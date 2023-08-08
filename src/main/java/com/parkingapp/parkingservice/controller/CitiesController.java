@@ -24,6 +24,9 @@ public class CitiesController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public CitiesResponse getCities() {
+        // Mock response
+//        List<CityDTO> dummyCities = List.of(new CityDTO(1, "Ney york"), new CityDTO(2, "Barcelona"));
+//        return new CitiesResponse(dummyCities);
         List<City> cities = citiesService.getCities();
         List<CityDTO> mappedCities = cities.stream()
                 .map( city ->  new CityDTO(city.getId(), city.getName()))
