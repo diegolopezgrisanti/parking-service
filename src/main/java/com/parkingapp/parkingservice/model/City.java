@@ -1,10 +1,10 @@
 package com.parkingapp.parkingservice.model;
 
-public class CityDTO {
+public class City {
     private Integer id;
     private String name;
 
-    public CityDTO() {
+    public City() {
     }
 
     public Integer getId() {

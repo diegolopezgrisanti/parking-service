@@ -1,6 +1,8 @@
 package com.parkingapp.parkingservice.controller;
 
-import com.parkingapp.parkingservice.model.CityDTO;
+import com.parkingapp.parkingservice.dto.CitiesResponse;
+import com.parkingapp.parkingservice.dto.CityDTO;
+import com.parkingapp.parkingservice.model.City;
 import com.parkingapp.parkingservice.service.CitiesService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,7 +23,12 @@ public class CitiesController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<CityDTO> getCities() {
-        return citiesService.getCities();
+    public CitiesResponse getCities() {
+        List<City> cities = citiesService.getCities();
+        List<CityDTO> mappedCities = cities.stream()
+                .map( city ->  new CityDTO(city.getId(), city.getName()))
+                .toList();
+
+        return new CitiesResponse(mappedCities);
     }
 }
