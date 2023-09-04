@@ -1,7 +1,6 @@
 package com.parkingapp.parkingservice.controller;
 
 import com.parkingapp.parkingservice.dto.*;
-import com.parkingapp.parkingservice.model.Parking;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -12,7 +11,7 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/parkings")
@@ -27,7 +26,7 @@ public class ParkingsController {
                     content = {
                             @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = ParkingResponse.class)
+                                    schema = @Schema(implementation = CreateParkingResponse.class)
                             )
                     }),
             @ApiResponse(
@@ -51,16 +50,18 @@ public class ParkingsController {
                     }
             )
     })
-//    @RequestBody(description = "Created Parking", required = true,
-//            content = @Content(
-//                    schema = @Schema(implementation = Parking.class)
-//            )
-//    )
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ParkingResponse createParking(@RequestBody @Valid ParkingDTO parking) {
-        // Mock response
-        List<ParkingDTO> dummyParking = List.of(new ParkingDTO(24, "Salou"));
-        return new ParkingResponse(dummyParking);
+    public CreateParkingResponse createParking(@RequestBody @Valid CreateParkingRequest request) {
+
+        CreateParkingResponse response = new CreateParkingResponse();
+        response.setId(UUID.randomUUID());
+        response.setPlate(request.getPlate());
+        response.setCity_id(request.getCity_id());
+        response.setParking_zone_id(request.getParking_zone_id());
+        response.setExpiration(request.getExpiration());
+        response.setEmail(request.getEmail());
+
+        return response;
     }
 }
