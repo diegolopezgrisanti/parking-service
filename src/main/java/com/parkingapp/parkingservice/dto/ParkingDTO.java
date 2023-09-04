@@ -3,21 +3,20 @@ package com.parkingapp.parkingservice.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
-public class CityDTO {
-
+public class ParkingDTO {
     @Schema(
-            description = "City ID",
-            example = "3"
+            description = "Parking ID",
+            example = "24"
     )
     private Integer id;
 
     @Schema(
-            description = "City name",
-            example = "Barcelona"
+            description = "Parking name",
+            example = "Salou"
     )
     private String name;
 
-    public CityDTO(Integer id, String name) {
+    public ParkingDTO(Integer id, String name) {
         this.id = id;
         this.name = name;
     }
