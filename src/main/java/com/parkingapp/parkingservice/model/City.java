@@ -1,17 +1,19 @@
 package com.parkingapp.parkingservice.model;
 
+import java.util.UUID;
+
 public class City {
-    private Integer id;
+    private UUID id;
     private String name;
 
     public City() {
     }
 
-    public Integer getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
