@@ -21,7 +21,7 @@ public class ParkingsController {
     @Operation(summary = "Create parking")
     @ApiResponses(value = {
             @ApiResponse(
-                    responseCode = "200",
+                    responseCode = "201",
                     description = "Successful response",
                     content = {
                             @Content(
