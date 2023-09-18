@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/parking-zones")
@@ -65,10 +66,12 @@ public class ParkingZonesController {
     )
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public ParkingZonesResponse getParkingZoneById(@RequestParam("city-id") String cityId) {
+    public ParkingZonesResponse getParkingZoneById(@RequestParam("city-id") UUID cityId) {
         // Mock response
         System.out.println(String.format("City Id requested is: %s", cityId));
-       List<ParkingZoneDTO> dummyParkingZones = List.of(new ParkingZoneDTO(1234, "Sa Conca"), new ParkingZoneDTO(253, "Port"));
+       List<ParkingZoneDTO> dummyParkingZones = List.of(
+               new ParkingZoneDTO(UUID.randomUUID(), "Sa Conca"),
+               new ParkingZoneDTO(UUID.randomUUID(), "Port"));
        return new ParkingZonesResponse(dummyParkingZones);
     }
 }
