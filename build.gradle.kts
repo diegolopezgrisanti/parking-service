@@ -25,6 +25,7 @@ dependencies {
 	implementation("org.postgresql:postgresql:42.6.0")
 	implementation("org.springframework.boot:spring-boot-starter-web:3.1.3")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa:3.1.3")
+	implementation("org.flywaydb:flyway-core:9.11.0")
 }
 
 tasks.withType<Test> {
