@@ -1,0 +1,7 @@
+CREATE TABLE IF NOT EXISTS parking_zones (
+    id UUID PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    city_id UUID NOT NULL,
+    created TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (city_id) REFERENCES cities(id)
+);
