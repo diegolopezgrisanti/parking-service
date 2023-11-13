@@ -1,8 +1,6 @@
 package com.parkingapp.parkingservice.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
 
 import java.util.UUID;
 
