@@ -18,6 +18,6 @@ public class CitiesServiceImpl implements CitiesService {
     }
 
     public List<City> findAll() {
-        return citiesRepository.findAll();
+        return citiesRepository.getAllCities();
     }
 }
