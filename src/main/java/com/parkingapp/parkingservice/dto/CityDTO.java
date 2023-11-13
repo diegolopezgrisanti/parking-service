@@ -1,8 +1,11 @@
 package com.parkingapp.parkingservice.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 
 import java.util.UUID;
+
 
 public class CityDTO {
 
@@ -17,6 +20,9 @@ public class CityDTO {
             example = "Barcelona"
     )
     private String name;
+
+    public CityDTO() {
+    }
 
     public CityDTO(UUID id, String name) {
         this.id = id;

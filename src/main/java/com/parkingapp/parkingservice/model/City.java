@@ -1,8 +1,18 @@
 package com.parkingapp.parkingservice.model;
 
+
+
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+
+
 import java.util.UUID;
 
+@Entity
 public class City {
+
+    @Id
     private UUID id;
     private String name;
 
