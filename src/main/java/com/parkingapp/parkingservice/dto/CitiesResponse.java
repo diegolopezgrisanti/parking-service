@@ -18,10 +18,4 @@ public class CitiesResponse {
     public List<CityDTO> getCities() {
         return cities;
     }
-
-    public void setCities(List<CityDTO> cities) {
-        this.cities = cities;
-    }
-
-
 }

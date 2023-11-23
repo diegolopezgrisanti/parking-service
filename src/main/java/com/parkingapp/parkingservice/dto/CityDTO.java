@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.util.UUID;
 
+
 public class CityDTO {
 
     @Schema(
@@ -17,6 +18,9 @@ public class CityDTO {
             example = "Barcelona"
     )
     private String name;
+
+    public CityDTO() {
+    }
 
     public CityDTO(UUID id, String name) {
         this.id = id;

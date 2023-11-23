@@ -5,5 +5,5 @@ import com.parkingapp.parkingservice.model.City;
 import java.util.List;
 
 public interface CitiesService {
-    List<City> getCities();
+    List<City> findAll();
 }

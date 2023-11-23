@@ -1,15 +1,20 @@
-package com.parkingapp.parkingservice.model;
+package com.parkingapp.parkingservice.entity;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 import java.util.UUID;
 
-public class City {
+@Entity
+@Table(name= "cities")
+public class CityEntity {
 
+    @Id
     private UUID id;
     private String name;
 
-    public City(UUID id, String name) {
-        this.id = id;
-        this.name = name;
+    public CityEntity() {
     }
 
     public UUID getId() {
@@ -28,3 +33,4 @@ public class City {
         this.name = name;
     }
 }
+
