@@ -7,14 +7,14 @@ import jakarta.persistence.Table;
 import java.util.UUID;
 
 @Entity
-@Table(name= "cities")
-public class CityEntity {
+@Table(name= "parking_zones")
+public class ParkingZonesEntity {
 
     @Id
     private UUID id;
     private String name;
 
-    public CityEntity() {
+    public ParkingZonesEntity() {
     }
 
     public UUID getId() {

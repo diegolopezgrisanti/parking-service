@@ -1,23 +1,13 @@
-package com.parkingapp.parkingservice.dto;
-
-import io.swagger.v3.oas.annotations.media.Schema;
+package com.parkingapp.parkingservice.model;
 
 import java.util.UUID;
 
-public class ParkingZoneDTO {
-    @Schema(
-            description = "Parking zone ID",
-            example = "8e4488d3-0e5a-4044-8d6d-d3d9e36836d0"
-    )
-    private UUID id;
+public class ParkingZone {
 
-    @Schema(
-            description = "Parking zone name",
-            example = "Sa Conca"
-    )
+    private UUID id;
     private String name;
 
-    public ParkingZoneDTO(UUID id, String name) {
+    public ParkingZone(UUID id, String name) {
         this.id = id;
         this.name = name;
     }

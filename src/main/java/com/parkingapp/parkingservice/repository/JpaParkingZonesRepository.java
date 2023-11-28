@@ -1,22 +1,23 @@
 package com.parkingapp.parkingservice.repository;
 
-import com.parkingapp.parkingservice.model.City;
+import com.parkingapp.parkingservice.model.ParkingZone;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Repository
-public class JpaCitiesRepository implements CitiesRepository {
+public class JpaParkingZonesRepository implements ParkingZonesRepository {
 
     @Autowired
-    private JpaCitiesInterfaceRepository jpaCitiesInterfaceRepository;
+    private JpaParkingZonesInterfaceRepository jpaParkingZonesInterfaceRepository;
 
     @Override
-    public List<City> getAllCities() {
-        return jpaCitiesInterfaceRepository.findAll().stream()
-                .map(cityEntity -> new City(cityEntity.getId(), cityEntity.getName()))
+    public List<ParkingZone> getParkingZonesById(UUID cityId) {
+        return jpaParkingZonesInterfaceRepository.findById(cityId).stream()
+                .map(parkingZonesEntity -> new ParkingZone(parkingZonesEntity.getId(), parkingZonesEntity.getName()))
                 .collect(Collectors.toList());
     }
 

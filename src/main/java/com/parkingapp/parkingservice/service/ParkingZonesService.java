@@ -1,9 +1,10 @@
 package com.parkingapp.parkingservice.service;
 
-import com.parkingapp.parkingservice.model.City;
+import com.parkingapp.parkingservice.model.ParkingZone;
 
 import java.util.List;
+import java.util.UUID;
 
-public interface CitiesService {
-    List<City> findAll();
+public interface ParkingZonesService {
+    List<ParkingZone> findById(UUID cityId);
 }
