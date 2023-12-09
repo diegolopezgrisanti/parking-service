@@ -1,10 +1,8 @@
 package com.parkingapp.parkingservice.controller;
 
 import com.parkingapp.parkingservice.dto.*;
-import com.parkingapp.parkingservice.model.City;
 import com.parkingapp.parkingservice.model.ParkingZone;
-import com.parkingapp.parkingservice.service.CitiesServiceImpl;
-import com.parkingapp.parkingservice.service.ParkingZonesServiceImpl;
+import com.parkingapp.parkingservice.service.ParkingZonesService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -29,10 +27,10 @@ import java.util.stream.Collectors;
 @Tag(name = "Parking zones", description = "All about parking zones")
 public class ParkingZonesController {
 
-    private final ParkingZonesServiceImpl parkingZonesServiceImpl;
+    private final ParkingZonesService parkingZonesService;
 
-    public ParkingZonesController(ParkingZonesServiceImpl parkingZonesService) {
-        this.parkingZonesServiceImpl = parkingZonesService;
+    public ParkingZonesController(ParkingZonesService parkingZonesService) {
+        this.parkingZonesService = parkingZonesService;
     }
 
     @Operation(summary = "Gets all parking zones by city ID")
@@ -75,8 +73,8 @@ public class ParkingZonesController {
     )
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public ParkingZonesResponse getParkingZoneById(@RequestParam("city-id") UUID cityId) {
-        List<ParkingZone> parkingZones = parkingZonesServiceImpl.findById(cityId);
+    public ParkingZonesResponse getParkingZonesByCityId(@RequestParam("city-id") UUID cityId) {
+        List<ParkingZone> parkingZones = parkingZonesService.getAllByCityId(cityId);
         List<ParkingZoneDTO> mappedParkingZones = parkingZones.stream()
                 .map(parkingZone -> new ParkingZoneDTO(parkingZone.getId(), parkingZone.getName()))
                 .collect(Collectors.toList());

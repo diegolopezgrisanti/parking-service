@@ -6,5 +6,5 @@ import java.util.List;
 import java.util.UUID;
 
 public interface ParkingZonesRepository {
-    List<ParkingZone> getParkingZonesById(UUID cityId);
+    List<ParkingZone> getParkingZonesByCityId(UUID cityId);
 }

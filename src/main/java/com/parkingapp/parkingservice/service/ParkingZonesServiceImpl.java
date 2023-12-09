@@ -18,7 +18,8 @@ public class ParkingZonesServiceImpl implements ParkingZonesService {
         this.parkingZonesRepository = parkingZonesRepository;
     }
 
-    public List<ParkingZone> findById(UUID cityId) {
-        return parkingZonesRepository.getParkingZonesById(cityId);
+    public List<ParkingZone> getAllByCityId(UUID cityId) {
+        return parkingZonesRepository.getParkingZonesByCityId(cityId);
     }
+
 }

@@ -15,8 +15,8 @@ public class JpaParkingZonesRepository implements ParkingZonesRepository {
     private JpaParkingZonesInterfaceRepository jpaParkingZonesInterfaceRepository;
 
     @Override
-    public List<ParkingZone> getParkingZonesById(UUID cityId) {
-        return jpaParkingZonesInterfaceRepository.findById(cityId).stream()
+    public List<ParkingZone> getParkingZonesByCityId(UUID cityId) {
+        return jpaParkingZonesInterfaceRepository.findByCityId(cityId).stream()
                 .map(parkingZonesEntity -> new ParkingZone(parkingZonesEntity.getId(), parkingZonesEntity.getName()))
                 .collect(Collectors.toList());
     }

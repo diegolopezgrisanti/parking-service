@@ -6,6 +6,7 @@ public class ParkingZone {
 
     private UUID id;
     private String name;
+    private UUID cityId;
 
     public ParkingZone(UUID id, String name) {
         this.id = id;
@@ -26,5 +27,12 @@ public class ParkingZone {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public UUID getCityId() {
+        return cityId;
+    }
+    public void setCityId(UUID cityId) {
+        this.cityId = cityId;
     }
 }

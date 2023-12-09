@@ -1,8 +1,6 @@
 package com.parkingapp.parkingservice.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.util.UUID;
 
@@ -13,6 +11,9 @@ public class CityEntity {
     @Id
     private UUID id;
     private String name;
+
+    @OneToMany(mappedBy = "id")
+    private ParkingZonesEntity parkingZones;
 
     public CityEntity() {
     }
@@ -31,6 +32,14 @@ public class CityEntity {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public ParkingZonesEntity getParkingZones() {
+        return parkingZones;
+    }
+
+    public void setParkingZones(ParkingZonesEntity parkingZones) {
+        this.parkingZones = parkingZones;
     }
 }
 
