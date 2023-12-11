@@ -1,8 +1,8 @@
 package com.parkingapp.parkingservice.controller;
 
-import com.parkingapp.parkingservice.dto.ErrorResponse;
-import com.parkingapp.parkingservice.dto.ParkingZoneDTO;
-import com.parkingapp.parkingservice.dto.ParkingZonesResponse;
+import com.parkingapp.parkingservice.dto.*;
+import com.parkingapp.parkingservice.model.ParkingZone;
+import com.parkingapp.parkingservice.service.ParkingZonesService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -20,11 +20,18 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/parking-zones")
 @Tag(name = "Parking zones", description = "All about parking zones")
 public class ParkingZonesController {
+
+    private final ParkingZonesService parkingZonesService;
+
+    public ParkingZonesController(ParkingZonesService parkingZonesService) {
+        this.parkingZonesService = parkingZonesService;
+    }
 
     @Operation(summary = "Gets all parking zones by city ID")
     @ApiResponses(value = {
@@ -66,12 +73,12 @@ public class ParkingZonesController {
     )
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public ParkingZonesResponse getParkingZoneById(@RequestParam("city-id") UUID cityId) {
-        // Mock response
-        System.out.println(String.format("City Id requested is: %s", cityId));
-       List<ParkingZoneDTO> dummyParkingZones = List.of(
-               new ParkingZoneDTO(UUID.randomUUID(), "Sa Conca"),
-               new ParkingZoneDTO(UUID.randomUUID(), "Port"));
-       return new ParkingZonesResponse(dummyParkingZones);
+    public ParkingZonesResponse getParkingZonesByCityId(@RequestParam("city-id") UUID cityId) {
+        List<ParkingZone> parkingZones = parkingZonesService.getAllByCityId(cityId);
+        List<ParkingZoneDTO> mappedParkingZones = parkingZones.stream()
+                .map(parkingZone -> new ParkingZoneDTO(parkingZone.getId(), parkingZone.getName()))
+                .collect(Collectors.toList());
+
+        return new ParkingZonesResponse(mappedParkingZones);
     }
 }

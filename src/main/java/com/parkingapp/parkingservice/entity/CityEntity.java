@@ -2,8 +2,10 @@ package com.parkingapp.parkingservice.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -13,6 +15,9 @@ public class CityEntity {
     @Id
     private UUID id;
     private String name;
+
+    @OneToMany
+    private List<ParkingZonesEntity> parkingZones;
 
     public CityEntity() {
     }
@@ -31,6 +36,14 @@ public class CityEntity {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public List<ParkingZonesEntity> getParkingZones() {
+        return parkingZones;
+    }
+
+    public void setParkingZones(List<ParkingZonesEntity> parkingZones) {
+        this.parkingZones = parkingZones;
     }
 }
 
