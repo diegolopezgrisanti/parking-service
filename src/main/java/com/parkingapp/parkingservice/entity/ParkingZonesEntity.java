@@ -10,10 +10,10 @@ public class ParkingZonesEntity {
 
     @Id
     private UUID id;
+
     private String name;
-    private UUID cityId;
+
     @ManyToOne
-    @JoinColumn(name = "id")
     private CityEntity city;
 
     public ParkingZonesEntity() {
@@ -33,13 +33,6 @@ public class ParkingZonesEntity {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public UUID getCityId() {
-        return cityId;
-    }
-    public void setCityId(UUID cityId) {
-        this.cityId = cityId;
     }
 
     public CityEntity getCity() {
