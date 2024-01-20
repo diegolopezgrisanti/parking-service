@@ -4,6 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -16,7 +17,7 @@ public class ParkingEntity {
     private UUID parking_zone_id;
     private String plate;
     private String email;
-    private LocalDateTime expiration;
+    private Instant expiration;
 
     public UUID getId() {
         return id;
@@ -58,11 +59,11 @@ public class ParkingEntity {
         this.email = email;
     }
 
-    public LocalDateTime getExpiration() {
+    public Instant getExpiration() {
         return expiration;
     }
 
-    public void setExpiration(LocalDateTime expiration) {
+    public void setExpiration(Instant expiration) {
         this.expiration = expiration;
     }
 }

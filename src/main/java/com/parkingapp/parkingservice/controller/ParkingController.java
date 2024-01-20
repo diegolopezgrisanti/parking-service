@@ -16,7 +16,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/parkings")
 @Tag(name = "Parkings", description = "All about parking")
-public class ParkingsController {
+public class ParkingController {
 
     @Operation(summary = "Create parking")
     @ApiResponses(value = {

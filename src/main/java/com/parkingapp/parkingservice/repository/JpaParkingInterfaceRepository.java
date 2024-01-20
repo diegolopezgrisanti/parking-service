@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 import java.util.UUID;
 
 @Repository
-interface JpaParkingsInterfaceRepository extends JpaRepository<ParkingEntity, UUID> {
+interface JpaParkingInterfaceRepository extends JpaRepository<ParkingEntity, UUID> {
 }

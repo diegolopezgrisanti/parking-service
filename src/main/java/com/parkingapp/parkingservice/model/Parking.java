@@ -1,17 +1,18 @@
 package com.parkingapp.parkingservice.model;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-public class Parkings {
+public class Parking {
     private UUID id;
     private UUID city_id;
     private UUID parking_zone_id;
     private String plate;
     private String email;
-    private LocalDateTime expiration;
+    private Instant expiration;
 
-    public Parkings(UUID id, UUID city_id, UUID parking_zone_id, String plate, String email, LocalDateTime expiration) {
+    public Parking(UUID id, UUID city_id, UUID parking_zone_id, String plate, String email, Instant expiration) {
         this.id = id;
         this.city_id = city_id;
         this.parking_zone_id = parking_zone_id;
@@ -61,11 +62,11 @@ public class Parkings {
         this.email = email;
     }
 
-    public LocalDateTime getExpiration() {
+    public Instant getExpiration() {
         return expiration;
     }
 
-    public void setExpiration(LocalDateTime expiration) {
+    public void setExpiration(Instant expiration) {
         this.expiration = expiration;
     }
 }

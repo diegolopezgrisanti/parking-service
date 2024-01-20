@@ -19,5 +19,4 @@ public class JpaCitiesRepository implements CitiesRepository {
                 .map(cityEntity -> new City(cityEntity.getId(), cityEntity.getName()))
                 .collect(Collectors.toList());
     }
-
 }
