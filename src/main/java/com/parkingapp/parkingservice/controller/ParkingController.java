@@ -13,6 +13,8 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @RestController
 @RequestMapping("/parkings")
 @Tag(name = "Parkings", description = "All about parking")
@@ -58,9 +60,17 @@ public class ParkingController {
     })
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CreateParkingResponse createParking(@RequestBody @Valid Parking request) {
-         Parking parkingCreated = parkingService.createParking(request);
+    public CreateParkingResponse createParking(@RequestBody @Valid CreateParkingRequest request) {
+        Parking parking = new Parking(
+                UUID.randomUUID(),
+                request.getCityId(),
+                request.getParkingZoneId(),
+                request.getPlate(),
+                request.getEmail(),
+                request.getExpiration()
+        );
+        parkingService.createParking(parking);
 
-        return new CreateParkingResponse(parkingCreated);
+        return new CreateParkingResponse(parking);
     }
 }

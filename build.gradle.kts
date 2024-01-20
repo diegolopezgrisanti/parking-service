@@ -26,6 +26,8 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-web:3.1.3")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa:3.1.3")
 	implementation("org.flywaydb:flyway-core:9.11.0")
+	implementation("jakarta.validation:jakarta.validation-api:3.0.0")
+	implementation("org.hibernate.validator:hibernate-validator")
 }
 
 tasks.withType<Test> {

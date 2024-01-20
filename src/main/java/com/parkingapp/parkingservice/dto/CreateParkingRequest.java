@@ -1,8 +1,11 @@
 package com.parkingapp.parkingservice.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.UUID;
 
 public class CreateParkingRequest {
@@ -11,36 +14,47 @@ public class CreateParkingRequest {
             description = "Vehicle plate",
             example = "4736KTZ"
     )
+    @NotNull
+    @NotBlank
     private String plate;
 
     @Schema(
+            name = "city_id",
             description = "City ID",
             example = "5f215120-c669-451a-97b1-57f79144548b"
     )
-    private UUID city_id;
+    @NotNull
+    private UUID cityId;
 
     @Schema(
+            name = "parking_zone_id",
             description = "Parking zone ID",
             example = "8e4488d3-0e5a-4044-8d6d-d3d9e36836d0"
     )
-    private UUID parking_zone_id;
+    @NotNull
+    private UUID parkingZoneId;
 
     @Schema(
             description = "Parking expiration date time with zone",
             example = "2023-09-18T16:18:58.165+00:00"
     )
-    private LocalDateTime expiration;
+    @NotNull
+    private Instant expiration;
 
     @Schema(
             description = "User email",
             example = "dummy_user@mail.com"
     )
+    @NotNull
+    @Email
     private String email;
 
-    public CreateParkingRequest(String plate, UUID city_id, UUID parking_zone_id, LocalDateTime expiration, String email) {
+    public CreateParkingRequest(){}
+
+    public CreateParkingRequest(String plate, UUID cityId, UUID parkingZoneId, Instant expiration, String email) {
         this.plate = plate;
-        this.city_id = city_id;
-        this.parking_zone_id = parking_zone_id;
+        this.cityId = cityId;
+        this.parkingZoneId = parkingZoneId;
         this.expiration = expiration;
         this.email = email;
     }
@@ -49,39 +63,40 @@ public class CreateParkingRequest {
         return plate;
     }
 
-    public void setPlate(String plate) {
-        this.plate = plate;
+    public UUID getCityId() {
+        return cityId;
     }
 
-    public UUID getCity_id() {
-        return city_id;
+    public UUID getParkingZoneId() {
+        return parkingZoneId;
     }
 
-    public void setCity_id(UUID city_id) {
-        this.city_id = city_id;
-    }
-
-    public UUID getParking_zone_id() {
-        return parking_zone_id;
-    }
-
-    public void setParking_zone_id(UUID parking_zone_id) {
-        this.parking_zone_id = parking_zone_id;
-    }
-
-    public LocalDateTime getExpiration() {
+    public Instant getExpiration() {
         return expiration;
-    }
-
-    public void setExpiration(LocalDateTime expiration) {
-        this.expiration = expiration;
     }
 
     public String getEmail() {
         return email;
     }
 
+    public void setPlate(String plate) {
+        this.plate = plate;
+    }
+
+    public void setCityId(UUID cityId) {
+        this.cityId = cityId;
+    }
+
+    public void setParkingZoneId(UUID parkingZoneId) {
+        this.parkingZoneId = parkingZoneId;
+    }
+
+    public void setExpiration(Instant expiration) {
+        this.expiration = expiration;
+    }
+
     public void setEmail(String email) {
         this.email = email;
     }
+
 }

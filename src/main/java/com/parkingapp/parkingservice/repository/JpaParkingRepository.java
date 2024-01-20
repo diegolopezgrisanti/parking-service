@@ -19,8 +19,8 @@ public class JpaParkingRepository implements ParkingRepository {
         ParkingEntity parkingEntity = new ParkingEntity();
         parkingEntity.setId(UUID.randomUUID());
         parkingEntity.setPlate(parking.getPlate());
-        parkingEntity.setCity_id(parking.getCity_id());
-        parkingEntity.setParking_zone_id(parking.getParking_zone_id());
+        parkingEntity.setCity_id(parking.getCityId());
+        parkingEntity.setParking_zone_id(parking.getParkingZoneId());
         parkingEntity.setExpiration(parking.getExpiration());
         parkingEntity.setEmail(parking.getEmail());
 
