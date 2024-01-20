@@ -1,6 +1,8 @@
 package com.parkingapp.parkingservice.controller;
 
 import com.parkingapp.parkingservice.dto.*;
+import com.parkingapp.parkingservice.model.Parking;
+import com.parkingapp.parkingservice.service.ParkingServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -11,12 +13,16 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.UUID;
-
 @RestController
 @RequestMapping("/parkings")
 @Tag(name = "Parkings", description = "All about parking")
 public class ParkingController {
+
+    private final ParkingServiceImpl parkingServiceImpl;
+
+    public ParkingController(ParkingServiceImpl parkingService) {
+        this.parkingServiceImpl = parkingService;
+    }
 
     @Operation(summary = "Create parking")
     @ApiResponses(value = {
@@ -52,16 +58,9 @@ public class ParkingController {
     })
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CreateParkingResponse createParking(@RequestBody @Valid CreateParkingRequest request) {
+    public CreateParkingResponse createParking(@RequestBody @Valid Parking request) {
+        parkingServiceImpl.createParking(request);
 
-        CreateParkingResponse response = new CreateParkingResponse();
-        response.setId(UUID.randomUUID());
-        response.setPlate(request.getPlate());
-        response.setCity_id(request.getCity_id());
-        response.setParking_zone_id(request.getParking_zone_id());
-        response.setExpiration(request.getExpiration());
-        response.setEmail(request.getEmail());
-
-        return response;
+        return new CreateParkingResponse();
     }
 }
