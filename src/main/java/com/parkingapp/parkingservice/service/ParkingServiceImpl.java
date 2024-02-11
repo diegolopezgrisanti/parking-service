@@ -15,7 +15,8 @@ public class ParkingServiceImpl implements ParkingService {
         this.parkingRepository = parkingRepository;
     }
 
-    public void createParking(Parking parking) {
+    public Parking createParking(Parking parking) {
         parkingRepository.saveParking(parking);
+        return parking;
     }
 }

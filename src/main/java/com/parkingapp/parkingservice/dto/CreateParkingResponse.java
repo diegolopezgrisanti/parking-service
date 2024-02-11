@@ -1,7 +1,10 @@
 package com.parkingapp.parkingservice.dto;
 
+import com.parkingapp.parkingservice.model.Parking;
 import io.swagger.v3.oas.annotations.media.Schema;
+import org.apache.logging.log4j.CloseableThreadContext;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -35,7 +38,7 @@ public class CreateParkingResponse {
             description = "Parking expiration date time with zone",
             example = "2023-09-18T16:18:58.165+00:00"
     )
-    private LocalDateTime expiration;
+    private Instant expiration;
 
     @Schema(
             description = "User email",
@@ -43,13 +46,13 @@ public class CreateParkingResponse {
     )
     private String email;
 
-    public CreateParkingResponse() {
-        this.id = id;
-        this.plate = plate;
-        this.city_id = city_id;
-        this.parking_zone_id = parking_zone_id;
-        this.expiration = expiration;
-        this.email = email;
+    public CreateParkingResponse(Parking parking) {
+        this.id = UUID.randomUUID();
+        this.plate = parking.getPlate();
+        this.city_id = parking.getCity_id();
+        this.parking_zone_id = parking.getParking_zone_id();
+        this.expiration = parking.getExpiration();
+        this.email = parking.getEmail();
     }
 
     public UUID getId() {
@@ -83,11 +86,11 @@ public class CreateParkingResponse {
         this.parking_zone_id = parking_zone_id;
     }
 
-    public LocalDateTime getExpiration() {
+    public Instant getExpiration() {
         return expiration;
     }
 
-    public void setExpiration(LocalDateTime expiration) {
+    public void setExpiration(Instant expiration) {
         this.expiration = expiration;
     }
 

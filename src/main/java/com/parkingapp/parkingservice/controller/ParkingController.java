@@ -2,7 +2,7 @@ package com.parkingapp.parkingservice.controller;
 
 import com.parkingapp.parkingservice.dto.*;
 import com.parkingapp.parkingservice.model.Parking;
-import com.parkingapp.parkingservice.service.ParkingServiceImpl;
+import com.parkingapp.parkingservice.service.ParkingService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -18,10 +18,10 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "Parkings", description = "All about parking")
 public class ParkingController {
 
-    private final ParkingServiceImpl parkingServiceImpl;
+    private final ParkingService parkingService;
 
-    public ParkingController(ParkingServiceImpl parkingService) {
-        this.parkingServiceImpl = parkingService;
+    public ParkingController(ParkingService parkingService) {
+        this.parkingService = parkingService;
     }
 
     @Operation(summary = "Create parking")
@@ -59,8 +59,8 @@ public class ParkingController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public CreateParkingResponse createParking(@RequestBody @Valid Parking request) {
-        parkingServiceImpl.createParking(request);
+         Parking parkingCreated = parkingService.createParking(request);
 
-        return new CreateParkingResponse();
+        return new CreateParkingResponse(parkingCreated);
     }
 }

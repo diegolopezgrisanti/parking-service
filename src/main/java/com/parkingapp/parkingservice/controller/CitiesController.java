@@ -4,6 +4,7 @@ import com.parkingapp.parkingservice.dto.CitiesResponse;
 import com.parkingapp.parkingservice.dto.CityDTO;
 import com.parkingapp.parkingservice.dto.ErrorResponse;
 import com.parkingapp.parkingservice.model.City;
+import com.parkingapp.parkingservice.service.CitiesService;
 import com.parkingapp.parkingservice.service.CitiesServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -24,10 +25,10 @@ import java.util.stream.Collectors;
 @RequestMapping("/cities")
 @Tag(name = "Cities", description = "All about cities")
 public class CitiesController {
-    private final CitiesServiceImpl citiesServiceImpl;
+    private final CitiesService citiesService;
 
-    public CitiesController(CitiesServiceImpl citiesService) {
-        this.citiesServiceImpl = citiesService;
+    public CitiesController(CitiesService citiesService) {
+        this.citiesService = citiesService;
     }
 
     @Operation(summary = "List cities")
@@ -66,7 +67,7 @@ public class CitiesController {
     @ResponseStatus(HttpStatus.OK)
     public CitiesResponse getCities() {
 
-        List<City> cities = citiesServiceImpl.findAll();
+        List<City> cities = citiesService.findAll();
         List<CityDTO> mappedCities = cities.stream()
                         .map(city -> new CityDTO(city.getId(), city.getName()))
                         .collect(Collectors.toList());
