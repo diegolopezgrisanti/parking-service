@@ -8,12 +8,12 @@ import java.time.Instant;
 import java.util.UUID;
 
 @Entity
-@Table(name= "parkings")
+@Table(name= "parking")
 public class ParkingEntity {
     @Id
     private UUID id;
-    private UUID city_id;
-    private UUID parking_zone_id;
+    private UUID cityId;
+    private UUID parkingZoneId;
     private String plate;
     private String email;
     private Instant expiration;
@@ -26,20 +26,20 @@ public class ParkingEntity {
         this.id = id;
     }
 
-    public UUID getCity_id() {
-        return city_id;
+    public UUID getCityId() {
+        return cityId;
     }
 
-    public void setCity_id(UUID city_id) {
-        this.city_id = city_id;
+    public void setCityId(UUID cityId) {
+        this.cityId = cityId;
     }
 
-    public UUID getParking_zone_id() {
-        return parking_zone_id;
+    public UUID getParkingZoneId() {
+        return parkingZoneId;
     }
 
-    public void setParking_zone_id(UUID parking_zone_id) {
-        this.parking_zone_id = parking_zone_id;
+    public void setParkingZoneId(UUID parkingZoneId) {
+        this.parkingZoneId = parkingZoneId;
     }
 
     public String getPlate() {

@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS parkings (
+CREATE TABLE IF NOT EXISTS parking (
     id UUID PRIMARY KEY,
     plate VARCHAR(15) NOT NULL,
     city_id UUID NOT NULL,
