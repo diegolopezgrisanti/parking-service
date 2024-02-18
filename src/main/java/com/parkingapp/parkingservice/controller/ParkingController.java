@@ -1,6 +1,8 @@
 package com.parkingapp.parkingservice.controller;
 
 import com.parkingapp.parkingservice.dto.*;
+import com.parkingapp.parkingservice.model.Parking;
+import com.parkingapp.parkingservice.service.ParkingService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -16,7 +18,13 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/parkings")
 @Tag(name = "Parkings", description = "All about parking")
-public class ParkingsController {
+public class ParkingController {
+
+    private final ParkingService parkingService;
+
+    public ParkingController(ParkingService parkingService) {
+        this.parkingService = parkingService;
+    }
 
     @Operation(summary = "Create parking")
     @ApiResponses(value = {
@@ -53,15 +61,16 @@ public class ParkingsController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public CreateParkingResponse createParking(@RequestBody @Valid CreateParkingRequest request) {
+        Parking parking = new Parking(
+                UUID.randomUUID(),
+                request.getCityId(),
+                request.getParkingZoneId(),
+                request.getPlate(),
+                request.getEmail(),
+                request.getExpiration()
+        );
+        parkingService.createParking(parking);
 
-        CreateParkingResponse response = new CreateParkingResponse();
-        response.setId(UUID.randomUUID());
-        response.setPlate(request.getPlate());
-        response.setCity_id(request.getCity_id());
-        response.setParking_zone_id(request.getParking_zone_id());
-        response.setExpiration(request.getExpiration());
-        response.setEmail(request.getEmail());
-
-        return response;
+        return new CreateParkingResponse(parking);
     }
 }

@@ -1,8 +1,9 @@
 package com.parkingapp.parkingservice.dto;
 
+import com.parkingapp.parkingservice.model.Parking;
 import io.swagger.v3.oas.annotations.media.Schema;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.UUID;
 
 public class CreateParkingResponse {
@@ -20,22 +21,24 @@ public class CreateParkingResponse {
     private String plate;
 
     @Schema(
+            name = "city_id",
             description = "City ID",
             example = "5f215120-c669-451a-97b1-57f79144548b"
     )
-    private UUID city_id;
+    private UUID cityId;
 
     @Schema(
+            name = "parking_zone_id",
             description = "Parking zone ID",
             example = "8e4488d3-0e5a-4044-8d6d-d3d9e36836d0"
     )
-    private UUID parking_zone_id;
+    private UUID parkingZoneId;
 
     @Schema(
             description = "Parking expiration date time with zone",
             example = "2023-09-18T16:18:58.165+00:00"
     )
-    private LocalDateTime expiration;
+    private Instant expiration;
 
     @Schema(
             description = "User email",
@@ -43,13 +46,13 @@ public class CreateParkingResponse {
     )
     private String email;
 
-    public CreateParkingResponse() {
-        this.id = id;
-        this.plate = plate;
-        this.city_id = city_id;
-        this.parking_zone_id = parking_zone_id;
-        this.expiration = expiration;
-        this.email = email;
+    public CreateParkingResponse(Parking parking) {
+        this.id = UUID.randomUUID();
+        this.plate = parking.getPlate();
+        this.cityId = parking.getCityId();
+        this.parkingZoneId = parking.getParkingZoneId();
+        this.expiration = parking.getExpiration();
+        this.email = parking.getEmail();
     }
 
     public UUID getId() {
@@ -67,27 +70,27 @@ public class CreateParkingResponse {
         this.plate = plate;
     }
 
-    public UUID getCity_id() {
-        return city_id;
+    public UUID getCityId() {
+        return cityId;
     }
 
-    public void setCity_id(UUID city_id) {
-        this.city_id = city_id;
+    public void setCityId(UUID cityId) {
+        this.cityId = cityId;
     }
 
-    public UUID getParking_zone_id() {
-        return parking_zone_id;
+    public UUID getParkingZoneId() {
+        return parkingZoneId;
     }
 
-    public void setParking_zone_id(UUID parking_zone_id) {
-        this.parking_zone_id = parking_zone_id;
+    public void setParkingZoneId(UUID parkingZoneId) {
+        this.parkingZoneId = parkingZoneId;
     }
 
-    public LocalDateTime getExpiration() {
+    public Instant getExpiration() {
         return expiration;
     }
 
-    public void setExpiration(LocalDateTime expiration) {
+    public void setExpiration(Instant expiration) {
         this.expiration = expiration;
     }
 
