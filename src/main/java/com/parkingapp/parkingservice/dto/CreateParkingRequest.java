@@ -1,6 +1,7 @@
 package com.parkingapp.parkingservice.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.*;
 
 import java.time.Instant;
 import java.util.UUID;
@@ -11,6 +12,8 @@ public class CreateParkingRequest {
             description = "Vehicle plate",
             example = "4736KTZ"
     )
+    @NotNull
+    @Pattern(regexp = "\\d{4}[A-Za-z]{3}")
     private String plate;
 
     @Schema(
@@ -18,6 +21,7 @@ public class CreateParkingRequest {
             description = "City ID",
             example = "5f215120-c669-451a-97b1-57f79144548b"
     )
+    @NotNull
     private UUID cityId;
 
     @Schema(
@@ -25,18 +29,24 @@ public class CreateParkingRequest {
             description = "Parking zone ID",
             example = "8e4488d3-0e5a-4044-8d6d-d3d9e36836d0"
     )
+    @NotNull
     private UUID parkingZoneId;
 
     @Schema(
             description = "Parking expiration date time with zone",
             example = "2023-09-18T16:18:58.165+00:00"
     )
+    @NotNull
+    @Future
     private Instant expiration;
 
     @Schema(
             description = "User email",
             example = "dummy_user@mail.com"
     )
+    @NotNull
+    @Email
+    @NotBlank
     private String email;
 
     public CreateParkingRequest(){}

@@ -69,7 +69,7 @@ public class ParkingZonesController {
             name = "city-id",
             description = "City ID to filter parking zones",
             in = ParameterIn.QUERY,
-            schema = @Schema(type = "string", format = "uuid", example = "48236e54-017a-446a-b1b5-8e1d85222cc8")
+            schema = @Schema(type = "string", format = "uuid", example = "dd9f8f22-7395-49fc-bcf7-67533742ae03")
     )
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
