@@ -13,8 +13,7 @@ public class CreateParkingRequest {
             example = "4736KTZ"
     )
     @NotNull
-    @Size(min = 6, max = 6)
-    @Pattern(regexp = "\\d{4}[A-Za-z]{2}")
+    @Pattern(regexp = "\\d{4}[A-Za-z]{3}")
     private String plate;
 
     @Schema(
