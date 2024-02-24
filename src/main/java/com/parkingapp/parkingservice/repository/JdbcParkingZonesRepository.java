@@ -1,7 +1,6 @@
 package com.parkingapp.parkingservice.repository;
 
 import com.parkingapp.parkingservice.model.ParkingZone;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -11,8 +10,6 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-
-import static java.util.Collections.emptyMap;
 
 @Repository
 public class JdbcParkingZonesRepository implements ParkingZonesRepository {
