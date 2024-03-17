@@ -1,5 +1,7 @@
 package com.parkingapp.parkingservice.exceptions;
 
+import com.parkingapp.parkingservice.dto.error.ValidationError;
+
 import java.util.List;
 
 public class ValidationErrorException extends ApiException {

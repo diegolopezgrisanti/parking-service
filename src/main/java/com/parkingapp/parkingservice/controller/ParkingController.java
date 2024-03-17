@@ -1,6 +1,7 @@
 package com.parkingapp.parkingservice.controller;
 
 import com.parkingapp.parkingservice.dto.*;
+import com.parkingapp.parkingservice.dto.error.ErrorResponse;
 import com.parkingapp.parkingservice.model.Parking;
 import com.parkingapp.parkingservice.service.ParkingService;
 import io.swagger.v3.oas.annotations.Operation;

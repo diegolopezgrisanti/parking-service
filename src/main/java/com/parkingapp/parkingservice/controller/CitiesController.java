@@ -2,10 +2,9 @@ package com.parkingapp.parkingservice.controller;
 
 import com.parkingapp.parkingservice.dto.CitiesResponse;
 import com.parkingapp.parkingservice.dto.CityDTO;
-import com.parkingapp.parkingservice.dto.ErrorResponse;
+import com.parkingapp.parkingservice.dto.error.ErrorResponse;
 import com.parkingapp.parkingservice.model.City;
 import com.parkingapp.parkingservice.service.CitiesService;
-import com.parkingapp.parkingservice.service.CitiesServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
