@@ -45,7 +45,7 @@ public class CreateParkingRequest {
             example = "dummy_user@mail.com"
     )
     @NotNull
-    @Email
+    @Email(message = "Must be a valid email")
     @NotBlank
     private String email;
 

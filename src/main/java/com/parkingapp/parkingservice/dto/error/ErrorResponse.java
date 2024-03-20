@@ -1,4 +1,4 @@
-package com.parkingapp.parkingservice.dto;
+package com.parkingapp.parkingservice.dto.error;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

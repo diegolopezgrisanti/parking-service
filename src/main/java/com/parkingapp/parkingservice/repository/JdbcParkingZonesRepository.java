@@ -31,6 +31,17 @@ public class JdbcParkingZonesRepository implements ParkingZonesRepository {
         );
     }
 
+    @Override
+    public boolean isParkingZoneIdValid(java.util.UUID parkingZoneId) {
+        return namedParameterJdbcTemplate.queryForObject(
+                """
+                   select count(*) from parking_zones where id = :parkingZoneId
+                """,
+                Map.of("parkingZoneId", parkingZoneId),
+                Integer.class
+        ) == 1;
+    }
+
     private class ParkingZonesRowMapper implements RowMapper<ParkingZone> {
         @Override
         public ParkingZone mapRow(ResultSet rs, int rowNum) throws SQLException {

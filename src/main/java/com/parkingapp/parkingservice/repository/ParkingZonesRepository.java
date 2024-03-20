@@ -7,4 +7,6 @@ import java.util.UUID;
 
 public interface ParkingZonesRepository {
     List<ParkingZone> getParkingZonesByCityId(UUID cityId);
+
+    boolean isParkingZoneIdValid(UUID parkingZoneId0);
 }
