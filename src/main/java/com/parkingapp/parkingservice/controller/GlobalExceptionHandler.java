@@ -6,6 +6,7 @@ import com.parkingapp.parkingservice.dto.error.ValidationErrorResponse;
 import com.parkingapp.parkingservice.exceptions.ApiException;
 import com.parkingapp.parkingservice.exceptions.ParkingZoneNotFoundException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -28,7 +29,6 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-
     ErrorResponse handle(ParkingZoneNotFoundException exception) {
         return new ErrorResponse(exception.getMessage());
     }
@@ -49,6 +49,10 @@ public class GlobalExceptionHandler {
         return new ValidationErrorResponse(errors);
     }
 
-
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    ErrorResponse handle(HttpMessageNotReadableException exception) {
+        return new ErrorResponse(exception.getMessage());
+    }
 
 }
