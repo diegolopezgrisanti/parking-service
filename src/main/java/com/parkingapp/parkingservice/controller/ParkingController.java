@@ -64,7 +64,6 @@ public class ParkingController {
     public CreateParkingResponse createParking(@RequestBody @Valid CreateParkingRequest request) {
         Parking parking = new Parking(
                 UUID.randomUUID(),
-                request.getCityId(),
                 request.getParkingZoneId(),
                 request.getPlate(),
                 request.getEmail(),

@@ -21,13 +21,6 @@ public class CreateParkingResponse {
     private String plate;
 
     @Schema(
-            name = "city_id",
-            description = "City ID",
-            example = "5f215120-c669-451a-97b1-57f79144548b"
-    )
-    private UUID cityId;
-
-    @Schema(
             name = "parking_zone_id",
             description = "Parking zone ID",
             example = "8e4488d3-0e5a-4044-8d6d-d3d9e36836d0"
@@ -49,7 +42,6 @@ public class CreateParkingResponse {
     public CreateParkingResponse(Parking parking) {
         this.id = UUID.randomUUID();
         this.plate = parking.getPlate();
-        this.cityId = parking.getCityId();
         this.parkingZoneId = parking.getParkingZoneId();
         this.expiration = parking.getExpiration();
         this.email = parking.getEmail();
@@ -68,14 +60,6 @@ public class CreateParkingResponse {
 
     public void setPlate(String plate) {
         this.plate = plate;
-    }
-
-    public UUID getCityId() {
-        return cityId;
-    }
-
-    public void setCityId(UUID cityId) {
-        this.cityId = cityId;
     }
 
     public UUID getParkingZoneId() {
