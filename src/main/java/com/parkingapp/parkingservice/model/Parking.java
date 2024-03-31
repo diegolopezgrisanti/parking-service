@@ -5,14 +5,12 @@ import java.util.UUID;
 
 public class Parking {
     private UUID id;
-    private UUID cityId;
     private UUID parkingZoneId;
     private String plate;
     private String email;
     private Instant expiration;
-    public Parking(UUID id, UUID cityId, UUID parkingZoneId, String plate, String email, Instant expiration) {
+    public Parking(UUID id, UUID parkingZoneId, String plate, String email, Instant expiration) {
         this.id = id;
-        this.cityId = cityId;
         this.parkingZoneId = parkingZoneId;
         this.plate = plate;
         this.email = email;
@@ -26,10 +24,6 @@ public class Parking {
 
     public void setId(UUID id) {
         this.id = id;
-    }
-
-    public UUID getCityId() {
-        return cityId;
     }
 
     public UUID getParkingZoneId() {

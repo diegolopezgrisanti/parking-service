@@ -1,0 +1,1 @@
+ALTER TABLE parking DROP COLUMN city_id;

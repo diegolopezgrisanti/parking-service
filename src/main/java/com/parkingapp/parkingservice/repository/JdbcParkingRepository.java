@@ -21,7 +21,6 @@ public class JdbcParkingRepository implements ParkingRepository {
     public void saveParking(Parking parking) {
         MapSqlParameterSource params = new MapSqlParameterSource()
                 .addValue("id", UUID.randomUUID())
-                .addValue("cityId", parking.getCityId())
                 .addValue("parkingZoneId", parking.getParkingZoneId())
                 .addValue("plate", parking.getPlate())
                 .addValue("email", parking.getEmail())
@@ -29,8 +28,8 @@ public class JdbcParkingRepository implements ParkingRepository {
 
         namedParameterJdbcTemplate.update(
                 """
-                INSERT INTO parking(id, city_id, parking_zone_id, plate, email, expiration)
-                VALUES (:id, :cityId, :parkingZoneId, :plate, :email, :expiration)
+                INSERT INTO parking(id, parking_zone_id, plate, email, expiration)
+                VALUES (:id, :parkingZoneId, :plate, :email, :expiration)
                 """,
                 params
         );
