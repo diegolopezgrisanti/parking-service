@@ -3,6 +3,7 @@ package com.parkingapp.parkingservice.controller;
 import com.parkingapp.parkingservice.dto.*;
 import com.parkingapp.parkingservice.dto.error.ErrorResponse;
 import com.parkingapp.parkingservice.model.Parking;
+import com.parkingapp.parkingservice.model.ParkingStatusCheck;
 import com.parkingapp.parkingservice.service.ParkingService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -72,5 +73,51 @@ public class ParkingController {
         parkingService.createParking(parking);
 
         return new CreateParkingResponse(parking);
+    }
+
+    @Operation(summary = "Check parking by plate and parking zone id")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Successful response",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = ParkingCheckResponse.class)
+                            )
+                    }),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Bad request",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = ErrorResponse.class)
+                            )
+                    }
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Internal server error",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = ErrorResponse.class)
+                            )
+                    }
+            )
+    })
+    @GetMapping("/check")
+    @ResponseStatus(HttpStatus.OK)
+    public ParkingCheckResponse checkParking(
+            @RequestParam("plate") String plate,
+            @RequestParam("parking_zone_id") UUID parkingZoneId
+    ) {
+        ParkingStatusCheck check = parkingService.getParkingStatusCheck(plate, parkingZoneId);
+        ParkingDetailsDTO parkingDetails = check.getParking() != null
+                ? new ParkingDetailsDTO(plate, check.getParking().getExpiration())
+                : null;
+
+        return new ParkingCheckResponse(check.getParkingStatus(), parkingDetails);
     }
 }
