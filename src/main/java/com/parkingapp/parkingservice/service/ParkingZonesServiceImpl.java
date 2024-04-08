@@ -1,7 +1,7 @@
 package com.parkingapp.parkingservice.service;
 
-import com.parkingapp.parkingservice.model.ParkingZone;
-import com.parkingapp.parkingservice.repository.ParkingZonesRepository;
+import com.parkingapp.parkingservice.domain.parkingzone.ParkingZone;
+import com.parkingapp.parkingservice.domain.parkingzone.ParkingZonesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

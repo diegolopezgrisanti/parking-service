@@ -1,11 +1,11 @@
 package com.parkingapp.parkingservice.service;
 
 import com.parkingapp.parkingservice.exceptions.ParkingZoneNotFoundException;
-import com.parkingapp.parkingservice.model.Parking;
-import com.parkingapp.parkingservice.model.ParkingStatus;
-import com.parkingapp.parkingservice.model.ParkingStatusCheck;
-import com.parkingapp.parkingservice.repository.ParkingRepository;
-import com.parkingapp.parkingservice.repository.ParkingZonesRepository;
+import com.parkingapp.parkingservice.domain.parking.Parking;
+import com.parkingapp.parkingservice.domain.parking.ParkingStatus;
+import com.parkingapp.parkingservice.domain.parking.ParkingStatusCheck;
+import com.parkingapp.parkingservice.exceptions.ParkingRepository;
+import com.parkingapp.parkingservice.domain.parkingzone.ParkingZonesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

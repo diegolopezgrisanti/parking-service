@@ -1,6 +1,6 @@
 package com.parkingapp.parkingservice.exceptions;
 
-import com.parkingapp.parkingservice.dto.error.ValidationError;
+import com.parkingapp.parkingservice.infrastructure.entrypoint.rest.response.error.ValidationError;
 
 import java.util.List;
 

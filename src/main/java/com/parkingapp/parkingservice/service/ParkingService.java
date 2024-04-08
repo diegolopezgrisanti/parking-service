@@ -1,7 +1,7 @@
 package com.parkingapp.parkingservice.service;
 
-import com.parkingapp.parkingservice.model.Parking;
-import com.parkingapp.parkingservice.model.ParkingStatusCheck;
+import com.parkingapp.parkingservice.domain.parking.Parking;
+import com.parkingapp.parkingservice.domain.parking.ParkingStatusCheck;
 
 import java.util.Optional;
 import java.util.UUID;
