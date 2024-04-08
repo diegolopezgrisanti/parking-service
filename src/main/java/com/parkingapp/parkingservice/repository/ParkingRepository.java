@@ -3,6 +3,7 @@ package com.parkingapp.parkingservice.repository;
 import com.parkingapp.parkingservice.model.Parking;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface ParkingRepository {
@@ -10,5 +11,5 @@ public interface ParkingRepository {
 
     List<Parking> getTodayParkingsByPlateAndZone(String plate, UUID parkingZoneId);
 
-    Parking getParkingById(UUID id);
+    Optional<Parking> getParkingById(UUID id);
 }

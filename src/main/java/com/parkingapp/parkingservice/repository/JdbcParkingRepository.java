@@ -26,7 +26,7 @@ public class JdbcParkingRepository implements ParkingRepository {
     @Override
     public void saveParking(Parking parking) {
         MapSqlParameterSource params = new MapSqlParameterSource()
-                .addValue("id", UUID.randomUUID())
+                .addValue("id", parking.getId())
                 .addValue("parkingZoneId", parking.getParkingZoneId())
                 .addValue("plate", parking.getPlate())
                 .addValue("email", parking.getEmail())
@@ -71,15 +71,16 @@ public class JdbcParkingRepository implements ParkingRepository {
     }
 
     @Override
-    public Parking getParkingById(UUID id) {
+    public Optional<Parking> getParkingById(UUID id) {
         return namedParameterJdbcTemplate.query(
                 """
                    SELECT * FROM parking
                    WHERE id = :id
                 """,
-                params,
+                Map.of("id", id),
                 new ParkingRowMapper()
-        );
+        )
+                .stream().findFirst();
     }
 
     private class ParkingRowMapper implements RowMapper<Parking> {

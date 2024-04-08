@@ -40,7 +40,7 @@ public class ParkingResponse {
     private String email;
 
     public ParkingResponse(Parking parking) {
-        this.id = UUID.randomUUID();
+        this.id = parking.getId();
         this.plate = parking.getPlate();
         this.parkingZoneId = parking.getParkingZoneId();
         this.expiration = parking.getExpiration();

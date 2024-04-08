@@ -1,10 +1,12 @@
 package com.parkingapp.parkingservice.controller;
 
-import com.parkingapp.parkingservice.dto.*;
+import com.parkingapp.parkingservice.dto.CreateParkingRequest;
+import com.parkingapp.parkingservice.dto.ParkingResponse;
+import com.parkingapp.parkingservice.dto.ParkingCheckResponse;
+import com.parkingapp.parkingservice.dto.ParkingDetailsDTO;
 import com.parkingapp.parkingservice.dto.error.ErrorResponse;
 import com.parkingapp.parkingservice.model.Parking;
 import com.parkingapp.parkingservice.model.ParkingStatusCheck;
-import com.parkingapp.parkingservice.model.ParkingZone;
 import com.parkingapp.parkingservice.service.ParkingService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -14,11 +16,18 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/parkings")
@@ -39,7 +48,7 @@ public class ParkingController {
                     content = {
                             @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = CreateParkingResponse.class)
+                                    schema = @Schema(implementation = ParkingResponse.class)
                             )
                     }),
             @ApiResponse(
@@ -65,7 +74,7 @@ public class ParkingController {
     })
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CreateParkingResponse createParking(@RequestBody @Valid CreateParkingRequest request) {
+    public ParkingResponse createParking(@RequestBody @Valid CreateParkingRequest request) {
         Parking parking = new Parking(
                 UUID.randomUUID(),
                 request.getParkingZoneId(),
@@ -75,7 +84,7 @@ public class ParkingController {
         );
         parkingService.createParking(parking);
 
-        return new CreateParkingResponse(parking);
+        return new ParkingResponse(parking);
     }
 
     @Operation(summary = "Check parking by plate and parking zone id")
@@ -123,14 +132,18 @@ public class ParkingController {
 
         return new ParkingCheckResponse(check.getParkingStatus(), parkingDetails);
     }
-    @GetMapping("/{parking_id}")
-    @ResponseStatus(HttpStatus.OK)
-    public ParkingResponse getParkingById(@PathVariable("parking_id") UUID id) {
-        Parking parking = parkingService.getParkingById(id);
-        ParkingResponse parkingById = parking.getId() != null
-                ? new ParkingResponse(parking.getId())
-                : null;
 
-        return new ParkingResponse(parkingById);
+    @GetMapping("/{parkingId}")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity getParkingById(@PathVariable UUID parkingId) {
+        Optional<Parking> parking = parkingService.getParkingById(parkingId);
+
+        if (parking.isPresent()) {
+            ParkingResponse response = new ParkingResponse(parking.get());
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }
+
+        ErrorResponse errorResponse = new ErrorResponse("Parking not found");
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
 }

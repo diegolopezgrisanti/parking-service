@@ -51,6 +51,11 @@ public class ParkingServiceImpl implements ParkingService {
         );
     }
 
+    @Override
+    public Optional<Parking> getParkingById(UUID id) {
+        return parkingRepository.getParkingById(id);
+    }
+
     private ParkingStatus resolveParkingStatus(Optional<Parking> lastParking) {
         if (lastParking.isEmpty()) {
             return ParkingStatus.NOT_FOUND;
