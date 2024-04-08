@@ -9,4 +9,6 @@ public interface ParkingRepository {
     void saveParking(Parking parking);
 
     List<Parking> getTodayParkingsByPlateAndZone(String plate, UUID parkingZoneId);
+
+    Parking getParkingById(UUID id);
 }

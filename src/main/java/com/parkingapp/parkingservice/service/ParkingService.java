@@ -9,4 +9,6 @@ public interface ParkingService {
     Parking createParking(Parking parking);
 
     ParkingStatusCheck getParkingStatusCheck(String plate, UUID parkingZoneId);
+
+    Parking getParkingById(UUID id);
 }

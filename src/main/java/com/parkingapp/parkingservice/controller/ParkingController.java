@@ -4,6 +4,7 @@ import com.parkingapp.parkingservice.dto.*;
 import com.parkingapp.parkingservice.dto.error.ErrorResponse;
 import com.parkingapp.parkingservice.model.Parking;
 import com.parkingapp.parkingservice.model.ParkingStatusCheck;
+import com.parkingapp.parkingservice.model.ParkingZone;
 import com.parkingapp.parkingservice.service.ParkingService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -15,7 +16,9 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/parkings")
@@ -119,5 +122,15 @@ public class ParkingController {
                 : null;
 
         return new ParkingCheckResponse(check.getParkingStatus(), parkingDetails);
+    }
+    @GetMapping("/{parking_id}")
+    @ResponseStatus(HttpStatus.OK)
+    public ParkingResponse getParkingById(@PathVariable("parking_id") UUID id) {
+        Parking parking = parkingService.getParkingById(id);
+        ParkingResponse parkingById = parking.getId() != null
+                ? new ParkingResponse(parking.getId())
+                : null;
+
+        return new ParkingResponse(parkingById);
     }
 }

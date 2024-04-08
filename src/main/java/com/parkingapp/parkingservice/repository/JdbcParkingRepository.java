@@ -70,6 +70,18 @@ public class JdbcParkingRepository implements ParkingRepository {
         );
     }
 
+    @Override
+    public Parking getParkingById(UUID id) {
+        return namedParameterJdbcTemplate.query(
+                """
+                   SELECT * FROM parking
+                   WHERE id = :id
+                """,
+                params,
+                new ParkingRowMapper()
+        );
+    }
+
     private class ParkingRowMapper implements RowMapper<Parking> {
 
         @Override
