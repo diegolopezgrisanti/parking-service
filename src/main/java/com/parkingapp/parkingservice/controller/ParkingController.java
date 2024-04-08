@@ -133,6 +133,38 @@ public class ParkingController {
         return new ParkingCheckResponse(check.getParkingStatus(), parkingDetails);
     }
 
+    @Operation(summary = "Get parking by id")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Successful response",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = ParkingResponse.class)
+                            )
+                    }),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Parking was not found with the ID provided",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = ErrorResponse.class)
+                            )
+                    }
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Internal server error",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = ErrorResponse.class)
+                            )
+                    }
+            )
+    })
     @GetMapping("/{parkingId}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity getParkingById(@PathVariable UUID parkingId) {
