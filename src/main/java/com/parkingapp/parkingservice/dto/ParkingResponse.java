@@ -6,7 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.Instant;
 import java.util.UUID;
 
-public class CreateParkingResponse {
+public class ParkingResponse {
 
     @Schema(
             description = "Parking ID",
@@ -39,8 +39,8 @@ public class CreateParkingResponse {
     )
     private String email;
 
-    public CreateParkingResponse(Parking parking) {
-        this.id = UUID.randomUUID();
+    public ParkingResponse(Parking parking) {
+        this.id = parking.getId();
         this.plate = parking.getPlate();
         this.parkingZoneId = parking.getParkingZoneId();
         this.expiration = parking.getExpiration();
