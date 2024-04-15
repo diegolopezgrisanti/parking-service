@@ -1,11 +1,10 @@
 package com.parkingapp.parkingservice.infrastructure.database;
 
 import com.parkingapp.parkingservice.domain.parking.Parking;
-import com.parkingapp.parkingservice.exceptions.ParkingRepository;
+import com.parkingapp.parkingservice.domain.parking.ParkingRepository;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -13,9 +12,13 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
 
-@Repository
 public class JdbcParkingRepository implements ParkingRepository {
 
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;

@@ -1,5 +1,8 @@
 package com.parkingapp.parkingservice.infrastructure.entrypoint.rest;
 
+import com.parkingapp.parkingservice.application.createparking.CreateParkingUseCase;
+import com.parkingapp.parkingservice.application.getparkingbyid.GetParkingByIdUseCase;
+import com.parkingapp.parkingservice.application.checkparkingstatus.CheckParkingStatusUseCase;
 import com.parkingapp.parkingservice.infrastructure.entrypoint.rest.request.CreateParkingRequest;
 import com.parkingapp.parkingservice.infrastructure.entrypoint.rest.response.ParkingResponse;
 import com.parkingapp.parkingservice.infrastructure.entrypoint.rest.response.ParkingCheckResponse;
@@ -7,7 +10,6 @@ import com.parkingapp.parkingservice.infrastructure.entrypoint.rest.response.Par
 import com.parkingapp.parkingservice.infrastructure.entrypoint.rest.response.error.ErrorResponse;
 import com.parkingapp.parkingservice.domain.parking.Parking;
 import com.parkingapp.parkingservice.domain.parking.ParkingStatusCheck;
-import com.parkingapp.parkingservice.service.ParkingService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -34,10 +36,18 @@ import java.util.UUID;
 @Tag(name = "Parkings", description = "All about parking")
 public class ParkingController {
 
-    private final ParkingService parkingService;
+    private final CreateParkingUseCase createParkingUseCase;
+    private final GetParkingByIdUseCase getParkingByIdUseCase;
+    private final CheckParkingStatusUseCase checkParkingStatusUseCase;
 
-    public ParkingController(ParkingService parkingService) {
-        this.parkingService = parkingService;
+    public ParkingController(
+            CreateParkingUseCase createParkingUseCase,
+            GetParkingByIdUseCase getParkingByIdUseCase,
+            CheckParkingStatusUseCase checkParkingStatusUseCase
+    ) {
+        this.createParkingUseCase = createParkingUseCase;
+        this.getParkingByIdUseCase = getParkingByIdUseCase;
+        this.checkParkingStatusUseCase = checkParkingStatusUseCase;
     }
 
     @Operation(summary = "Create parking")
@@ -82,7 +92,7 @@ public class ParkingController {
                 request.getEmail(),
                 request.getExpiration()
         );
-        parkingService.createParking(parking);
+        createParkingUseCase.execute(parking);
 
         return new ParkingResponse(parking);
     }
@@ -125,7 +135,7 @@ public class ParkingController {
             @RequestParam("plate") String plate,
             @RequestParam("parking_zone_id") UUID parkingZoneId
     ) {
-        ParkingStatusCheck check = parkingService.getParkingStatusCheck(plate, parkingZoneId);
+        ParkingStatusCheck check = checkParkingStatusUseCase.execute(plate, parkingZoneId);
         ParkingDetailsDTO parkingDetails = check.getParking() != null
                 ? new ParkingDetailsDTO(plate, check.getParking().getExpiration())
                 : null;
@@ -168,7 +178,7 @@ public class ParkingController {
     @GetMapping("/{parkingId}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity getParkingById(@PathVariable UUID parkingId) {
-        Optional<Parking> parking = parkingService.getParkingById(parkingId);
+        Optional<Parking> parking = getParkingByIdUseCase.execute(parkingId);
 
         if (parking.isPresent()) {
             ParkingResponse response = new ParkingResponse(parking.get());

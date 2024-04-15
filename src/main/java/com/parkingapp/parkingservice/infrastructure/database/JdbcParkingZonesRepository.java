@@ -4,7 +4,6 @@ import com.parkingapp.parkingservice.domain.parkingzone.ParkingZone;
 import com.parkingapp.parkingservice.domain.parkingzone.ParkingZonesRepository;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -12,7 +11,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-@Repository
 public class JdbcParkingZonesRepository implements ParkingZonesRepository {
 
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;

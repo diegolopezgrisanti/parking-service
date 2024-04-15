@@ -1,10 +1,9 @@
 package com.parkingapp.parkingservice.infrastructure.entrypoint.rest;
 
+import com.parkingapp.parkingservice.domain.exceptions.ParkingZoneNotFoundException;
 import com.parkingapp.parkingservice.infrastructure.entrypoint.rest.response.error.ErrorResponse;
 import com.parkingapp.parkingservice.infrastructure.entrypoint.rest.response.error.ValidationError;
 import com.parkingapp.parkingservice.infrastructure.entrypoint.rest.response.error.ValidationErrorResponse;
-import com.parkingapp.parkingservice.exceptions.ApiException;
-import com.parkingapp.parkingservice.exceptions.ParkingZoneNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
@@ -20,10 +19,10 @@ import java.util.List;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler({
-            ApiException.class
+            RuntimeException.class
     })
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    ErrorResponse handle(ApiException exception) {
+    ErrorResponse handle(RuntimeException exception) {
         return new ErrorResponse("Internal server error, please try later");
     }
 

@@ -1,6 +1,4 @@
-package com.parkingapp.parkingservice.exceptions;
-
-import com.parkingapp.parkingservice.domain.parking.Parking;
+package com.parkingapp.parkingservice.domain.parking;
 
 import java.util.List;
 import java.util.Optional;

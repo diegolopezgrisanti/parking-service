@@ -1,10 +1,10 @@
 package com.parkingapp.parkingservice.infrastructure.entrypoint.rest;
 
+import com.parkingapp.parkingservice.application.getparkingzones.GetParkingZonesByIdUseCase;
+import com.parkingapp.parkingservice.domain.parkingzone.ParkingZone;
 import com.parkingapp.parkingservice.infrastructure.entrypoint.rest.response.ParkingZoneDTO;
 import com.parkingapp.parkingservice.infrastructure.entrypoint.rest.response.ParkingZonesResponse;
 import com.parkingapp.parkingservice.infrastructure.entrypoint.rest.response.error.ErrorResponse;
-import com.parkingapp.parkingservice.domain.parkingzone.ParkingZone;
-import com.parkingapp.parkingservice.service.ParkingZonesService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -29,10 +29,10 @@ import java.util.stream.Collectors;
 @Tag(name = "Parking zones", description = "All about parking zones")
 public class ParkingZonesController {
 
-    private final ParkingZonesService parkingZonesService;
+    private final GetParkingZonesByIdUseCase getParkingZonesByIdUseCase;
 
-    public ParkingZonesController(ParkingZonesService parkingZonesService) {
-        this.parkingZonesService = parkingZonesService;
+    public ParkingZonesController(GetParkingZonesByIdUseCase getParkingZonesByIdUseCase) {
+        this.getParkingZonesByIdUseCase = getParkingZonesByIdUseCase;
     }
 
     @Operation(summary = "Gets all parking zones by city ID")
@@ -76,7 +76,7 @@ public class ParkingZonesController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public ParkingZonesResponse getParkingZonesByCityId(@RequestParam("city-id") UUID cityId) {
-        List<ParkingZone> parkingZones = parkingZonesService.getAllByCityId(cityId);
+        List<ParkingZone> parkingZones = getParkingZonesByIdUseCase.execute(cityId);
         List<ParkingZoneDTO> mappedParkingZones = parkingZones.stream()
                 .map(parkingZone -> new ParkingZoneDTO(parkingZone.getId(), parkingZone.getName()))
                 .collect(Collectors.toList());
