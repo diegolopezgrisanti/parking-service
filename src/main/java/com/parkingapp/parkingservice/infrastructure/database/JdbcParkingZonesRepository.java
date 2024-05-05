@@ -46,7 +46,8 @@ public class JdbcParkingZonesRepository implements ParkingZonesRepository {
         public ParkingZone mapRow(ResultSet rs, int rowNum) throws SQLException {
             return new ParkingZone(
                     UUID.fromString(rs.getString("id")),
-                    rs.getString("name")
+                    rs.getString("name"),
+                    UUID.fromString(rs.getString("city_id"))
             );
         }
     }
