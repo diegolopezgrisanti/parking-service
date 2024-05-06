@@ -8,9 +8,10 @@ public class ParkingZone {
     private String name;
     private UUID cityId;
 
-    public ParkingZone(UUID id, String name) {
+    public ParkingZone(UUID id, String name, UUID cityId) {
         this.id = id;
         this.name = name;
+        this.cityId = cityId;
     }
 
     public UUID getId() {
