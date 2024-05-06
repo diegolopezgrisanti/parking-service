@@ -1,6 +1,5 @@
-package com.parkingapp.parkingservice.application.getparking;
+package com.parkingapp.parkingservice.application.getparkingbyid;
 
-import com.parkingapp.parkingservice.application.getparkingbyid.GetParkingByIdUseCase;
 import com.parkingapp.parkingservice.domain.parking.Parking;
 import com.parkingapp.parkingservice.domain.parking.ParkingRepository;
 import org.junit.jupiter.api.Test;
