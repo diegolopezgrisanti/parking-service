@@ -1,7 +1,10 @@
+import com.adarshr.gradle.testlogger.theme.ThemeType
+
 plugins {
 	java
 	id("org.springframework.boot") version "3.1.1"
 	id("io.spring.dependency-management") version "1.1.0"
+	id("com.adarshr.test-logger") version "4.0.0"
 }
 
 group = "com.parkingapp"
@@ -33,8 +36,69 @@ dependencies {
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 	testImplementation("org.assertj:assertj-core:3.25.1")
 	testImplementation("org.mockito:mockito-core:3.+")
+
+	testImplementation(platform("org.testcontainers:testcontainers-bom:1.19.7"))
+	testImplementation("org.testcontainers:junit-jupiter")
+	testImplementation("org.testcontainers:postgresql")
 }
 
 tasks.withType<Test> {
 	useJUnitPlatform()
+}
+
+tasks.apply {
+	test {
+		enableAssertions = true
+		useJUnitPlatform {
+			excludeTags("integration")
+			excludeTags("component")
+		}
+	}
+
+	testlogger {
+		theme = ThemeType.STANDARD_PARALLEL
+		showExceptions = true
+		showStackTraces = true
+		showFullStackTraces = false
+		showCauses = true
+		slowThreshold = 5000
+		showSummary = true
+		showSimpleNames = false
+		showPassed = false
+		showSkipped = true
+		showFailed = true
+		showOnlySlow = false
+		showStandardStreams = false
+		showPassedStandardStreams = false
+		showSkippedStandardStreams = true
+		showFailedStandardStreams = true
+		logLevel = LogLevel.LIFECYCLE
+	}
+
+	task<Test>("integrationTest") {
+		group = "verification"
+		description = "Runs integration tests."
+		useJUnitPlatform {
+			includeTags("integration")
+		}
+		shouldRunAfter(test)
+	}
+
+	task<Test>("contractTest") {
+		group = "verification"
+		description = "Runs contract tests."
+		useJUnitPlatform {
+			includeTags("contract")
+		}
+		shouldRunAfter("integrationTest")
+	}
+
+	task<Test>("componentTest") {
+		group = "verification"
+		description = "Runs component tests."
+		useJUnitPlatform {
+			includeTags("component")
+		}
+		shouldRunAfter("contractTest")
+	}
 }
