@@ -17,7 +17,7 @@ class GetParkingByIdUseCaseTest {
     private GetParkingByIdUseCase useCase = new GetParkingByIdUseCase(parkingRepository);
 
     @Test
-    void shouldReturnAllCities() {
+    void shouldReturnParkingById() {
         // GIVEN
         UUID id = UUID.randomUUID();
         Instant mock_instant = Instant.parse("1970-01-01T00:00:00Z");
