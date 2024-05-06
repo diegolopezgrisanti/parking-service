@@ -19,24 +19,23 @@ class GetParkingByIdUseCaseTest {
     @Test
     void shouldReturnParkingById() {
         // GIVEN
-        UUID id = UUID.randomUUID();
-        Instant mock_instant = Instant.parse("1970-01-01T00:00:00Z");
+        UUID parkingId = UUID.randomUUID();
         Parking parking = new Parking(
-                id,
+                parkingId,
                 UUID.randomUUID(),
                 "4316KNN",
                 "mock@test.com",
-                mock_instant
+                Instant.now()
 
         );
-        when(parkingRepository.getParkingById(id)).thenReturn(Optional.of(parking));
+        when(parkingRepository.getParkingById(parkingId)).thenReturn(Optional.of(parking));
 
         // WHEN
-        Optional<Parking> result = useCase.execute(id);
+        Optional<Parking> result = useCase.execute(parkingId);
 
         // THEN
         assertThat(result).isPresent().contains(parking);
 
-        verify(parkingRepository, times(1)).getParkingById(id);
+        verify(parkingRepository, times(1)).getParkingById(parkingId);
     }
 }
