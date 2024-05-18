@@ -5,6 +5,8 @@ plugins {
 	id("org.springframework.boot") version "3.1.1"
 	id("io.spring.dependency-management") version "1.1.0"
 	id("com.adarshr.test-logger") version "4.0.0"
+	kotlin("jvm") version "1.6.21"
+	kotlin("plugin.spring") version "1.6.21"
 }
 
 group = "com.parkingapp"
@@ -42,16 +44,13 @@ dependencies {
 	testImplementation("org.testcontainers:postgresql")
 }
 
-tasks.withType<Test> {
-	useJUnitPlatform()
-}
-
 tasks.apply {
 	test {
 		enableAssertions = true
 		useJUnitPlatform {
 			excludeTags("integration")
 			excludeTags("component")
+			excludeTags("contract")
 		}
 	}
 
@@ -101,4 +100,9 @@ tasks.apply {
 		}
 		shouldRunAfter("contractTest")
 	}
+
+	check {
+		dependsOn("integrationTest", "contractTest", "componentTest")
+	}
+
 }
