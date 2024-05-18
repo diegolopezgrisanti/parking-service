@@ -26,7 +26,6 @@ class GetParkingByIdUseCaseTest {
                 "4316KNN",
                 "mock@test.com",
                 Instant.now()
-
         );
         when(parkingRepository.getParkingById(parkingId)).thenReturn(Optional.of(parking));
 
