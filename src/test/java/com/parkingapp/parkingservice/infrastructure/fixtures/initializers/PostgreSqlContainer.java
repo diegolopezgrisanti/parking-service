@@ -21,7 +21,7 @@ public class PostgreSqlContainer extends PostgreSQLContainer<PostgreSqlContainer
     }
 
     public PostgreSqlContainer() {
-        super();
+        super("postgres:15");
     }
 
     public static PostgreSqlContainer getInstance() {
