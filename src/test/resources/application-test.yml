@@ -1,0 +1,5 @@
+spring:
+  flyway:
+    enabled: true
+    baselineOnMigrate: true
+    locations: classpath:db/migrations
