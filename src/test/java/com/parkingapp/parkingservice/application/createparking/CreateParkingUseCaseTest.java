@@ -1,43 +1,60 @@
 package com.parkingapp.parkingservice.application.createparking;
 
-import com.parkingapp.parkingservice.application.getparkingbyid.GetParkingByIdUseCase;
+import com.parkingapp.parkingservice.domain.exceptions.ParkingZoneNotFoundException;
 import com.parkingapp.parkingservice.domain.parking.Parking;
 import com.parkingapp.parkingservice.domain.parking.ParkingRepository;
+import com.parkingapp.parkingservice.domain.parkingzone.ParkingZonesRepository;
 import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
-import java.util.Optional;
 import java.util.UUID;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class CreateParkingUseCaseTest {
 
     private ParkingRepository parkingRepository = mock(ParkingRepository.class);
-    private GetParkingByIdUseCase useCase = new GetParkingByIdUseCase(parkingRepository);
+    private ParkingZonesRepository parkingZonesRepository = mock(ParkingZonesRepository.class);
+    private CreateParkingUseCase useCase = new CreateParkingUseCase(
+            parkingRepository,
+            parkingZonesRepository
+    );
+
+    private UUID parkingId = UUID.randomUUID();
+    private UUID parkingZoneId = UUID.randomUUID();
+    private Parking parking = new Parking(
+            parkingId,
+            parkingZoneId,
+            "ABC123",
+            "dummy@email.com",
+            Instant.now()
+    );
 
     @Test
-    void shouldReturnCreateParking() {
+    void shouldCreateParkingWhenParkingZoneIsValid() {
         // GIVEN
-        UUID id = UUID.randomUUID();
-        Instant mock_instant = Instant.parse("1970-01-01T00:00:00Z");
-        Parking parking = new Parking(
-                id,
-                UUID.randomUUID(),
-                "4316KNN",
-                "mock@test.com",
-                mock_instant
-
-        );
-        when(parkingRepository.getParkingById(id)).thenReturn(Optional.of(parking));
+        when(parkingZonesRepository.isParkingZoneIdValid(parkingZoneId)).thenReturn(true);
+        doNothing().when(parkingRepository).saveParking(parking);
 
         // WHEN
-        Optional<Parking> result = useCase.execute(id);
+        Parking result = useCase.execute(parking);
 
         // THEN
-        assertThat(result).isPresent().contains(parking);
+        verify(parkingZonesRepository).isParkingZoneIdValid(parkingZoneId);
+        verify(parkingRepository).saveParking(parking);
+        assertThat(result).isEqualTo(parking);
+    }
 
-        verify(parkingRepository, times(1)).getParkingById(id);
+    @Test
+    void shouldNotCreateParkingWhenParkingZoneIsNotValid() {
+        // GIVEN
+        when(parkingZonesRepository.isParkingZoneIdValid(parkingZoneId)).thenReturn(false);
+
+        // WHEN AND THEN
+        assertThrows(ParkingZoneNotFoundException.class, () -> useCase.execute(parking));
+        verify(parkingZonesRepository).isParkingZoneIdValid(parkingZoneId);
+        verifyNoInteractions(parkingRepository);
     }
 }
