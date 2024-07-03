@@ -96,7 +96,7 @@ public class JdbcParkingRepository implements ParkingRepository {
                     UUID.fromString(rs.getString("parking_zone_id")),
                     rs.getString("plate"),
                     rs.getString("email"),
-                    rs.getTimestamp("expiration").toLocalDateTime().toInstant(ZoneOffset.UTC)
+                    rs.getTimestamp("expiration").toInstant()
             );
         }
     }
