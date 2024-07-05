@@ -52,12 +52,27 @@ class JdbcParkingZonesRepositoryIntegrationTest {
 
     @Test
     void shouldCheckAParkingZoneIdIsValid() {
+        // GIVEN
+        UUID cityId = UUID.randomUUID();
+        ParkingZone parkingZone = new ParkingZone(UUID.randomUUID(), "dummy", cityId);
+        givenExistingParkingZone(parkingZone);
+        // WHEN
+        boolean result = jdbcParkingZonesRepository.isParkingZoneIdValid(parkingZone.getId());
 
+        // THEN
+        assertThat(result).isTrue();
     }
 
     @Test
     void shouldCheckAParkingZoneIdIsNotValid() {
+        // GIVEN
+        UUID parkingZoneId = UUID.randomUUID();
 
+        // WHEN
+        boolean result = jdbcParkingZonesRepository.isParkingZoneIdValid(parkingZoneId);
+
+        // THEN
+        assertThat(result).isFalse();
     }
 
     private void givenExistingParkingZone(ParkingZone parkingZone) {
