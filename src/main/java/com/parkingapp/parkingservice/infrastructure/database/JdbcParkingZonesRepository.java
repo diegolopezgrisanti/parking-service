@@ -13,7 +13,7 @@ import java.util.UUID;
 
 public class JdbcParkingZonesRepository implements ParkingZonesRepository {
 
-    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+    private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     public JdbcParkingZonesRepository(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
         this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
@@ -31,7 +31,7 @@ public class JdbcParkingZonesRepository implements ParkingZonesRepository {
     }
 
     @Override
-    public boolean isParkingZoneIdValid(java.util.UUID parkingZoneId) {
+    public boolean isParkingZoneIdValid(UUID parkingZoneId) {
         return namedParameterJdbcTemplate.queryForObject(
                 """
                    select count(*) from parking_zones where id = :parkingZoneId
