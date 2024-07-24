@@ -61,7 +61,6 @@ public class CreateParkingRequest {
             example = "2024-12-24T16:18:58.165+00:00"
     )
     @NotNull
-    @Future
     private Instant startDate;
 
     @Schema(

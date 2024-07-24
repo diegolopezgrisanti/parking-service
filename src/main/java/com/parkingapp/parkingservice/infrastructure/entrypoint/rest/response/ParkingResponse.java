@@ -3,8 +3,6 @@ package com.parkingapp.parkingservice.infrastructure.entrypoint.rest.response;
 import com.parkingapp.parkingservice.domain.parking.Parking;
 import com.parkingapp.parkingservice.domain.parking.PaymentStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.Future;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.Instant;
