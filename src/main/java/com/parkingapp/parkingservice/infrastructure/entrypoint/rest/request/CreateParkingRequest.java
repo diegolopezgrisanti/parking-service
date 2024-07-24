@@ -79,6 +79,5 @@ public class CreateParkingRequest {
             example = "PENDING"
     )
     @NotNull
-    @Future
     private PaymentStatus paymentStatus;
 }

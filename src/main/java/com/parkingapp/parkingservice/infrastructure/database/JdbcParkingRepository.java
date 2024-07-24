@@ -37,13 +37,14 @@ public class JdbcParkingRepository implements ParkingRepository {
                 .addValue("paymentMethodId", parking.getPaymentMethodId())
                 .addValue("plate", parking.getPlate())
                 .addValue("startDate", Date.from(parking.getStartDate()))
-                .addValue("endDate", Date.from(parking.getEndDate()));
+                .addValue("endDate", Date.from(parking.getEndDate()))
+                .addValue("paymentStatus", parking.getPaymentStatus().name());
 
 
         namedParameterJdbcTemplate.update(
                 """
-                INSERT INTO parking(id, parking_zone_id, user_id, vehicle_id, payment_method_id, plate, start_date, end_date)
-                VALUES (:id, :parkingZoneId, :userId, :vehicleId, :paymentMethodId, :plate, :startDate, :endDate)
+                INSERT INTO parking(id, parking_zone_id, user_id, vehicle_id, payment_method_id, plate, start_date, end_date, payment_status)
+                VALUES (:id, :parkingZoneId, :userId, :vehicleId, :paymentMethodId, :plate, :startDate, :endDate, :paymentStatus::payment_status_enum)
                 """,
                 params
         );

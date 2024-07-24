@@ -11,8 +11,6 @@ import java.time.Instant;
 import java.util.UUID;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class ParkingResponse {
 
     @Schema(
@@ -77,6 +75,15 @@ public class ParkingResponse {
     private PaymentStatus paymentStatus;
 
     public ParkingResponse(Parking parking) {
+        this.id = parking.getId();
+        this.parkingZoneId = parking.getParkingZoneId();
+        this.vehicleId = parking.getVehicleId();
+        this.userId = parking.getUserId();
+        this.paymentMethodId = parking.getPaymentMethodId();
+        this.plate = parking.getPlate();
+        this.startDate = parking.getStartDate();
+        this.endDate = parking.getEndDate();
+        this.paymentStatus = parking.getPaymentStatus();
     }
 }
 
