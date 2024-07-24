@@ -2,6 +2,7 @@ package com.parkingapp.parkingservice.infrastructure.database;
 
 import com.parkingapp.parkingservice.domain.parking.Parking;
 import com.parkingapp.parkingservice.domain.parking.ParkingRepository;
+import com.parkingapp.parkingservice.domain.parking.PaymentStatus;
 import com.parkingapp.parkingservice.infrastructure.fixtures.initializers.testannotation.IntegrationTest;
 import com.parkingapp.parkingservice.infrastructure.fixtures.initializers.testannotation.WithPostgreSql;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,9 +30,15 @@ public class JdbcParkingRepositoryIntegrationTest {
     @Autowired
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-    private String plate = "DUMMY";
-    private UUID parkingZoneId = UUID.randomUUID();
-    private Instant now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
+    private final UUID parkingZoneId = UUID.randomUUID();
+    private final UUID userId = UUID.randomUUID();
+    private final UUID vehicleId = UUID.randomUUID();
+    private final String plate = "4616KUY";
+    private final UUID paymentMethodId = UUID.randomUUID();
+    private final Instant now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
+    private final Instant nowPlusOneHour = now.plus(1, ChronoUnit.HOURS).truncatedTo(ChronoUnit.MILLIS);
+    private final Instant nowMinusOneDay = now.minus(1, ChronoUnit.DAYS).truncatedTo(ChronoUnit.MILLIS);
+    private final PaymentStatus paymentStatusPending = PaymentStatus.PENDING;
 
     @BeforeEach
     void setUp() {
@@ -48,9 +55,13 @@ public class JdbcParkingRepositoryIntegrationTest {
         Parking expectedParking = new Parking(
                 parkingId,
                 parkingZoneId,
-                "ABC123",
-                "dummy@email.com",
-                now
+                userId,
+                vehicleId,
+                paymentMethodId,
+                plate,
+                now,
+                nowPlusOneHour,
+                paymentStatusPending
         );
 
         givenExitingParkingZone(parkingZoneId);
@@ -66,14 +77,19 @@ public class JdbcParkingRepositoryIntegrationTest {
     @Test
     void shouldNotFindTodayParkingsWhenThereIsNoMatchForParkingZone() {
         // GIVEN
+        UUID parkingId = UUID.randomUUID();
         UUID notMatchingParkingZoneId = UUID.randomUUID();
         givenExitingParkingZone(notMatchingParkingZoneId);
         Parking parking = new Parking(
-                UUID.randomUUID(),
+                parkingId,
                 notMatchingParkingZoneId,
+                userId,
+                vehicleId,
+                paymentMethodId,
                 plate,
-                "dummy@email.com",
-                now
+                now,
+                nowPlusOneHour,
+                paymentStatusPending
         );
         parkingRepository.saveParking(parking);
 
@@ -87,13 +103,18 @@ public class JdbcParkingRepositoryIntegrationTest {
     @Test
     void shouldNotFindTodayParkingsWhenThereIsNoMatchForPlate() {
         // GIVEN
+        UUID parkingId = UUID.randomUUID();
         givenExitingParkingZone(parkingZoneId);
         Parking parking = new Parking(
-                UUID.randomUUID(),
+                parkingId,
                 parkingZoneId,
-                "NOT_MATCH",
-                "dummy@email.com",
-                now
+                userId,
+                vehicleId,
+                paymentMethodId,
+                "NO MATCH PLATE",
+                now,
+                nowPlusOneHour,
+                paymentStatusPending
         );
         parkingRepository.saveParking(parking);
 
@@ -107,13 +128,18 @@ public class JdbcParkingRepositoryIntegrationTest {
     @Test
     void shouldNotFindParkingsThatExpiredBeforeToday() {
         // GIVEN
+        UUID parkingId = UUID.randomUUID();
         givenExitingParkingZone(parkingZoneId);
         Parking parking = new Parking(
-                UUID.randomUUID(),
+                parkingId,
                 parkingZoneId,
+                userId,
+                vehicleId,
+                paymentMethodId,
                 plate,
-                "dummy@email.com",
-                now.minus(1, ChronoUnit.DAYS)
+                now.minus(25, ChronoUnit.HOURS),
+                nowMinusOneDay,
+                paymentStatusPending
         );
         parkingRepository.saveParking(parking);
 
@@ -127,13 +153,18 @@ public class JdbcParkingRepositoryIntegrationTest {
     @Test
     void shouldFindTodayParkings() {
         // GIVEN
+        UUID parkingId = UUID.randomUUID();
         givenExitingParkingZone(parkingZoneId);
         Parking parking = new Parking(
-                UUID.randomUUID(),
+                parkingId,
                 parkingZoneId,
+                userId,
+                vehicleId,
+                paymentMethodId,
                 plate,
-                "dummy@email.com",
-                now
+                now,
+                nowPlusOneHour,
+                paymentStatusPending
         );
         parkingRepository.saveParking(parking);
 
@@ -147,20 +178,32 @@ public class JdbcParkingRepositoryIntegrationTest {
     @Test
     void shouldFindTodayParkingsWhenThereAreMultiple() {
         // GIVEN
+
+        UUID parkingId1 = UUID.randomUUID();
+        UUID parkingId2 = UUID.randomUUID();
         givenExitingParkingZone(parkingZoneId);
         Parking parking = new Parking(
-                UUID.randomUUID(),
+                parkingId1,
                 parkingZoneId,
+                userId,
+                vehicleId,
+                paymentMethodId,
                 plate,
-                "dummy@email.com",
-                now
+                now,
+                nowPlusOneHour,
+                paymentStatusPending
         );
         Parking parking2 = new Parking(
-                UUID.randomUUID(),
+                parkingId2,
                 parkingZoneId,
+                userId,
+                vehicleId,
+                paymentMethodId,
                 plate,
-                "dummy@email.com",
-                now.plus(3, ChronoUnit.HOURS)
+                now,
+                now.plus(3, ChronoUnit.HOURS),
+                paymentStatusPending
+
         );
         parkingRepository.saveParking(parking);
         parkingRepository.saveParking(parking2);

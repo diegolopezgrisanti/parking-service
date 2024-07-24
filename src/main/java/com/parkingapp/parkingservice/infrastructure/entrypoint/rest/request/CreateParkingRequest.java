@@ -1,11 +1,18 @@
 package com.parkingapp.parkingservice.infrastructure.entrypoint.rest.request;
 
+import com.parkingapp.parkingservice.domain.parking.PaymentStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.Instant;
 import java.util.UUID;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class CreateParkingRequest {
 
     @Schema(
@@ -25,61 +32,53 @@ public class CreateParkingRequest {
     private UUID parkingZoneId;
 
     @Schema(
-            description = "Parking expiration date time with zone",
-            example = "2023-09-18T16:18:58.165+00:00"
+            name = "user_id",
+            description = "User ID",
+            example = "685275ca-d4d4-4465-b2ac-4d7451eeffef"
+    )
+    @NotNull
+    private UUID userId;
+
+    @Schema(
+            name = "vehicle_id",
+            description = "Vehicle ID",
+            example = "1ef08577-d7eb-455d-8152-c7b620e5b8cc"
+    )
+    @NotNull
+    private UUID vehicleId;
+
+    @Schema(
+            name = "payment_method_id",
+            description = "Payment method ID",
+            example = "5bc31e3e-4057-425a-bda8-3e5913d56e95"
+    )
+    @NotNull
+    private UUID paymentMethodId;
+
+    @Schema(
+            name = "start_date",
+            description = "Parking start date time with zone",
+            example = "2024-12-24T16:18:58.165+00:00"
     )
     @NotNull
     @Future
-    private Instant expiration;
+    private Instant startDate;
 
     @Schema(
-            description = "User email",
-            example = "dummy_user@mail.com"
+            name = "end_date",
+            description = "Parking end date time with zone",
+            example = "2024-12-24T17:18:58.165+00:00"
     )
     @NotNull
-    @Email(message = "Must be a valid email")
-    @NotBlank
-    private String email;
+    @Future
+    private Instant endDate;
 
-    public CreateParkingRequest(){}
-
-    public CreateParkingRequest(String plate, UUID parkingZoneId, Instant expiration, String email) {
-        this.plate = plate;
-        this.parkingZoneId = parkingZoneId;
-        this.expiration = expiration;
-        this.email = email;
-    }
-
-    public String getPlate() {
-        return plate;
-    }
-
-    public UUID getParkingZoneId() {
-        return parkingZoneId;
-    }
-
-    public Instant getExpiration() {
-        return expiration;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setPlate(String plate) {
-        this.plate = plate;
-    }
-
-    public void setParkingZoneId(UUID parkingZoneId) {
-        this.parkingZoneId = parkingZoneId;
-    }
-
-    public void setExpiration(Instant expiration) {
-        this.expiration = expiration;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
+    @Schema(
+            name = "payment_status",
+            description = "Parking payment status",
+            example = "PENDING"
+    )
+    @NotNull
+    @Future
+    private PaymentStatus paymentStatus;
 }

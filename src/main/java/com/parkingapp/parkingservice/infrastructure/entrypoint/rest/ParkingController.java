@@ -88,9 +88,13 @@ public class ParkingController {
         Parking parking = new Parking(
                 UUID.randomUUID(),
                 request.getParkingZoneId(),
+                request.getUserId(),
+                request.getVehicleId(),
+                request.getPaymentMethodId(),
                 request.getPlate(),
-                request.getEmail(),
-                request.getExpiration()
+                request.getStartDate(),
+                request.getEndDate(),
+                request.getPaymentStatus()
         );
         createParkingUseCase.execute(parking);
 
@@ -137,7 +141,7 @@ public class ParkingController {
     ) {
         ParkingStatusCheck check = checkParkingStatusUseCase.execute(plate, parkingZoneId);
         ParkingDetailsDTO parkingDetails = check.getParking() != null
-                ? new ParkingDetailsDTO(plate, check.getParking().getExpiration())
+                ? new ParkingDetailsDTO(plate, check.getParking().getEndDate())
                 : null;
 
         return new ParkingCheckResponse(check.getParkingStatus(), parkingDetails);

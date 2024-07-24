@@ -3,10 +3,12 @@ package com.parkingapp.parkingservice.application.createparking;
 import com.parkingapp.parkingservice.domain.exceptions.ParkingZoneNotFoundException;
 import com.parkingapp.parkingservice.domain.parking.Parking;
 import com.parkingapp.parkingservice.domain.parking.ParkingRepository;
+import com.parkingapp.parkingservice.domain.parking.PaymentStatus;
 import com.parkingapp.parkingservice.domain.parkingzone.ParkingZonesRepository;
 import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -22,14 +24,22 @@ public class CreateParkingUseCaseTest {
             parkingZonesRepository
     );
 
-    private UUID parkingId = UUID.randomUUID();
-    private UUID parkingZoneId = UUID.randomUUID();
-    private Parking parking = new Parking(
+    private final UUID parkingId = UUID.randomUUID();
+    private final UUID parkingZoneId = UUID.randomUUID();
+    private final UUID userId = UUID.randomUUID();
+    private final UUID vehicleId = UUID.randomUUID();
+    private final String plate = "4616KUY";
+    private final UUID paymentMethodId = UUID.randomUUID();
+    private final Parking parking = new Parking(
             parkingId,
             parkingZoneId,
-            "ABC123",
-            "dummy@email.com",
-            Instant.now()
+            userId,
+            vehicleId,
+            paymentMethodId,
+            plate,
+            Instant.now(),
+            Instant.now().plus(1, ChronoUnit.HOURS),
+            PaymentStatus.PENDING
     );
 
     @Test

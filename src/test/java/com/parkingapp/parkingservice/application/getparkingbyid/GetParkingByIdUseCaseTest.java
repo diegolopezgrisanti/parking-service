@@ -2,9 +2,11 @@ package com.parkingapp.parkingservice.application.getparkingbyid;
 
 import com.parkingapp.parkingservice.domain.parking.Parking;
 import com.parkingapp.parkingservice.domain.parking.ParkingRepository;
+import com.parkingapp.parkingservice.domain.parking.PaymentStatus;
 import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -20,12 +22,21 @@ class GetParkingByIdUseCaseTest {
     void shouldReturnParkingById() {
         // GIVEN
         UUID parkingId = UUID.randomUUID();
+        UUID parkingZoneId = UUID.randomUUID();
+        UUID userId = UUID.randomUUID();
+        UUID vehicleId = UUID.randomUUID();
+        String plate = "4616KUY";
+        UUID paymentMethodId = UUID.randomUUID();
         Parking parking = new Parking(
                 parkingId,
-                UUID.randomUUID(),
-                "4316KNN",
-                "mock@test.com",
-                Instant.now()
+                parkingZoneId,
+                userId,
+                vehicleId,
+                paymentMethodId,
+                plate,
+                Instant.now(),
+                Instant.now().plus(1, ChronoUnit.HOURS),
+                PaymentStatus.PENDING
         );
         when(parkingRepository.getParkingById(parkingId)).thenReturn(Optional.of(parking));
 
