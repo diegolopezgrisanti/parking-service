@@ -23,7 +23,7 @@ public class CheckParkingStatusUseCase {
 
     public ParkingStatusCheck execute(String plate, UUID parkingZoneId) {
         List<Parking> parkings = this.parkingRepository.getTodayParkingsByPlateAndZone(plate, parkingZoneId);
-        Optional<Parking> lastParking = parkings.stream().max(Comparator.comparing(Parking::getExpiration));
+        Optional<Parking> lastParking = parkings.stream().max(Comparator.comparing(Parking::getEndDate));
         ParkingStatus status = this.resolveParkingStatus(lastParking);
         return new ParkingStatusCheck(
                 status,
@@ -35,6 +35,6 @@ public class CheckParkingStatusUseCase {
         if (lastParking.isEmpty()) {
             return ParkingStatus.NOT_FOUND;
         }
-        return lastParking.get().getExpiration().isAfter(Instant.now()) ? ParkingStatus.ACTIVE : ParkingStatus.EXPIRED;
+        return lastParking.get().getEndDate().isAfter(Instant.now()) ? ParkingStatus.ACTIVE : ParkingStatus.EXPIRED;
     }
 }

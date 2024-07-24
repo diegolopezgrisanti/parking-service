@@ -1,11 +1,14 @@
 package com.parkingapp.parkingservice.infrastructure.entrypoint.rest.response;
 
 import com.parkingapp.parkingservice.domain.parking.Parking;
+import com.parkingapp.parkingservice.domain.parking.PaymentStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.*;
 
 import java.time.Instant;
 import java.util.UUID;
 
+@Data
 public class ParkingResponse {
 
     @Schema(
@@ -15,12 +18,6 @@ public class ParkingResponse {
     private UUID id;
 
     @Schema(
-            description = "Vehicle plate",
-            example = "4736KTZ"
-    )
-    private String plate;
-
-    @Schema(
             name = "parking_zone_id",
             description = "Parking zone ID",
             example = "8e4488d3-0e5a-4044-8d6d-d3d9e36836d0"
@@ -28,62 +25,63 @@ public class ParkingResponse {
     private UUID parkingZoneId;
 
     @Schema(
-            description = "Parking expiration date time with zone",
-            example = "2023-09-18T16:18:58.165+00:00"
+            name = "user_id",
+            description = "User ID",
+            example = "685275ca-d4d4-4465-b2ac-4d7451eeffef"
     )
-    private Instant expiration;
+    private UUID userId;
 
     @Schema(
-            description = "User email",
-            example = "dummy_user@mail.com"
+            name = "vehicle_id",
+            description = "Vehicle ID",
+            example = "1ef08577-d7eb-455d-8152-c7b620e5b8cc"
     )
-    private String email;
+    private UUID vehicleId;
+
+    @Schema(
+            name = "payment_method_id",
+            description = "Payment method ID",
+            example = "5bc31e3e-4057-425a-bda8-3e5913d56e95"
+    )
+    private UUID paymentMethodId;
+
+    @Schema(
+            description = "Vehicle plate",
+            example = "4736KTZ"
+    )
+    private String plate;
+
+    @Schema(
+            name = "start_date",
+            description = "Parking start date time with zone",
+            example = "2024-12-24T16:18:58.165+00:00"
+    )
+    private Instant startDate;
+
+    @Schema(
+            name = "end_date",
+            description = "Parking end date time with zone",
+            example = "2024-12-24T17:18:58.165+00:00"
+    )
+    private Instant endDate;
+
+    @Schema(
+            name = "payment_status",
+            description = "Parking payment status",
+            example = "PENDING"
+    )
+    private PaymentStatus paymentStatus;
 
     public ParkingResponse(Parking parking) {
         this.id = parking.getId();
-        this.plate = parking.getPlate();
         this.parkingZoneId = parking.getParkingZoneId();
-        this.expiration = parking.getExpiration();
-        this.email = parking.getEmail();
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-    public String getPlate() {
-        return plate;
-    }
-
-    public void setPlate(String plate) {
-        this.plate = plate;
-    }
-
-    public UUID getParkingZoneId() {
-        return parkingZoneId;
-    }
-
-    public void setParkingZoneId(UUID parkingZoneId) {
-        this.parkingZoneId = parkingZoneId;
-    }
-
-    public Instant getExpiration() {
-        return expiration;
-    }
-
-    public void setExpiration(Instant expiration) {
-        this.expiration = expiration;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
+        this.vehicleId = parking.getVehicleId();
+        this.userId = parking.getUserId();
+        this.paymentMethodId = parking.getPaymentMethodId();
+        this.plate = parking.getPlate();
+        this.startDate = parking.getStartDate();
+        this.endDate = parking.getEndDate();
+        this.paymentStatus = parking.getPaymentStatus();
     }
 }
 

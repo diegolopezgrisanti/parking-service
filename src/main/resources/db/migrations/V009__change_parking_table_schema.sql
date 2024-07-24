@@ -1,0 +1,14 @@
+CREATE TYPE payment_status AS ENUM ('PENDING', 'PROCESSED');
+
+ALTER TABLE parking
+RENAME expiration TO end_date;
+
+ALTER TABLE parking
+DROP COLUMN email;
+
+ALTER TABLE parking
+ADD COLUMN user_id UUID NOT NULL,
+ADD COLUMN vehicle_id UUID NOT NULL,
+ADD COLUMN payment_method_id UUID NOT NULL,
+ADD COLUMN start_date TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+ADD COLUMN payment_status payment_status NOT NULL DEFAULT 'PENDING';

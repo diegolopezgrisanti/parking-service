@@ -1,9 +1,6 @@
 package com.parkingapp.parkingservice.application.checkparkingstatus;
 
-import com.parkingapp.parkingservice.domain.parking.Parking;
-import com.parkingapp.parkingservice.domain.parking.ParkingRepository;
-import com.parkingapp.parkingservice.domain.parking.ParkingStatus;
-import com.parkingapp.parkingservice.domain.parking.ParkingStatusCheck;
+import com.parkingapp.parkingservice.domain.parking.*;
 import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
@@ -18,20 +15,31 @@ class CheckParkingStatusUseCaseTest {
 
     private final ParkingRepository parkingRepository = mock(ParkingRepository.class);
     private final CheckParkingStatusUseCase useCase = new CheckParkingStatusUseCase(parkingRepository);
-    private final String plate = "ABC123";
+    private final UUID parkingId = UUID.randomUUID();
     private final UUID parkingZoneId = UUID.randomUUID();
+    private final UUID userId = UUID.randomUUID();
+    private final UUID vehicleId = UUID.randomUUID();
+    private final String plate = "4616KUY";
+    private final UUID paymentMethodId = UUID.randomUUID();
     private final Instant now = Instant.now();
+    private final Instant nowPlusOneHour = Instant.now().plus(1, ChronoUnit.HOURS);
+    private final Instant nowMinusOneHour = Instant.now().minus(1, ChronoUnit.HOURS);
+    private final PaymentStatus paymentStatusPending = PaymentStatus.PENDING;
+
 
     @Test
     void shouldResolveActiveStatusWhenParkingIsActive() {
         // GIVEN
-        Instant expirationDateInTheFuture = now.plus(1, ChronoUnit.HOURS);
         Parking parking = new Parking(
-                UUID.randomUUID(),
+                parkingId,
                 parkingZoneId,
+                userId,
+                vehicleId,
+                paymentMethodId,
                 plate,
-                "dummy@email.com",
-                expirationDateInTheFuture
+                now,
+                nowPlusOneHour,
+                paymentStatusPending
         );
         when(parkingRepository.getTodayParkingsByPlateAndZone(plate, parkingZoneId)).thenReturn(List.of(parking));
 
@@ -47,13 +55,16 @@ class CheckParkingStatusUseCaseTest {
     @Test
     void shouldResolveExpiredStatusWhenParkingIsExpired() {
         // GIVEN
-        Instant expirationDateInThePast = now.minus(1, ChronoUnit.HOURS);
         Parking parking = new Parking(
-                UUID.randomUUID(),
+                parkingId,
                 parkingZoneId,
+                userId,
+                vehicleId,
+                paymentMethodId,
                 plate,
-                "dummy@email.com",
-                expirationDateInThePast
+                now.minus(3, ChronoUnit.HOURS),
+                nowMinusOneHour,
+                paymentStatusPending
         );
         when(parkingRepository.getTodayParkingsByPlateAndZone(plate, parkingZoneId)).thenReturn(List.of(parking));
 
@@ -83,21 +94,27 @@ class CheckParkingStatusUseCaseTest {
     @Test
     void shouldResolveStatusWithLastParkingWhenMultipleParkingFound() {
         // GIVEN
-        Instant expirationDateInTheFuture = now.plus(1, ChronoUnit.HOURS);
-        Instant expirationDateInThePast = now.minus(1, ChronoUnit.HOURS);
         Parking expectedParking = new Parking(
-                UUID.randomUUID(),
+                parkingId,
                 parkingZoneId,
+                userId,
+                vehicleId,
+                paymentMethodId,
                 plate,
-                "dummy@email.com",
-                expirationDateInTheFuture
+                now,
+                nowPlusOneHour,
+                paymentStatusPending
         );
         Parking parking = new Parking(
-                UUID.randomUUID(),
+                parkingId,
                 parkingZoneId,
+                userId,
+                vehicleId,
+                paymentMethodId,
                 plate,
-                "dummy@email.com",
-                expirationDateInThePast
+                now.minus(3, ChronoUnit.HOURS),
+                nowMinusOneHour,
+                paymentStatusPending
         );
         when(parkingRepository.getTodayParkingsByPlateAndZone(plate, parkingZoneId))
                 .thenReturn(List.of(parking, expectedParking));

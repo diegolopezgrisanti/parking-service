@@ -1,31 +1,19 @@
 package com.parkingapp.parkingservice.infrastructure.entrypoint.rest.response;
 
+import lombok.Data;
+
 import java.time.Instant;
 
+@Data
 public class ParkingDetailsDTO {
 
     private String plate;
 
-    private Instant expirationDate;
+    private Instant endDate;
 
-    public ParkingDetailsDTO(String plate, Instant expirationDate) {
+    public ParkingDetailsDTO(String plate, Instant endDate) {
         this.plate = plate;
-        this.expirationDate = expirationDate;
+        this.endDate = endDate;
     }
 
-    public String getPlate() {
-        return plate;
-    }
-
-    public void setPlate(String plate) {
-        this.plate = plate;
-    }
-
-    public Instant getExpirationDate() {
-        return expirationDate;
-    }
-
-    public void setExpirationDate(Instant expirationDate) {
-        this.expirationDate = expirationDate;
-    }
 }

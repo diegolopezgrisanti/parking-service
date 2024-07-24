@@ -2,6 +2,7 @@ package com.parkingapp.parkingservice.infrastructure.database;
 
 import com.parkingapp.parkingservice.domain.parking.Parking;
 import com.parkingapp.parkingservice.domain.parking.ParkingRepository;
+import com.parkingapp.parkingservice.domain.parking.PaymentStatus;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -31,14 +32,19 @@ public class JdbcParkingRepository implements ParkingRepository {
         MapSqlParameterSource params = new MapSqlParameterSource()
                 .addValue("id", parking.getId())
                 .addValue("parkingZoneId", parking.getParkingZoneId())
+                .addValue("userId", parking.getUserId())
+                .addValue("vehicleId", parking.getVehicleId())
+                .addValue("paymentMethodId", parking.getPaymentMethodId())
                 .addValue("plate", parking.getPlate())
-                .addValue("email", parking.getEmail())
-                .addValue("expiration", Date.from(parking.getExpiration()));
+                .addValue("startDate", Date.from(parking.getStartDate()))
+                .addValue("endDate", Date.from(parking.getEndDate()))
+                .addValue("paymentStatus", parking.getPaymentStatus().name());
+
 
         namedParameterJdbcTemplate.update(
                 """
-                INSERT INTO parking(id, parking_zone_id, plate, email, expiration)
-                VALUES (:id, :parkingZoneId, :plate, :email, :expiration)
+                INSERT INTO parking(id, parking_zone_id, user_id, vehicle_id, payment_method_id, plate, start_date, end_date, payment_status)
+                VALUES (:id, :parkingZoneId, :userId, :vehicleId, :paymentMethodId, :plate, :startDate, :endDate, :paymentStatus::payment_status)
                 """,
                 params
         );
@@ -66,7 +72,7 @@ public class JdbcParkingRepository implements ParkingRepository {
                   SELECT * FROM parking 
                   WHERE plate = :plate 
                   AND parking_zone_id = :parkingZoneId
-                  AND expiration > :atBeginningOfToday
+                  AND end_date > :atBeginningOfToday
                """,
                 params,
                 new ParkingRowMapper()
@@ -93,9 +99,13 @@ public class JdbcParkingRepository implements ParkingRepository {
             return new Parking(
                     UUID.fromString(rs.getString("id")),
                     UUID.fromString(rs.getString("parking_zone_id")),
+                    UUID.fromString(rs.getString("user_id")),
+                    UUID.fromString(rs.getString("vehicle_id")),
+                    UUID.fromString(rs.getString("payment_method_id")),
                     rs.getString("plate"),
-                    rs.getString("email"),
-                    rs.getTimestamp("expiration").toInstant()
+                    rs.getTimestamp("start_date").toInstant(),
+                    rs.getTimestamp("end_date").toInstant(),
+                    PaymentStatus.valueOf(rs.getString("payment_status"))
             );
         }
     }
