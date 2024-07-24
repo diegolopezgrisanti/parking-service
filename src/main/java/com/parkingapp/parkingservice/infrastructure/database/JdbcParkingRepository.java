@@ -50,7 +50,6 @@ public class JdbcParkingRepository implements ParkingRepository {
         );
     }
 
-    //TODO refactor to get the vehicle ID from vehicles table and can delete plate table from parking
     @Override
     public List<Parking> getTodayParkingsByPlateAndZone(String plate, UUID parkingZoneId) {
         LocalDate today = LocalDate.now();
