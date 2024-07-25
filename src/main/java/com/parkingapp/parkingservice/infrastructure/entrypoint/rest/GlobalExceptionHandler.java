@@ -1,6 +1,7 @@
 package com.parkingapp.parkingservice.infrastructure.entrypoint.rest;
 
 import com.parkingapp.parkingservice.domain.exceptions.ParkingZoneNotFoundException;
+import com.parkingapp.parkingservice.domain.exceptions.VehicleAlreadyExistsException;
 import com.parkingapp.parkingservice.infrastructure.entrypoint.rest.response.error.ErrorResponse;
 import com.parkingapp.parkingservice.infrastructure.entrypoint.rest.response.error.ValidationError;
 import com.parkingapp.parkingservice.infrastructure.entrypoint.rest.response.error.ValidationErrorResponse;
@@ -51,6 +52,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     ErrorResponse handle(HttpMessageNotReadableException exception) {
+        return new ErrorResponse(exception.getMessage());
+    }
+
+    @ExceptionHandler(VehicleAlreadyExistsException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    ErrorResponse handle(VehicleAlreadyExistsException exception) {
         return new ErrorResponse(exception.getMessage());
     }
 
