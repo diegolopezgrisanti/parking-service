@@ -11,6 +11,8 @@ import com.parkingapp.parkingservice.infrastructure.entrypoint.rest.response.err
 import com.parkingapp.parkingservice.domain.parking.Parking;
 import com.parkingapp.parkingservice.domain.parking.ParkingStatusCheck;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -23,6 +25,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -50,45 +53,51 @@ public class ParkingController {
         this.checkParkingStatusUseCase = checkParkingStatusUseCase;
     }
 
-    @Operation(summary = "Create parking")
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "201",
-                    description = "Successful response",
-                    content = {
-                            @Content(
+    @Operation(
+            summary = "Create parking",
+            parameters = {
+                    @Parameter(
+                            name = "USER_ID",
+                            description = "ID of the user creating the parking",
+                            required = true,
+                            in = ParameterIn.HEADER,
+                            schema = @Schema(type = "string", format = "uuid")
+                    )
+            },
+            responses = {
+                    @ApiResponse(
+                            responseCode = "201",
+                            description = "Successful response",
+                            content = @Content(
                                     mediaType = "application/json",
                                     schema = @Schema(implementation = ParkingResponse.class)
                             )
-                    }),
-            @ApiResponse(
-                    responseCode = "400",
-                    description = "Bad request",
-                    content = {
-                            @Content(
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Bad request",
+                            content = @Content(
                                     mediaType = "application/json",
                                     schema = @Schema(implementation = ErrorResponse.class)
                             )
-                    }
-            ),
-            @ApiResponse(
-                    responseCode = "500",
-                    description = "Internal server error",
-                    content = {
-                            @Content(
+                    ),
+                    @ApiResponse(
+                            responseCode = "500",
+                            description = "Internal server error",
+                            content = @Content(
                                     mediaType = "application/json",
                                     schema = @Schema(implementation = ErrorResponse.class)
                             )
-                    }
-            )
-    })
+                    )
+            }
+    )
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ParkingResponse createParking(@RequestBody @Valid CreateParkingRequest request) {
+    public ParkingResponse createParking(@RequestHeader("USER_ID") UUID userId, @RequestBody @Valid CreateParkingRequest request) {
         Parking parking = new Parking(
                 UUID.randomUUID(),
                 request.getParkingZoneId(),
-                request.getUserId(),
+                userId,
                 request.getVehicleId(),
                 request.getPaymentMethodId(),
                 request.getPlate(),

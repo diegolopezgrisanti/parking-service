@@ -32,14 +32,6 @@ public class CreateParkingRequest {
     private UUID parkingZoneId;
 
     @Schema(
-            name = "user_id",
-            description = "User ID",
-            example = "685275ca-d4d4-4465-b2ac-4d7451eeffef"
-    )
-    @NotNull
-    private UUID userId;
-
-    @Schema(
             name = "vehicle_id",
             description = "Vehicle ID",
             example = "1ef08577-d7eb-455d-8152-c7b620e5b8cc"
