@@ -21,6 +21,8 @@ repositories {
 }
 
 dependencies {
+	val REST_ASSURED = "5.5.0"
+
 	implementation("org.springframework.boot:spring-boot-starter")
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.springframework.boot:spring-boot-starter-validation")
@@ -51,6 +53,11 @@ dependencies {
 	testImplementation(platform("org.testcontainers:testcontainers-bom:1.19.7"))
 	testImplementation("org.testcontainers:junit-jupiter")
 	testImplementation("org.testcontainers:postgresql")
+	testImplementation("io.rest-assured:rest-assured:$REST_ASSURED")
+	testImplementation("io.rest-assured:json-path:$REST_ASSURED")
+	testImplementation("io.rest-assured:xml-path:$REST_ASSURED")
+	testImplementation("io.rest-assured:spring-mock-mvc:$REST_ASSURED")
+	testImplementation("io.rest-assured:spring-commons:$REST_ASSURED")
 }
 
 tasks.apply {
