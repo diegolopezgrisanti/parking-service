@@ -1,5 +1,5 @@
 ## Trello ticket
-[NUMBER](https://trello.com/c/ABcA3nPp/NUMBER)
+[Ticket](LINK)
 
 ## Description of changes
 
