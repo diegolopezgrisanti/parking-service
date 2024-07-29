@@ -41,7 +41,7 @@ class CreateVehicleUseCaseTest {
     void shouldCreateANewVehicle() {
         // GIVEN
         when(vehicleRepository.vehicleExistsByUserIdAndPlate(vehicle)).thenReturn(false);
-        doNothing().when(vehicleRepository).saveVehicle(vehicle);
+        when(vehicleRepository.saveVehicle(vehicle)).thenReturn(true);
 
         // WHEN
         Vehicle result = useCase.execute(vehicle);
@@ -53,7 +53,7 @@ class CreateVehicleUseCaseTest {
     }
 
     @Test
-    void shouldNotCreateANewVehicleIfCombinationOfUserIdAndPlateAlreadyExists() {
+    void shouldNotSaveAVehicleWhenPlateAndUserIdExists() {
         // GIVEN
         when(vehicleRepository.vehicleExistsByUserIdAndPlate(vehicle)).thenReturn(true);
 

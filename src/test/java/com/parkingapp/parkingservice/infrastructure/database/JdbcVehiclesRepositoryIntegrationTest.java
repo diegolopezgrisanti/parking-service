@@ -57,15 +57,16 @@ public class JdbcVehiclesRepositoryIntegrationTest {
     @Test
     void shouldSaveANewVehicle() {
         // WHEN
-        vehicleRepository.saveVehicle(newVehicle);
+        boolean saveResult = vehicleRepository.saveVehicle(newVehicle);
 
         // THEN
         Optional<Vehicle> result = vehicleRepository.getVehicleByUserIdAndPlate(newVehicle.getUserId(), newVehicle.getPlate());
         assertThat(result).isEqualTo(Optional.of(newVehicle));
+        assertThat(saveResult).isTrue();
     }
 
     @Test
-    void shouldSaveANewVehicleWhenAlreadyAExistsPlateButNoUserId() {
+    void shouldSaveVehicleWhenSamePlateAndDifferentUserIdExists() {
         // GIVEN
         Vehicle newVehiclePlateAlreadyExists = new Vehicle(
                 UUID.randomUUID(),
@@ -78,8 +79,8 @@ public class JdbcVehiclesRepositoryIntegrationTest {
         );
 
         // WHEN
-        vehicleRepository.saveVehicle(newVehicle);
-        vehicleRepository.saveVehicle(newVehiclePlateAlreadyExists);
+        boolean saveResult = vehicleRepository.saveVehicle(newVehicle);
+        boolean saveResult2 = vehicleRepository.saveVehicle(newVehiclePlateAlreadyExists);
 
         // THEN
         Optional<Vehicle> result1 = vehicleRepository.getVehicleByUserIdAndPlate(
@@ -87,16 +88,18 @@ public class JdbcVehiclesRepositoryIntegrationTest {
                 newVehicle.getPlate()
         );
         assertThat(result1).isEqualTo(Optional.of(newVehicle));
+        assertThat(saveResult).isTrue();
 
         Optional<Vehicle> result2 = vehicleRepository.getVehicleByUserIdAndPlate(
                 newVehiclePlateAlreadyExists.getUserId(),
                 newVehiclePlateAlreadyExists.getPlate()
         );
         assertThat(result2).isEqualTo(Optional.of(newVehiclePlateAlreadyExists));
+        assertThat(saveResult2).isTrue();
     }
 
     @Test
-    void shouldSaveANewVehicleWhenAlreadyAExistsUserIdButNoPlate() {
+    void shouldSaveVehicleWhenSameUserIdAndDifferentPlateExists() {
         // GIVEN
         Vehicle newVehicleUserIdAlreadyExists = new Vehicle(
                 UUID.randomUUID(),
@@ -109,8 +112,8 @@ public class JdbcVehiclesRepositoryIntegrationTest {
         );
 
         // WHEN
-        vehicleRepository.saveVehicle(newVehicle);
-        vehicleRepository.saveVehicle(newVehicleUserIdAlreadyExists);
+        boolean saveResult = vehicleRepository.saveVehicle(newVehicle);
+        boolean saveResult2 = vehicleRepository.saveVehicle(newVehicleUserIdAlreadyExists);
 
         // THEN
         Optional<Vehicle> result1 = vehicleRepository.getVehicleByUserIdAndPlate(
@@ -118,17 +121,20 @@ public class JdbcVehiclesRepositoryIntegrationTest {
                 newVehicle.getPlate()
         );
         assertThat(result1).isEqualTo(Optional.of(newVehicle));
+        assertThat(saveResult).isTrue();
+
         Optional<Vehicle> result2 = vehicleRepository.getVehicleByUserIdAndPlate(
                 newVehicleUserIdAlreadyExists.getUserId(),
                 newVehicleUserIdAlreadyExists.getPlate()
         );
         assertThat(result2).isEqualTo(Optional.of(newVehicleUserIdAlreadyExists));
+        assertThat(saveResult2).isTrue();
     }
 
     @Test
-    void shouldNotSaveAVehicleWhenAlreadyExistsOneWhitSamePlateAndUserId() {
+    void shouldNotSaveAVehicleWhenPlateAndUserIdExists() {
         // GIVEN
-        Vehicle newVehicleUserIdAndPlateAlreadyExists = new Vehicle(
+        Vehicle duplicateVehicle = new Vehicle(
                 UUID.randomUUID(),
                 brand,
                 model,
@@ -139,11 +145,13 @@ public class JdbcVehiclesRepositoryIntegrationTest {
         );
 
         // WHEN
-        vehicleRepository.saveVehicle(newVehicle);
+        boolean saveResult = vehicleRepository.saveVehicle(newVehicle);
+        boolean saveResult2 = vehicleRepository.saveVehicle(duplicateVehicle);
 
         // THEN
-        assertThrows(DataIntegrityViolationException.class,
-                () -> vehicleRepository.saveVehicle(newVehicleUserIdAndPlateAlreadyExists));
+        assertThat(saveResult).isTrue();
+        assertThat(saveResult2).isFalse();
+
     }
 
 }

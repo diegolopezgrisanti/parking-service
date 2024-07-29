@@ -18,7 +18,7 @@ public class JdbcVehiclesRepository implements VehicleRepository {
     }
 
     @Override
-    public void saveVehicle(Vehicle vehicle) {
+    public boolean saveVehicle(Vehicle vehicle) {
         MapSqlParameterSource params = new MapSqlParameterSource()
                 .addValue("id", vehicle.getId())
                 .addValue("brand", vehicle.getBrand())
@@ -28,13 +28,14 @@ public class JdbcVehiclesRepository implements VehicleRepository {
                 .addValue("country", vehicle.getCountry())
                 .addValue("userId", vehicle.getUserId());
 
-        namedParameterJdbcTemplate.update(
+        return namedParameterJdbcTemplate.update(
                 """
                 INSERT INTO vehicles(id, brand, model, color, plate, country, user_id)
                 VALUES (:id, :brand, :model, :color, :plate, :country, :userId)
+                ON CONFLICT(plate, user_id) DO NOTHING;
                 """,
                 params
-        );
+        ) > 0;
     }
 
     @Override
