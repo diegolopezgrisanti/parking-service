@@ -12,14 +12,11 @@ public class CreateVehicleUseCase {
     }
 
     public Vehicle execute(Vehicle vehicle) {
-        if (vehicleAlreadyExists(vehicle)) {
+        boolean vehicleIsSaved = vehicleRepository.saveVehicle(vehicle);
+
+        if (!vehicleIsSaved) {
             throw new VehicleAlreadyExistsException("The combination of vehicle_id and user_id already exists.");
         }
-        vehicleRepository.saveVehicle(vehicle);
         return vehicle;
     }
-
-    private boolean vehicleAlreadyExists(Vehicle vehicle) {
-        return this.vehicleRepository.vehicleExistsByUserIdAndPlate(vehicle);
-    };
 }

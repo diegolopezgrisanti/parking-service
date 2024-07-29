@@ -8,9 +8,7 @@ import org.junit.jupiter.api.Test;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
@@ -40,14 +38,12 @@ class CreateVehicleUseCaseTest {
     @Test
     void shouldCreateANewVehicle() {
         // GIVEN
-        when(vehicleRepository.vehicleExistsByUserIdAndPlate(vehicle)).thenReturn(false);
         when(vehicleRepository.saveVehicle(vehicle)).thenReturn(true);
 
         // WHEN
         Vehicle result = useCase.execute(vehicle);
 
         // THEN
-        verify(vehicleRepository).vehicleExistsByUserIdAndPlate(vehicle);
         verify(vehicleRepository).saveVehicle(vehicle);
         assertThat(result).isEqualTo(vehicle);
     }
@@ -55,11 +51,9 @@ class CreateVehicleUseCaseTest {
     @Test
     void shouldNotSaveAVehicleWhenPlateAndUserIdExists() {
         // GIVEN
-        when(vehicleRepository.vehicleExistsByUserIdAndPlate(vehicle)).thenReturn(true);
+        when(vehicleRepository.saveVehicle(vehicle)).thenReturn(false);
 
         // WHEN & THEN
         assertThrows(VehicleAlreadyExistsException.class, () -> useCase.execute(vehicle));
-        verify(vehicleRepository).vehicleExistsByUserIdAndPlate(vehicle);
-        verify(vehicleRepository, never()).saveVehicle(vehicle);
     }
 }

@@ -39,22 +39,6 @@ public class JdbcVehiclesRepository implements VehicleRepository {
     }
 
     @Override
-    public boolean vehicleExistsByUserIdAndPlate(Vehicle vehicle) {
-        String sql = """
-                SELECT COUNT(*) FROM vehicles
-                WHERE user_id = :userId AND plate = :plate
-                """;
-
-        SqlParameterSource params = new MapSqlParameterSource()
-                .addValue("userId", vehicle.getUserId())
-                .addValue("plate", vehicle.getPlate());
-
-        Integer count = namedParameterJdbcTemplate.queryForObject(sql, params, Integer.class);
-
-        return count != null && count > 0;
-    }
-
-    @Override
     public Optional<Vehicle> getVehicleByUserIdAndPlate(UUID userId, String plate) {
         String sql = """
                 SELECT * FROM vehicles
