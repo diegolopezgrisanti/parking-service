@@ -5,7 +5,7 @@ import com.parkingapp.parkingservice.application.createVehicle.CreateVehicleUseC
 import com.parkingapp.parkingservice.domain.common.Country;
 import com.parkingapp.parkingservice.domain.common.IdGenerator;
 import com.parkingapp.parkingservice.domain.vehicle.Vehicle;
-import com.parkingapp.parkingservice.domain.vehicle.VehicleColor;
+import com.parkingapp.parkingservice.domain.vehicle.Color;
 import com.parkingapp.parkingservice.infrastructure.entrypoint.rest.response.VehicleResponse;
 import com.parkingapp.parkingservice.infrastructure.fixtures.initializers.testannotation.ContractTest;
 import io.restassured.http.ContentType;
@@ -45,7 +45,7 @@ class VehiclesControllerContractTest {
     private final UUID userId = UUID.randomUUID();
     private final String model = "model";
     private final String brand = "brand";
-    private final VehicleColor color = VehicleColor.BLUE;
+    private final Color color = Color.BLUE;
     private final String plate = "4632TFR";
     private final Country country = Country.ESP;
 

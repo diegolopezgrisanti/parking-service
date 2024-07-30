@@ -12,7 +12,7 @@ public class Vehicle {
     private UUID id;
     private String brand;
     private String model;
-    private VehicleColor color;
+    private Color color;
     private String plate;
     private Country country;
     private UUID userId;

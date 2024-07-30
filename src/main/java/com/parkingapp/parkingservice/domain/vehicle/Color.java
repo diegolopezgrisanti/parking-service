@@ -1,6 +1,6 @@
 package com.parkingapp.parkingservice.domain.vehicle;
 
-public enum VehicleColor {
+public enum Color {
     BLACK,
     WHITE,
     RED,

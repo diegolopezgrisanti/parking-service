@@ -3,7 +3,7 @@ package com.parkingapp.parkingservice.application.createVehicle;
 import com.parkingapp.parkingservice.domain.common.Country;
 import com.parkingapp.parkingservice.domain.exceptions.VehicleAlreadyExistsException;
 import com.parkingapp.parkingservice.domain.vehicle.Vehicle;
-import com.parkingapp.parkingservice.domain.vehicle.VehicleColor;
+import com.parkingapp.parkingservice.domain.vehicle.Color;
 import com.parkingapp.parkingservice.domain.vehicle.VehicleRepository;
 import org.junit.jupiter.api.Test;
 
@@ -23,7 +23,7 @@ class CreateVehicleUseCaseTest {
     private final UUID userId = UUID.randomUUID();
     private final String model = "model";
     private final String brand = "brand";
-    private final VehicleColor color = VehicleColor.BLUE;
+    private final Color color = Color.BLUE;
     private final String plate = "4632TFR";
     private final Country country = Country.ESP;
 

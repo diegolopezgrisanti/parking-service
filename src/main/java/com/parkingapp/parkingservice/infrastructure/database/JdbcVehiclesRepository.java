@@ -2,7 +2,7 @@ package com.parkingapp.parkingservice.infrastructure.database;
 
 import com.parkingapp.parkingservice.domain.common.Country;
 import com.parkingapp.parkingservice.domain.vehicle.Vehicle;
-import com.parkingapp.parkingservice.domain.vehicle.VehicleColor;
+import com.parkingapp.parkingservice.domain.vehicle.Color;
 import com.parkingapp.parkingservice.domain.vehicle.VehicleRepository;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.jdbc.core.RowMapper;
@@ -61,7 +61,7 @@ public class JdbcVehiclesRepository implements VehicleRepository {
                 UUID.fromString(rs.getString("id")),
                 rs.getString("brand"),
                 rs.getString("model"),
-                VehicleColor.valueOf(rs.getString("color")),
+                Color.valueOf(rs.getString("color")),
                 rs.getString("plate"),
                 Country.valueOf(rs.getString("country")),
                 UUID.fromString(rs.getString("user_id"))
