@@ -1,5 +1,6 @@
 package com.parkingapp.parkingservice.infrastructure.entrypoint.rest.request;
 
+import com.parkingapp.parkingservice.domain.vehicle.VehicleColor;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -30,10 +31,10 @@ public class CreateVehicleRequest {
 
     @Schema(
             description = "Color",
-            example = "red"
+            example = "RED"
     )
     @NotNull
-    private String color;
+    private VehicleColor color;
 
     @Schema(
             description = "Plate",

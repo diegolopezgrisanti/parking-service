@@ -1,13 +1,13 @@
 package com.parkingapp.parkingservice.infrastructure.database;
 
 import com.parkingapp.parkingservice.domain.vehicle.Vehicle;
+import com.parkingapp.parkingservice.domain.vehicle.VehicleColor;
 import com.parkingapp.parkingservice.domain.vehicle.VehicleRepository;
 import com.parkingapp.parkingservice.infrastructure.fixtures.initializers.testannotation.IntegrationTest;
 import com.parkingapp.parkingservice.infrastructure.fixtures.initializers.testannotation.WithPostgreSql;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.test.jdbc.JdbcTestUtils;
 
@@ -15,7 +15,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertThrows;
 
 
 @IntegrationTest
@@ -32,7 +31,7 @@ public class JdbcVehiclesRepositoryIntegrationTest {
     private final UUID userId = UUID.randomUUID();
     private final String model = "model";
     private final String brand = "brand";
-    private final String color = "blue";
+    private final VehicleColor color = VehicleColor.BLUE;
     private final String plate = "4632TFR";
     private final String country = "ES";
 
@@ -66,7 +65,7 @@ public class JdbcVehiclesRepositoryIntegrationTest {
     }
 
     @Test
-    void shouldSaveVehicleWhenSamePlateAndDifferentUserIdExists() {
+    void shouldSaveVehicleWhenVehicleWithSamePlateAndDifferentUserIdExists() {
         // GIVEN
         Vehicle newVehiclePlateAlreadyExists = new Vehicle(
                 UUID.randomUUID(),
@@ -99,7 +98,7 @@ public class JdbcVehiclesRepositoryIntegrationTest {
     }
 
     @Test
-    void shouldSaveVehicleWhenSameUserIdAndDifferentPlateExists() {
+    void shouldSaveVehicleWhenVehicleWithSameUserIdAndDifferentPlateExists() {
         // GIVEN
         Vehicle newVehicleUserIdAlreadyExists = new Vehicle(
                 UUID.randomUUID(),
@@ -132,7 +131,7 @@ public class JdbcVehiclesRepositoryIntegrationTest {
     }
 
     @Test
-    void shouldNotSaveAVehicleWhenPlateAndUserIdExists() {
+    void shouldNotSaveAVehicleWhenItAlreadyExists() {
         // GIVEN
         Vehicle duplicateVehicle = new Vehicle(
                 UUID.randomUUID(),

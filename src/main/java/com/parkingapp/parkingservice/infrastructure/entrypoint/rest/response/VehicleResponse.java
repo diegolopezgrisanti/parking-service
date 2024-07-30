@@ -1,6 +1,7 @@
 package com.parkingapp.parkingservice.infrastructure.entrypoint.rest.response;
 
 import com.parkingapp.parkingservice.domain.vehicle.Vehicle;
+import com.parkingapp.parkingservice.domain.vehicle.VehicleColor;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
@@ -28,9 +29,9 @@ public class VehicleResponse {
 
     @Schema(
             description = "Color",
-            example = "red"
+            example = "RED"
     )
-    private String color;
+    private VehicleColor color;
 
     @Schema(
             description = "Plate",

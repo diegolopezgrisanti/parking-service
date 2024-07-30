@@ -1,6 +1,7 @@
 package com.parkingapp.parkingservice.infrastructure.database;
 
 import com.parkingapp.parkingservice.domain.vehicle.Vehicle;
+import com.parkingapp.parkingservice.domain.vehicle.VehicleColor;
 import com.parkingapp.parkingservice.domain.vehicle.VehicleRepository;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -23,7 +24,7 @@ public class JdbcVehiclesRepository implements VehicleRepository {
                 .addValue("id", vehicle.getId())
                 .addValue("brand", vehicle.getBrand())
                 .addValue("model", vehicle.getModel())
-                .addValue("color", vehicle.getColor())
+                .addValue("color", vehicle.getColor().name())
                 .addValue("plate", vehicle.getPlate())
                 .addValue("country", vehicle.getCountry())
                 .addValue("userId", vehicle.getUserId());
@@ -53,7 +54,7 @@ public class JdbcVehiclesRepository implements VehicleRepository {
                 UUID.fromString(rs.getString("id")),
                 rs.getString("brand"),
                 rs.getString("model"),
-                rs.getString("color"),
+                VehicleColor.valueOf(rs.getString("color")),
                 rs.getString("plate"),
                 rs.getString("country"),
                 UUID.fromString(rs.getString("user_id"))
