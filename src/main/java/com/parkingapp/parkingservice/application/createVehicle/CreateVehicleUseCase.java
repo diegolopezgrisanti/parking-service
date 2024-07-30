@@ -15,7 +15,7 @@ public class CreateVehicleUseCase {
         boolean vehicleIsSaved = vehicleRepository.saveVehicle(vehicle);
 
         if (!vehicleIsSaved) {
-            throw new VehicleAlreadyExistsException("The combination of vehicle_id and user_id already exists.");
+            throw new VehicleAlreadyExistsException();
         }
         return vehicle;
     }
