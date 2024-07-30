@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.test.jdbc.JdbcTestUtils;
 
-import java.util.Optional;
+import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -60,8 +60,8 @@ public class JdbcVehiclesRepositoryIntegrationTest {
         boolean saveResult = vehicleRepository.saveVehicle(newVehicle);
 
         // THEN
-        Optional<Vehicle> result = vehicleRepository.getVehicleByUserIdAndPlate(newVehicle.getUserId(), newVehicle.getPlate());
-        assertThat(result).isEqualTo(Optional.of(newVehicle));
+        List<Vehicle> result = vehicleRepository.getUserVehicles(newVehicle.getUserId());
+        assertThat(result).isEqualTo(List.of(newVehicle));
         assertThat(saveResult).isTrue();
     }
 
@@ -83,18 +83,12 @@ public class JdbcVehiclesRepositoryIntegrationTest {
         boolean saveResult2 = vehicleRepository.saveVehicle(newVehiclePlateAlreadyExists);
 
         // THEN
-        Optional<Vehicle> result1 = vehicleRepository.getVehicleByUserIdAndPlate(
-                newVehicle.getUserId(),
-                newVehicle.getPlate()
-        );
-        assertThat(result1).isEqualTo(Optional.of(newVehicle));
+        List<Vehicle> result1 = vehicleRepository.getUserVehicles(newVehicle.getUserId());
+        assertThat(result1).isEqualTo(List.of(newVehicle));
         assertThat(saveResult).isTrue();
 
-        Optional<Vehicle> result2 = vehicleRepository.getVehicleByUserIdAndPlate(
-                newVehiclePlateAlreadyExists.getUserId(),
-                newVehiclePlateAlreadyExists.getPlate()
-        );
-        assertThat(result2).isEqualTo(Optional.of(newVehiclePlateAlreadyExists));
+        List<Vehicle> result2 = vehicleRepository.getUserVehicles(newVehiclePlateAlreadyExists.getUserId());
+        assertThat(result2).isEqualTo(List.of(newVehiclePlateAlreadyExists));
         assertThat(saveResult2).isTrue();
     }
 
@@ -102,7 +96,7 @@ public class JdbcVehiclesRepositoryIntegrationTest {
     void shouldSaveVehicleWhenVehicleWithSameUserIdAndDifferentPlateExists() {
         // GIVEN
         Vehicle newVehicleUserIdAlreadyExists = new Vehicle(
-                UUID.randomUUID(),
+                userId,
                 brand,
                 model,
                 color,
@@ -112,22 +106,13 @@ public class JdbcVehiclesRepositoryIntegrationTest {
         );
 
         // WHEN
-        boolean saveResult = vehicleRepository.saveVehicle(newVehicle);
+        boolean saveResult1 = vehicleRepository.saveVehicle(newVehicle);
         boolean saveResult2 = vehicleRepository.saveVehicle(newVehicleUserIdAlreadyExists);
 
         // THEN
-        Optional<Vehicle> result1 = vehicleRepository.getVehicleByUserIdAndPlate(
-                newVehicle.getUserId(),
-                newVehicle.getPlate()
-        );
-        assertThat(result1).isEqualTo(Optional.of(newVehicle));
-        assertThat(saveResult).isTrue();
-
-        Optional<Vehicle> result2 = vehicleRepository.getVehicleByUserIdAndPlate(
-                newVehicleUserIdAlreadyExists.getUserId(),
-                newVehicleUserIdAlreadyExists.getPlate()
-        );
-        assertThat(result2).isEqualTo(Optional.of(newVehicleUserIdAlreadyExists));
+        List<Vehicle> result = vehicleRepository.getUserVehicles(newVehicle.getUserId());
+        assertThat(result).containsExactlyInAnyOrder(newVehicle, newVehicleUserIdAlreadyExists);
+        assertThat(saveResult1).isTrue();
         assertThat(saveResult2).isTrue();
     }
 

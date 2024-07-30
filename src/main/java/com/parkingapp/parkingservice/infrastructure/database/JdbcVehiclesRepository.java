@@ -10,7 +10,7 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 
-import java.util.Optional;
+import java.util.List;
 import java.util.UUID;
 
 public class JdbcVehiclesRepository implements VehicleRepository {
@@ -42,21 +42,18 @@ public class JdbcVehiclesRepository implements VehicleRepository {
     }
 
     @Override
-    public Optional<Vehicle> getVehicleByUserIdAndPlate(UUID userId, String plate) {
+    public List<Vehicle> getUserVehicles(UUID userId) {
         String sql = """
                 SELECT * FROM vehicles
-                WHERE user_id = :userId AND plate = :plate
+                WHERE user_id = :userId
                 """;
 
         SqlParameterSource params = new MapSqlParameterSource()
-                .addValue("userId", userId)
-                .addValue("plate", plate);
+                .addValue("userId", userId);
 
         RowMapper<Vehicle> rowMapper = getVehicleRowMapper();
 
-        Vehicle result = namedParameterJdbcTemplate.queryForObject(sql, params, rowMapper);
-
-        return Optional.ofNullable(result);
+        return namedParameterJdbcTemplate.query(sql, params, rowMapper);
     }
 
     private static @NotNull RowMapper<Vehicle> getVehicleRowMapper() {
