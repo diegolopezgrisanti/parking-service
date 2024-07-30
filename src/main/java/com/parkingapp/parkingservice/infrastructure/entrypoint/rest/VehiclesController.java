@@ -1,9 +1,9 @@
 package com.parkingapp.parkingservice.infrastructure.entrypoint.rest;
 
 import com.parkingapp.parkingservice.application.createVehicle.CreateVehicleUseCase;
+import com.parkingapp.parkingservice.domain.common.IdGenerator;
 import com.parkingapp.parkingservice.domain.vehicle.Vehicle;
 import com.parkingapp.parkingservice.infrastructure.entrypoint.rest.request.CreateVehicleRequest;
-import com.parkingapp.parkingservice.infrastructure.entrypoint.rest.response.ParkingResponse;
 import com.parkingapp.parkingservice.infrastructure.entrypoint.rest.response.VehicleResponse;
 import com.parkingapp.parkingservice.infrastructure.entrypoint.rest.response.error.ErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -27,9 +27,11 @@ import java.util.UUID;
 @Tag(name = "Vehicles", description = "All about vehicles")
 public class VehiclesController {
     private final CreateVehicleUseCase createVehicleUseCase;
+    private final IdGenerator idGenerator;
 
-    public VehiclesController(CreateVehicleUseCase createVehicleUseCase) {
+    public VehiclesController(CreateVehicleUseCase createVehicleUseCase, IdGenerator idGenerator) {
         this.createVehicleUseCase = createVehicleUseCase;
+        this.idGenerator = idGenerator;
     }
 
     @Operation(summary = "Create a new vehicle")
@@ -40,12 +42,22 @@ public class VehiclesController {
                     content = {
                             @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = ParkingResponse.class)
+                                    schema = @Schema(implementation = VehicleResponse.class)
                             )
                     }),
             @ApiResponse(
                     responseCode = "400",
                     description = "Bad request",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = ErrorResponse.class)
+                            )
+                    }
+            ),
+            @ApiResponse(
+                    responseCode = "409",
+                    description = "Vehicle for the userId with plate provided already exists",
                     content = {
                             @Content(
                                     mediaType = "application/json",
@@ -68,7 +80,7 @@ public class VehiclesController {
     @ResponseStatus(HttpStatus.CREATED)
     public VehicleResponse createVehicle(@RequestBody @Valid CreateVehicleRequest request) {
         Vehicle vehicle = new Vehicle(
-                UUID.randomUUID(),
+                idGenerator.generate(),
                 request.getBrand(),
                 request.getModel(),
                 request.getColor(),
