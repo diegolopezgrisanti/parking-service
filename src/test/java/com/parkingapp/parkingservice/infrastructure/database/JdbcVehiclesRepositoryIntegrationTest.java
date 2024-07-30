@@ -96,7 +96,7 @@ public class JdbcVehiclesRepositoryIntegrationTest {
     void shouldSaveVehicleWhenVehicleWithSameUserIdAndDifferentPlateExists() {
         // GIVEN
         Vehicle newVehicleUserIdAlreadyExists = new Vehicle(
-                userId,
+                UUID.randomUUID(),
                 brand,
                 model,
                 color,
@@ -132,11 +132,14 @@ public class JdbcVehiclesRepositoryIntegrationTest {
         // WHEN
         boolean saveResult = vehicleRepository.saveVehicle(newVehicle);
         boolean saveResult2 = vehicleRepository.saveVehicle(duplicateVehicle);
+        List<Vehicle> userVehiclesSaved = vehicleRepository.getUserVehicles(userId);
 
         // THEN
         assertThat(saveResult).isTrue();
         assertThat(saveResult2).isFalse();
-
+        assertThat(userVehiclesSaved).hasSize(1);
+        Vehicle savedVehicle = userVehiclesSaved.get(0);
+        assertThat(savedVehicle.getId()).isEqualTo(newVehicle.getId());
     }
 
 }
