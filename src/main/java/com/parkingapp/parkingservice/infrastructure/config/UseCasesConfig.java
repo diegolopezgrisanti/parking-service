@@ -1,5 +1,6 @@
 package com.parkingapp.parkingservice.infrastructure.config;
 
+import com.parkingapp.parkingservice.application.createVehicle.CreateVehicleUseCase;
 import com.parkingapp.parkingservice.application.createparking.CreateParkingUseCase;
 import com.parkingapp.parkingservice.application.findallcities.FindAllCitiesUseCase;
 import com.parkingapp.parkingservice.application.getparkingbyid.GetParkingByIdUseCase;
@@ -8,6 +9,7 @@ import com.parkingapp.parkingservice.application.getparkingzones.GetParkingZones
 import com.parkingapp.parkingservice.domain.city.CitiesRepository;
 import com.parkingapp.parkingservice.domain.parkingzone.ParkingZonesRepository;
 import com.parkingapp.parkingservice.domain.parking.ParkingRepository;
+import com.parkingapp.parkingservice.domain.vehicle.VehicleRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -50,5 +52,10 @@ public class UseCasesConfig {
         return new CheckParkingStatusUseCase(parkingRepository);
     }
 
-
+    @Bean
+    public CreateVehicleUseCase createVehicleUseCase(
+            VehicleRepository vehicleRepository
+    ) {
+        return new CreateVehicleUseCase(vehicleRepository);
+    }
 }
