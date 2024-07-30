@@ -1,5 +1,6 @@
 package com.parkingapp.parkingservice.domain.vehicle;
 
+import com.parkingapp.parkingservice.domain.common.Country;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -13,6 +14,6 @@ public class Vehicle {
     private String model;
     private VehicleColor color;
     private String plate;
-    private String country;
+    private Country country;
     private UUID userId;
 }

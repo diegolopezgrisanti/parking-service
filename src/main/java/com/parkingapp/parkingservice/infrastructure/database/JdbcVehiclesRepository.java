@@ -1,8 +1,10 @@
 package com.parkingapp.parkingservice.infrastructure.database;
 
+import com.parkingapp.parkingservice.domain.common.Country;
 import com.parkingapp.parkingservice.domain.vehicle.Vehicle;
 import com.parkingapp.parkingservice.domain.vehicle.VehicleColor;
 import com.parkingapp.parkingservice.domain.vehicle.VehicleRepository;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -26,7 +28,7 @@ public class JdbcVehiclesRepository implements VehicleRepository {
                 .addValue("model", vehicle.getModel())
                 .addValue("color", vehicle.getColor().name())
                 .addValue("plate", vehicle.getPlate())
-                .addValue("country", vehicle.getCountry())
+                .addValue("country", vehicle.getCountry().name())
                 .addValue("userId", vehicle.getUserId());
 
         return namedParameterJdbcTemplate.update(
@@ -50,18 +52,22 @@ public class JdbcVehiclesRepository implements VehicleRepository {
                 .addValue("userId", userId)
                 .addValue("plate", plate);
 
-        RowMapper<Vehicle> rowMapper = (rs, rowNum) -> new Vehicle(
+        RowMapper<Vehicle> rowMapper = getVehicleRowMapper();
+
+        Vehicle result = namedParameterJdbcTemplate.queryForObject(sql, params, rowMapper);
+
+        return Optional.ofNullable(result);
+    }
+
+    private static @NotNull RowMapper<Vehicle> getVehicleRowMapper() {
+        return (rs, rowNum) -> new Vehicle(
                 UUID.fromString(rs.getString("id")),
                 rs.getString("brand"),
                 rs.getString("model"),
                 VehicleColor.valueOf(rs.getString("color")),
                 rs.getString("plate"),
-                rs.getString("country"),
+                Country.valueOf(rs.getString("country")),
                 UUID.fromString(rs.getString("user_id"))
         );
-
-        Vehicle result = namedParameterJdbcTemplate.queryForObject(sql, params, rowMapper);
-
-        return Optional.ofNullable(result);
     }
 }

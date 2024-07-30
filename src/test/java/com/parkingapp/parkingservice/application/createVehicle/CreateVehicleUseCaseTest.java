@@ -1,5 +1,6 @@
 package com.parkingapp.parkingservice.application.createVehicle;
 
+import com.parkingapp.parkingservice.domain.common.Country;
 import com.parkingapp.parkingservice.domain.exceptions.VehicleAlreadyExistsException;
 import com.parkingapp.parkingservice.domain.vehicle.Vehicle;
 import com.parkingapp.parkingservice.domain.vehicle.VehicleColor;
@@ -24,7 +25,7 @@ class CreateVehicleUseCaseTest {
     private final String brand = "brand";
     private final VehicleColor color = VehicleColor.BLUE;
     private final String plate = "4632TFR";
-    private final String country = "ES";
+    private final Country country = Country.ESP;
 
     private final Vehicle vehicle = new Vehicle(
            vehicleId,

@@ -1,5 +1,6 @@
 package com.parkingapp.parkingservice.infrastructure.entrypoint.rest.response;
 
+import com.parkingapp.parkingservice.domain.common.Country;
 import com.parkingapp.parkingservice.domain.vehicle.Vehicle;
 import com.parkingapp.parkingservice.domain.vehicle.VehicleColor;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -41,9 +42,9 @@ public class VehicleResponse {
 
     @Schema(
             description = "Country",
-            example = "ES"
+            example = "ESP"
     )
-    private String country;
+    private Country country;
 
     @Schema(
             name = "user_id",

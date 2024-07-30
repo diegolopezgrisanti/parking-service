@@ -1,5 +1,6 @@
 package com.parkingapp.parkingservice.infrastructure.database;
 
+import com.parkingapp.parkingservice.domain.common.Country;
 import com.parkingapp.parkingservice.domain.vehicle.Vehicle;
 import com.parkingapp.parkingservice.domain.vehicle.VehicleColor;
 import com.parkingapp.parkingservice.domain.vehicle.VehicleRepository;
@@ -33,7 +34,7 @@ public class JdbcVehiclesRepositoryIntegrationTest {
     private final String brand = "brand";
     private final VehicleColor color = VehicleColor.BLUE;
     private final String plate = "4632TFR";
-    private final String country = "ES";
+    private final Country country = Country.ESP;
 
     Vehicle newVehicle = new Vehicle(
             vehicleId,

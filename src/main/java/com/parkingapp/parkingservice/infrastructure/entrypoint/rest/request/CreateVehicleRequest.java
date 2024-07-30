@@ -1,5 +1,6 @@
 package com.parkingapp.parkingservice.infrastructure.entrypoint.rest.request;
 
+import com.parkingapp.parkingservice.domain.common.Country;
 import com.parkingapp.parkingservice.domain.vehicle.VehicleColor;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
@@ -46,10 +47,10 @@ public class CreateVehicleRequest {
 
     @Schema(
             description = "Country",
-            example = "ES"
+            example = "ESP"
     )
     @NotNull
-    private String country;
+    private Country country;
 
     @Schema(
             name = "user_id",
