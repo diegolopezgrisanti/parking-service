@@ -3,6 +3,7 @@ package com.parkingapp.parkingservice.infrastructure.entrypoint.rest;
 import com.parkingapp.parkingservice.application.createparking.CreateParkingUseCase;
 import com.parkingapp.parkingservice.application.getparkingbyid.GetParkingByIdUseCase;
 import com.parkingapp.parkingservice.application.checkparkingstatus.CheckParkingStatusUseCase;
+import com.parkingapp.parkingservice.domain.common.IdGenerator;
 import com.parkingapp.parkingservice.infrastructure.entrypoint.rest.request.CreateParkingRequest;
 import com.parkingapp.parkingservice.infrastructure.entrypoint.rest.response.ParkingResponse;
 import com.parkingapp.parkingservice.infrastructure.entrypoint.rest.response.ParkingCheckResponse;
@@ -42,15 +43,18 @@ public class ParkingController {
     private final CreateParkingUseCase createParkingUseCase;
     private final GetParkingByIdUseCase getParkingByIdUseCase;
     private final CheckParkingStatusUseCase checkParkingStatusUseCase;
+    private final IdGenerator idGenerator;
 
     public ParkingController(
             CreateParkingUseCase createParkingUseCase,
             GetParkingByIdUseCase getParkingByIdUseCase,
-            CheckParkingStatusUseCase checkParkingStatusUseCase
+            CheckParkingStatusUseCase checkParkingStatusUseCase,
+            IdGenerator idGenerator
     ) {
         this.createParkingUseCase = createParkingUseCase;
         this.getParkingByIdUseCase = getParkingByIdUseCase;
         this.checkParkingStatusUseCase = checkParkingStatusUseCase;
+        this.idGenerator = idGenerator;
     }
 
     @Operation(
@@ -95,7 +99,7 @@ public class ParkingController {
     @ResponseStatus(HttpStatus.CREATED)
     public ParkingResponse createParking(@RequestHeader("USER_ID") UUID userId, @RequestBody @Valid CreateParkingRequest request) {
         Parking parking = new Parking(
-                UUID.randomUUID(),
+                idGenerator.generate(),
                 request.getParkingZoneId(),
                 userId,
                 request.getVehicleId(),
