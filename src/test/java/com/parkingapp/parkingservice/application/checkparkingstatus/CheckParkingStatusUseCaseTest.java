@@ -36,7 +36,6 @@ class CheckParkingStatusUseCaseTest {
                 userId,
                 vehicleId,
                 paymentMethodId,
-                plate,
                 now,
                 nowPlusOneHour,
                 paymentStatusPending
@@ -61,7 +60,6 @@ class CheckParkingStatusUseCaseTest {
                 userId,
                 vehicleId,
                 paymentMethodId,
-                plate,
                 now.minus(3, ChronoUnit.HOURS),
                 nowMinusOneHour,
                 paymentStatusPending
@@ -100,7 +98,6 @@ class CheckParkingStatusUseCaseTest {
                 userId,
                 vehicleId,
                 paymentMethodId,
-                plate,
                 now,
                 nowPlusOneHour,
                 paymentStatusPending
@@ -111,7 +108,6 @@ class CheckParkingStatusUseCaseTest {
                 userId,
                 vehicleId,
                 paymentMethodId,
-                plate,
                 now.minus(3, ChronoUnit.HOURS),
                 nowMinusOneHour,
                 paymentStatusPending

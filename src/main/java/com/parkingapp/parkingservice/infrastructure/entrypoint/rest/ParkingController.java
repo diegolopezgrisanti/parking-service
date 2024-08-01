@@ -104,7 +104,6 @@ public class ParkingController {
                 userId,
                 request.getVehicleId(),
                 request.getPaymentMethodId(),
-                request.getPlate(),
                 request.getStartDate(),
                 request.getEndDate(),
                 request.getPaymentStatus()

@@ -1,0 +1,2 @@
+ALTER TABLE parking
+DROP COLUMN plate;

@@ -58,7 +58,6 @@ public class JdbcParkingRepositoryIntegrationTest {
                 userId,
                 vehicleId,
                 paymentMethodId,
-                plate,
                 now,
                 nowPlusOneHour,
                 paymentStatusPending
@@ -86,7 +85,6 @@ public class JdbcParkingRepositoryIntegrationTest {
                 userId,
                 vehicleId,
                 paymentMethodId,
-                plate,
                 now,
                 nowPlusOneHour,
                 paymentStatusPending
@@ -111,7 +109,6 @@ public class JdbcParkingRepositoryIntegrationTest {
                 userId,
                 vehicleId,
                 paymentMethodId,
-                "NO MATCH PLATE",
                 now,
                 nowPlusOneHour,
                 paymentStatusPending
@@ -136,7 +133,6 @@ public class JdbcParkingRepositoryIntegrationTest {
                 userId,
                 vehicleId,
                 paymentMethodId,
-                plate,
                 now.minus(25, ChronoUnit.HOURS),
                 nowMinusOneDay,
                 paymentStatusPending
@@ -155,13 +151,13 @@ public class JdbcParkingRepositoryIntegrationTest {
         // GIVEN
         UUID parkingId = UUID.randomUUID();
         givenExitingParkingZone(parkingZoneId);
+        givenExistingVehicle(plate);
         Parking parking = new Parking(
                 parkingId,
                 parkingZoneId,
                 userId,
                 vehicleId,
                 paymentMethodId,
-                plate,
                 now,
                 nowPlusOneHour,
                 paymentStatusPending
@@ -178,7 +174,7 @@ public class JdbcParkingRepositoryIntegrationTest {
     @Test
     void shouldFindTodayParkingsWhenThereAreMultiple() {
         // GIVEN
-
+        givenExistingVehicle(plate);
         UUID parkingId1 = UUID.randomUUID();
         UUID parkingId2 = UUID.randomUUID();
         givenExitingParkingZone(parkingZoneId);
@@ -188,7 +184,6 @@ public class JdbcParkingRepositoryIntegrationTest {
                 userId,
                 vehicleId,
                 paymentMethodId,
-                plate,
                 now,
                 nowPlusOneHour,
                 paymentStatusPending
@@ -199,7 +194,6 @@ public class JdbcParkingRepositoryIntegrationTest {
                 userId,
                 vehicleId,
                 paymentMethodId,
-                plate,
                 now,
                 now.plus(3, ChronoUnit.HOURS),
                 paymentStatusPending
@@ -239,6 +233,25 @@ public class JdbcParkingRepositoryIntegrationTest {
                 VALUES (:id, :name, :cityId)
                 """,
                 parkingZoneParams
+        );
+    }
+
+    private void givenExistingVehicle(String plate) {
+        MapSqlParameterSource vehicleParams = new MapSqlParameterSource()
+                .addValue("id", vehicleId)
+                .addValue("brand", "fiat")
+                .addValue("model", "chronos")
+                .addValue("color", "RED")
+                .addValue("plate", plate)
+                .addValue("country", "ESP")
+                .addValue("userId", userId);
+
+        namedParameterJdbcTemplate.update(
+                """
+                        INSERT INTO vehicles (id, brand, model, color, plate, country, user_id)
+                        VALUES (:id, :brand, :model, :color, :plate, :country, :userId)
+                    """,
+                vehicleParams
         );
     }
 }

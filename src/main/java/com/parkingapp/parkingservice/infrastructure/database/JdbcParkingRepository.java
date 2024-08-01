@@ -35,7 +35,6 @@ public class JdbcParkingRepository implements ParkingRepository {
                 .addValue("userId", parking.getUserId())
                 .addValue("vehicleId", parking.getVehicleId())
                 .addValue("paymentMethodId", parking.getPaymentMethodId())
-                .addValue("plate", parking.getPlate())
                 .addValue("startDate", Date.from(parking.getStartDate()))
                 .addValue("endDate", Date.from(parking.getEndDate()))
                 .addValue("paymentStatus", parking.getPaymentStatus().name());
@@ -43,8 +42,8 @@ public class JdbcParkingRepository implements ParkingRepository {
 
         namedParameterJdbcTemplate.update(
                 """
-                INSERT INTO parking(id, parking_zone_id, user_id, vehicle_id, payment_method_id, plate, start_date, end_date, payment_status)
-                VALUES (:id, :parkingZoneId, :userId, :vehicleId, :paymentMethodId, :plate, :startDate, :endDate, :paymentStatus::payment_status)
+                INSERT INTO parking(id, parking_zone_id, user_id, vehicle_id, payment_method_id, start_date, end_date, payment_status)
+                VALUES (:id, :parkingZoneId, :userId, :vehicleId, :paymentMethodId, :startDate, :endDate, :paymentStatus::payment_status)
                 """,
                 params
         );
@@ -68,12 +67,14 @@ public class JdbcParkingRepository implements ParkingRepository {
         params.put("atBeginningOfToday", Timestamp.valueOf(atBeginningOfToday));
 
         return namedParameterJdbcTemplate.query(
-                """
-                  SELECT * FROM parking 
-                  WHERE plate = :plate 
-                  AND parking_zone_id = :parkingZoneId
-                  AND end_date > :atBeginningOfToday
-               """,
+           """
+                  SELECT p.*
+                  FROM parking p
+                  JOIN vehicles v ON p.vehicle_id = v.id
+                  WHERE v.plate = :plate
+                  AND p.parking_zone_id = :parkingZoneId
+                  AND p.end_date > :atBeginningOfToday
+                """,
                 params,
                 new ParkingRowMapper()
         );
@@ -102,7 +103,6 @@ public class JdbcParkingRepository implements ParkingRepository {
                     UUID.fromString(rs.getString("user_id")),
                     UUID.fromString(rs.getString("vehicle_id")),
                     UUID.fromString(rs.getString("payment_method_id")),
-                    rs.getString("plate"),
                     rs.getTimestamp("start_date").toInstant(),
                     rs.getTimestamp("end_date").toInstant(),
                     PaymentStatus.valueOf(rs.getString("payment_status"))

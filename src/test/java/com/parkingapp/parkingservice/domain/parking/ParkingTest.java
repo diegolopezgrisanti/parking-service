@@ -26,7 +26,6 @@ class ParkingTest {
                     userId,
                     vehicleId,
                     paymentMethodId,
-                    plate,
                     now.plus(1, ChronoUnit.HOURS),
                     now,
                     PaymentStatus.PENDING
@@ -43,7 +42,6 @@ class ParkingTest {
                     userId,
                     vehicleId,
                     paymentMethodId,
-                    plate,
                     now,
                     now,
                     PaymentStatus.PENDING
@@ -60,7 +58,6 @@ class ParkingTest {
                     userId,
                     vehicleId,
                     paymentMethodId,
-                    plate,
                     now,
                     now.plus(1, ChronoUnit.HOURS).truncatedTo(ChronoUnit.MILLIS),
                     PaymentStatus.PENDING

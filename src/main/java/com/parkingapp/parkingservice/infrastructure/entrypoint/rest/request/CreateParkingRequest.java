@@ -16,14 +16,6 @@ import java.util.UUID;
 public class CreateParkingRequest {
 
     @Schema(
-            description = "Vehicle plate",
-            example = "4736KTZ"
-    )
-    @NotNull
-    @Pattern(regexp = "\\d{4}[A-Za-z]{3}")
-    private String plate;
-
-    @Schema(
             name = "parking_zone_id",
             description = "Parking zone ID",
             example = "8e4488d3-0e5a-4044-8d6d-d3d9e36836d0"
