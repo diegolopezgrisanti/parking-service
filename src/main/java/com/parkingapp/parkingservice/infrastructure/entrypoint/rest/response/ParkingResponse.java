@@ -46,12 +46,6 @@ public class ParkingResponse {
     private UUID paymentMethodId;
 
     @Schema(
-            description = "Vehicle plate",
-            example = "4736KTZ"
-    )
-    private String plate;
-
-    @Schema(
             name = "start_date",
             description = "Parking start date time with zone",
             example = "2024-12-24T16:18:58.165+00:00"
@@ -78,7 +72,6 @@ public class ParkingResponse {
         this.vehicleId = parking.getVehicleId();
         this.userId = parking.getUserId();
         this.paymentMethodId = parking.getPaymentMethodId();
-        this.plate = parking.getPlate();
         this.startDate = parking.getStartDate();
         this.endDate = parking.getEndDate();
         this.paymentStatus = parking.getPaymentStatus();

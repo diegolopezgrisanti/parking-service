@@ -17,9 +17,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class CreateParkingUseCaseTest {
 
-    private ParkingRepository parkingRepository = mock(ParkingRepository.class);
-    private ParkingZonesRepository parkingZonesRepository = mock(ParkingZonesRepository.class);
-    private CreateParkingUseCase useCase = new CreateParkingUseCase(
+    private final ParkingRepository parkingRepository = mock(ParkingRepository.class);
+    private final ParkingZonesRepository parkingZonesRepository = mock(ParkingZonesRepository.class);
+    private final CreateParkingUseCase useCase = new CreateParkingUseCase(
             parkingRepository,
             parkingZonesRepository
     );
@@ -28,7 +28,6 @@ public class CreateParkingUseCaseTest {
     private final UUID parkingZoneId = UUID.randomUUID();
     private final UUID userId = UUID.randomUUID();
     private final UUID vehicleId = UUID.randomUUID();
-    private final String plate = "4616KUY";
     private final UUID paymentMethodId = UUID.randomUUID();
     private final Parking parking = new Parking(
             parkingId,
@@ -36,7 +35,6 @@ public class CreateParkingUseCaseTest {
             userId,
             vehicleId,
             paymentMethodId,
-            plate,
             Instant.now(),
             Instant.now().plus(1, ChronoUnit.HOURS),
             PaymentStatus.PENDING

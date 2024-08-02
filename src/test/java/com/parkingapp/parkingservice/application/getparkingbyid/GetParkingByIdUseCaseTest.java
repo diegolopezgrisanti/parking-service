@@ -15,8 +15,8 @@ import static org.mockito.Mockito.*;
 
 class GetParkingByIdUseCaseTest {
 
-    private ParkingRepository parkingRepository = mock(ParkingRepository.class);
-    private GetParkingByIdUseCase useCase = new GetParkingByIdUseCase(parkingRepository);
+    private final ParkingRepository parkingRepository = mock(ParkingRepository.class);
+    private final GetParkingByIdUseCase useCase = new GetParkingByIdUseCase(parkingRepository);
 
     @Test
     void shouldReturnParkingById() {
@@ -25,7 +25,6 @@ class GetParkingByIdUseCaseTest {
         UUID parkingZoneId = UUID.randomUUID();
         UUID userId = UUID.randomUUID();
         UUID vehicleId = UUID.randomUUID();
-        String plate = "4616KUY";
         UUID paymentMethodId = UUID.randomUUID();
         Parking parking = new Parking(
                 parkingId,
@@ -33,7 +32,6 @@ class GetParkingByIdUseCaseTest {
                 userId,
                 vehicleId,
                 paymentMethodId,
-                plate,
                 Instant.now(),
                 Instant.now().plus(1, ChronoUnit.HOURS),
                 PaymentStatus.PENDING

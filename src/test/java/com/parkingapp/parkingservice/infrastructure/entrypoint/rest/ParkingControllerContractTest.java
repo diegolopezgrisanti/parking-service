@@ -25,6 +25,7 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -54,18 +55,36 @@ class ParkingControllerContractTest {
     UUID parkingZoneId = UUID.randomUUID();
     UUID userId = UUID.randomUUID();
     UUID vehicleId = UUID.randomUUID();
-    String plate = "4616KUY";
     UUID paymentMethodId = UUID.randomUUID();
+
     Parking parking = new Parking(
             parkingId,
             parkingZoneId,
             userId,
             vehicleId,
             paymentMethodId,
-            plate,
             Instant.now(),
             Instant.now().plus(1, ChronoUnit.HOURS),
             PaymentStatus.PENDING
+    );
+
+    String requestBody = String.format(
+            """
+                {
+                    "parking_zone_id": "%s",
+                    "vehicle_id": "%s",
+                    "payment_method_id": "%s",
+                    "start_date": "%s",
+                    "end_date": "%s",
+                    "payment_status": "%s"
+                }
+            """,
+            parkingZoneId,
+            vehicleId,
+            paymentMethodId,
+            parking.getStartDate(),
+            parking.getEndDate(),
+            "PENDING"
     );
 
     @Nested
@@ -73,39 +92,17 @@ class ParkingControllerContractTest {
 
         @Test
         public void shouldCreateAParking() throws Exception {
-            // Given
+            // GIVEN
             when(idGenerator.generate()).thenReturn(parkingId);
             when(createParkingUseCase.execute(parking)).thenReturn(parking);
             String expectedResponse = objectMapper.writeValueAsString(
                     new ParkingResponse(parking)
             );
-            String requestBody = String.format(
-                    """
-                        {   
-                            "parking_zone_id": "%s",
-                            "user_id": "%s",
-                            "vehicle_id": "%s",
-                            "payment_method_id": "%s",
-                            "plate": "%s",
-                            "start_date": "%s",
-                            "end_date": "%s",
-                            "payment_status": "%s"
-                        }
-                    """,
-                    parkingZoneId,
-                    userId,
-                    vehicleId,
-                    paymentMethodId,
-                    plate,
-                    parking.getStartDate(),
-                    parking.getEndDate(),
-                    "PENDING"
-                    );
 
-            // When
+            // WHEN
             MockMvcResponse response = whenARequestToCreateAParkingIsReceived(requestBody);
 
-            // Then
+            // THEN
             response.then()
                     .statusCode(HttpStatus.CREATED.value())
                     .body(CoreMatchers.equalTo(expectedResponse));
@@ -113,11 +110,60 @@ class ParkingControllerContractTest {
             verify(createParkingUseCase).execute(parking);
         }
 
+        @Test
+        void shouldReturn500WhenErrorOccurs() {
+            // GIVEN
+            when(idGenerator.generate()).thenReturn(parkingId);
+            when(createParkingUseCase.execute(parking)).thenThrow(new RuntimeException("ops"));
+
+            // WHEN
+            MockMvcResponse response = whenARequestToCreateAParkingIsReceived(requestBody);
+
+            // THEN
+            response.then()
+                    .statusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
+
+            verify(createParkingUseCase).execute(parking);
+        }
+
+        @Test
+        void shouldReturn400WhenBodyIsIncorrect() {
+            // Given
+            String incorrectRequestBody = String.format(
+                    """
+                        {
+                        "InvalidParkingZone": "%s",
+                        "vehicle_id": "%s",
+                        "payment_method_id": "%s",
+                        "start_date": "%s",
+                        "end_date": "%s",
+                        "payment_status": "%s"
+                        }
+                    """,
+                    parkingZoneId,
+                    vehicleId,
+                    paymentMethodId,
+                    parking.getStartDate(),
+                    parking.getEndDate(),
+                    "PENDING"
+            );
+
+            // When
+            MockMvcResponse response = whenARequestToCreateAParkingIsReceived(incorrectRequestBody);
+
+            // Then
+            response.then()
+                    .statusCode(HttpStatus.BAD_REQUEST.value());
+
+            verify(createParkingUseCase, never()).execute(parking);
+        }
+
         private MockMvcResponse whenARequestToCreateAParkingIsReceived(String requestBody) {
             return RestAssuredMockMvc
                     .given()
                     .webAppContextSetup(context)
                     .contentType(ContentType.JSON)
+                    .header("USER_ID", userId)
                     .body(requestBody)
                     .when()
                     .post("/parkings");
