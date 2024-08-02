@@ -15,6 +15,8 @@ import io.restassured.module.mockmvc.response.MockMvcResponse;
 import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -22,6 +24,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.util.UUID;
+import java.util.stream.Stream;
 
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -91,8 +94,6 @@ class VehiclesControllerContractTest {
                     new VehicleResponse(newVehicle)
             );
 
-
-
             // WHEN
             MockMvcResponse response = whenARequestToCreateAVehicleIsReceived(requestBody);
 
@@ -121,30 +122,12 @@ class VehiclesControllerContractTest {
             verify(createVehicleUseCase).execute(newVehicle);
         }
 
-        @Test
-        public void shouldReturn400WhenBodyIsIncorrect() {
-            // Given
-            String incorrectRequestBody = String.format(
-                    """
-                        {
-                            "invalid_field": "%s",
-                            "model": "%s",
-                            "color": "%s",
-                            "plate": "%s",
-                            "country": "%s",
-                            "user_id": "%s"
-                        }
-                    """,
-                    brand,
-                    model,
-                    color,
-                    plate,
-                    country,
-                    userId
-            );
+        @ParameterizedTest
+        @MethodSource("provideInvalidRequestBodies")
+        public void shouldReturn400WhenBodyIsIncorrect(String invalidRequestBody) {
 
             // When
-            MockMvcResponse response = whenARequestToCreateAVehicleIsReceived(incorrectRequestBody);
+            MockMvcResponse response = whenARequestToCreateAVehicleIsReceived(invalidRequestBody);
 
             // Then
             response.then()
@@ -179,6 +162,54 @@ class VehiclesControllerContractTest {
                     .body(requestBody)
                     .when()
                     .post("/vehicles");
+        }
+
+        private static Stream<String> provideInvalidRequestBodies() {
+            return Stream.of(
+                    // Invalid field
+                    """
+                        {
+                            "invalid_field": "Toyota",
+                            "model": "Corolla",
+                            "color": "Blue",
+                            "plate": "ABC123",
+                            "country": "USA",
+                            "user_id": "12345"
+                        }
+                    """,
+                    // Null value
+                    """
+                        {
+                            "brand": null,
+                            "model": "Corolla",
+                            "color": "Blue",
+                            "plate": "ABC123",
+                            "country": "USA",
+                            "user_id": "12345"
+                        }
+                    """,
+                    // Empty value
+                    """
+                        {
+                            "brand": "",
+                            "model": "Corolla",
+                            "color": "Blue",
+                            "plate": "ABC123",
+                            "country": "USA",
+                            "user_id": "12345"
+                        }
+                    """,
+                    // missing value
+                    """
+                        {
+                            "model": "focus",
+                            "color": "RED",
+                            "plate": "1234ABC",
+                            "country": "ESP",
+                            "user_id": "9d7a9edf-25ab-4baf-bbc7-7c23ec47584d"
+                        }
+                    """
+            );
         }
     }
 }
