@@ -6,8 +6,13 @@ import com.parkingapp.parkingservice.application.createparking.CreateParkingUseC
 import com.parkingapp.parkingservice.application.getparkingbyid.GetParkingByIdUseCase;
 import com.parkingapp.parkingservice.domain.common.IdGenerator;
 import com.parkingapp.parkingservice.domain.parking.Parking;
+import com.parkingapp.parkingservice.domain.parking.ParkingStatusCheck;
 import com.parkingapp.parkingservice.domain.parking.PaymentStatus;
+import com.parkingapp.parkingservice.infrastructure.entrypoint.rest.response.ParkingCheckResponse;
+import com.parkingapp.parkingservice.infrastructure.entrypoint.rest.response.ParkingDetailsDTO;
 import com.parkingapp.parkingservice.infrastructure.entrypoint.rest.response.ParkingResponse;
+import com.parkingapp.parkingservice.infrastructure.entrypoint.rest.response.ParkingZonesResponse;
+import com.parkingapp.parkingservice.infrastructure.entrypoint.rest.response.error.ErrorResponse;
 import com.parkingapp.parkingservice.infrastructure.fixtures.initializers.testannotation.ContractTest;
 import io.restassured.http.ContentType;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
@@ -19,10 +24,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.mockito.Mockito.never;
@@ -173,14 +185,62 @@ class ParkingControllerContractTest {
 
     @Nested
     class GetParkingById {
-        // TODO: Implement tests for get parking by id endpoint
+
+        @Test
+        void ShouldReturnParkingById() throws Exception {
+            // GIVEN
+            when(getParkingByIdUseCase.execute(parkingId)).thenReturn(Optional.of(parking));
+            String expectedResponse = objectMapper.writeValueAsString(new ParkingResponse(parking));
+
+            // WHEN & THEN
+            MockMvcResponse response = whenARequestToGetParkingByIdIsReceived();
+
+            response.then()
+                    .statusCode(HttpStatus.OK.value())
+                    .body(CoreMatchers.equalTo(expectedResponse));
+
+            verify(getParkingByIdUseCase).execute(parkingId);
+        }
+
+        @Test
+        void shouldReturn404WhenParkingDoesNotExist() {
+            // WHEN
+            MockMvcResponse response = whenARequestToGetParkingByIdIsReceived();
+
+            // THEN
+            response.then()
+                    .statusCode(HttpStatus.NOT_FOUND.value());
+        }
+
+        @Test
+        void shouldReturn500WhenErrorOccurs() {
+            // GIVEN
+            when(getParkingByIdUseCase.execute(parkingId)).thenThrow(new RuntimeException("ops"));
+
+            // WHEN
+            MockMvcResponse response = whenARequestToGetParkingByIdIsReceived();
+
+            // THEN
+            response.then()
+                    .statusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
+
+            verify(getParkingByIdUseCase).execute(parkingId);
+        }
+
+        private MockMvcResponse whenARequestToGetParkingByIdIsReceived() {
+            return RestAssuredMockMvc
+                    .given()
+                    .webAppContextSetup(context)
+                    .contentType(ContentType.JSON)
+                    .pathParam("parkingId", parkingId.toString())
+                    .when()
+                    .get("/parkings/{parkingId}");
+        }
     }
 
     @Nested
     class CheckParking {
-        // TODO: Implement tests for check parking endpoint
+
     }
-
-
 
 }
