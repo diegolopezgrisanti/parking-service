@@ -83,7 +83,7 @@ public class VehiclesController {
                 request.getBrand(),
                 request.getModel(),
                 request.getColor(),
-                request.getPlate(),
+                request.getPlate().toUpperCase(),
                 request.getCountry(),
                 request.getUserId()
         );

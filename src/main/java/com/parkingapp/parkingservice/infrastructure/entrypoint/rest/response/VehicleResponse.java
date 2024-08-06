@@ -58,7 +58,7 @@ public class VehicleResponse {
         this.brand = vehicle.getBrand();
         this.model = vehicle.getModel();
         this.color = vehicle.getColor();
-        this.plate = vehicle.getPlate();
+        this.plate = vehicle.getPlate().toUpperCase();
         this.country = vehicle.getCountry();
         this.userId = vehicle.getUserId();
     }

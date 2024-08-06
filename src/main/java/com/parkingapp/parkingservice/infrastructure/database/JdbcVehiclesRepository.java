@@ -27,7 +27,7 @@ public class JdbcVehiclesRepository implements VehicleRepository {
                 .addValue("brand", vehicle.getBrand())
                 .addValue("model", vehicle.getModel())
                 .addValue("color", vehicle.getColor().name())
-                .addValue("plate", vehicle.getPlate())
+                .addValue("plate", vehicle.getPlate().toUpperCase())
                 .addValue("country", vehicle.getCountry().name())
                 .addValue("userId", vehicle.getUserId());
 
@@ -62,7 +62,7 @@ public class JdbcVehiclesRepository implements VehicleRepository {
                 rs.getString("brand"),
                 rs.getString("model"),
                 Color.valueOf(rs.getString("color")),
-                rs.getString("plate"),
+                rs.getString("plate").toUpperCase(),
                 Country.valueOf(rs.getString("country")),
                 UUID.fromString(rs.getString("user_id"))
         );

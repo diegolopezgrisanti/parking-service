@@ -66,6 +66,31 @@ public class JdbcVehiclesRepositoryIntegrationTest {
     }
 
     @Test
+    void shouldSaveANewVehicleWithPlateInUppercase() {
+        // GIVEN
+        String lowerCasePlate = "1234abc";
+        Vehicle vehicleWithLowerCasePlate = new Vehicle(
+                vehicleId,
+                brand,
+                model,
+                color,
+                lowerCasePlate,
+                country,
+                userId
+        );
+
+        // WHEN
+        boolean saveResult = vehicleRepository.saveVehicle(vehicleWithLowerCasePlate);
+
+        // THEN
+        List<Vehicle> result = vehicleRepository.getUserVehicles(vehicleWithLowerCasePlate.getUserId());
+        assertThat(result).hasSize(1);
+        Vehicle savedVehicle = result.get(0);
+        assertThat(savedVehicle.getPlate()).isEqualTo(lowerCasePlate.toUpperCase());
+        assertThat(saveResult).isTrue();
+    }
+
+    @Test
     void shouldSaveVehicleWhenVehicleWithSamePlateAndDifferentUserIdExists() {
         // GIVEN
         Vehicle newVehiclePlateAlreadyExists = new Vehicle(
