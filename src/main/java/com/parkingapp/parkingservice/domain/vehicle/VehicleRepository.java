@@ -6,4 +6,5 @@ import java.util.UUID;
 public interface VehicleRepository {
     boolean saveVehicle(Vehicle vehicle);
     List<Vehicle> getUserVehicles(UUID userId);
+    boolean isVehicleIdValid(UUID vehicleId, UUID userId);
 }

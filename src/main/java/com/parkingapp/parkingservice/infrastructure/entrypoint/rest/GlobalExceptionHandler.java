@@ -2,6 +2,7 @@ package com.parkingapp.parkingservice.infrastructure.entrypoint.rest;
 
 import com.parkingapp.parkingservice.domain.exceptions.ParkingZoneNotFoundException;
 import com.parkingapp.parkingservice.domain.exceptions.VehicleAlreadyExistsException;
+import com.parkingapp.parkingservice.domain.exceptions.VehicleNotFoundException;
 import com.parkingapp.parkingservice.infrastructure.entrypoint.rest.response.error.ErrorResponse;
 import com.parkingapp.parkingservice.infrastructure.entrypoint.rest.response.error.ValidationError;
 import com.parkingapp.parkingservice.infrastructure.entrypoint.rest.response.error.ValidationErrorResponse;
@@ -30,6 +31,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     ErrorResponse handle(ParkingZoneNotFoundException exception) {
+        return new ErrorResponse(exception.getMessage());
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    ErrorResponse handle(VehicleNotFoundException exception) {
         return new ErrorResponse(exception.getMessage());
     }
 
