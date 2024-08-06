@@ -33,9 +33,10 @@ public class UseCasesConfig {
     @Bean
     public CreateParkingUseCase createParkingUseCase(
             ParkingRepository parkingRepository,
-            ParkingZonesRepository parkingZonesRepository
+            ParkingZonesRepository parkingZonesRepository,
+            VehicleRepository vehicleRepository
     ) {
-        return new CreateParkingUseCase(parkingRepository, parkingZonesRepository);
+        return new CreateParkingUseCase(parkingRepository, parkingZonesRepository, vehicleRepository);
     }
 
     @Bean
