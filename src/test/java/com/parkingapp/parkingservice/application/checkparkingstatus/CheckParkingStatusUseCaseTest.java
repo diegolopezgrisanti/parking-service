@@ -26,21 +26,19 @@ class CheckParkingStatusUseCaseTest {
     private final Instant nowMinusOneHour = Instant.now().minus(1, ChronoUnit.HOURS);
     private final PaymentStatus paymentStatusPending = PaymentStatus.PENDING;
 
-    Parking parking = new Parking(
-            parkingId,
-            parkingZoneId,
-            userId,
-            vehicleId,
-            paymentMethodId,
-            now,
-            nowPlusOneHour,
-            paymentStatusPending
-    );
-
-
     @Test
     void shouldResolveActiveStatusWhenParkingIsActive() {
         // GIVEN
+        Parking parking = new Parking(
+                parkingId,
+                parkingZoneId,
+                userId,
+                vehicleId,
+                paymentMethodId,
+                now,
+                nowPlusOneHour,
+                paymentStatusPending
+        );
         when(parkingRepository.getTodayParkingsByPlateAndZone(plate, parkingZoneId)).thenReturn(List.of(parking));
 
         // WHEN
@@ -77,35 +75,6 @@ class CheckParkingStatusUseCaseTest {
     }
 
     @Test
-    void shouldGetParkingStatusSearchByPlateInUppercase() {
-        // GIVEN
-        when(parkingRepository.getTodayParkingsByPlateAndZone(plate, parkingZoneId)).thenReturn(List.of(parking));
-
-        // WHEN
-        ParkingStatusCheck result = useCase.execute(plate, parkingZoneId);
-
-        // THEN
-        assertThat(result.getParkingStatus()).isEqualTo(ParkingStatus.ACTIVE);
-        assertThat(result.getParking()).isNotNull();
-        verify(parkingRepository).getTodayParkingsByPlateAndZone(plate, parkingZoneId);
-    }
-
-    @Test
-    void shouldGetParkingStatusSearchByPlateInLowercase() {
-        // GIVEN
-        String plateLowercase = "4616kuy";
-        when(parkingRepository.getTodayParkingsByPlateAndZone(plateLowercase, parkingZoneId)).thenReturn(List.of(parking));
-
-        // WHEN
-        ParkingStatusCheck result = useCase.execute(plateLowercase, parkingZoneId);
-
-        // THEN
-        assertThat(result.getParkingStatus()).isEqualTo(ParkingStatus.ACTIVE);
-        assertThat(result.getParking()).isNotNull();
-        verify(parkingRepository).getTodayParkingsByPlateAndZone(plateLowercase, parkingZoneId);
-    }
-
-    @Test
     void shouldResolveNotFoundStatusWhenNoParkingFound() {
         // GIVEN
         when(parkingRepository.getTodayParkingsByPlateAndZone(plate, parkingZoneId)).thenReturn(List.of());
@@ -122,7 +91,17 @@ class CheckParkingStatusUseCaseTest {
     @Test
     void shouldResolveStatusWithLastParkingWhenMultipleParkingFound() {
         // GIVEN
-        Parking oldParking = new Parking(
+        Parking expectedParking = new Parking(
+                parkingId,
+                parkingZoneId,
+                userId,
+                vehicleId,
+                paymentMethodId,
+                now,
+                nowPlusOneHour,
+                paymentStatusPending
+        );
+        Parking parking = new Parking(
                 parkingId,
                 parkingZoneId,
                 userId,
@@ -133,14 +112,14 @@ class CheckParkingStatusUseCaseTest {
                 paymentStatusPending
         );
         when(parkingRepository.getTodayParkingsByPlateAndZone(plate, parkingZoneId))
-                .thenReturn(List.of(oldParking, parking));
+                .thenReturn(List.of(parking, expectedParking));
 
         // WHEN
         ParkingStatusCheck result = useCase.execute(plate, parkingZoneId);
 
         // THEN
         assertThat(result.getParkingStatus()).isEqualTo(ParkingStatus.ACTIVE);
-        assertThat(result.getParking()).isEqualTo(parking);
+        assertThat(result.getParking()).isEqualTo(expectedParking);
         verify(parkingRepository).getTodayParkingsByPlateAndZone(plate, parkingZoneId);
     }
 
