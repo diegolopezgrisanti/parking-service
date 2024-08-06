@@ -14,7 +14,6 @@ class ParkingTest {
     private final UUID userId = UUID.randomUUID();
     private final UUID vehicleId = UUID.randomUUID();
     private final UUID paymentMethodId = UUID.randomUUID();
-    private final String plate = "4616KUY";
     private final Instant now = Instant.now();
 
     @Test
