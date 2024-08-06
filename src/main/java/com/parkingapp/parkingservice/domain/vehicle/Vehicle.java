@@ -1,7 +1,6 @@
 package com.parkingapp.parkingservice.domain.vehicle;
 
 import com.parkingapp.parkingservice.domain.common.Country;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.util.UUID;
