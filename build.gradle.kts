@@ -31,7 +31,7 @@ dependencies {
 	implementation("org.jetbrains:annotations:24.0.0")
 	implementation("org.postgresql:postgresql:42.6.0")
 	implementation("org.springframework.boot:spring-boot-starter-web:3.1.3")
-	implementation("org.flywaydb:flyway-core:9.11.0")
+	implementation("org.flywaydb:flyway-core:10.17.0")
 	implementation("org.springframework.boot:spring-boot-starter-jdbc")
 
 	// Lombok
