@@ -190,7 +190,6 @@ class VehiclesControllerContractTest {
         void shouldGetUserVehicles() throws Exception {
             // GIVEN
             List<Vehicle> vehicleList =  List.of(newVehicle);
-            when(idGenerator.generate()).thenReturn(userId);
             when(getUserVehiclesUseCase.execute(userId)).thenReturn(vehicleList);
             String expectedResponse = objectMapper.writeValueAsString(vehicleList);
 
