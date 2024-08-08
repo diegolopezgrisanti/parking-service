@@ -1,11 +1,13 @@
 package com.parkingapp.parkingservice.infrastructure.entrypoint.rest.response;
 
-import com.parkingapp.parkingservice.domain.common.Currency;
 import com.parkingapp.parkingservice.domain.common.Location;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
 
+import javax.money.CurrencyUnit;
 import java.util.UUID;
 
+@Data
 public class ParkingZoneDTO {
     @Schema(
             description = "Parking zone ID",
@@ -29,7 +31,7 @@ public class ParkingZoneDTO {
             description = "Parking zone currency",
             example = "EUR"
     )
-    private Currency currency;
+    private String currency;
 
     @Schema(
             description = "Fee per minute in cents",
@@ -37,39 +39,11 @@ public class ParkingZoneDTO {
     )
     private int feePerMinute;
 
-    public ParkingZoneDTO(UUID id, String name, Location location, Currency currency, int feePerMinute) {
+    public ParkingZoneDTO(UUID id, String name, Location location, CurrencyUnit currency, int feePerMinute) {
         this.id = id;
         this.name = name;
         this.location = location;
-        this.currency = currency;
+        this.currency = currency.getCurrencyCode();
         this.feePerMinute = feePerMinute;
     }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Location getLocation() { return location; }
-
-    public void setLocation(Location location) { this.location = location; }
-
-    public Currency getCurrency() { return currency; }
-
-    public void setCurrency(Currency currency) { this.currency = currency; }
-
-    public int getFeePerMinute() { return feePerMinute; }
-
-    public void setFeePerMinute(int feePerMinute) { this.feePerMinute = feePerMinute; }
 }

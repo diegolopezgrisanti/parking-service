@@ -33,6 +33,7 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-web:3.1.3")
 	implementation("org.flywaydb:flyway-core:9.11.0")
 	implementation("org.springframework.boot:spring-boot-starter-jdbc")
+	implementation("org.javamoney:moneta:1.4.4")
 
 	// Lombok
 	compileOnly("org.projectlombok:lombok:1.18.32")

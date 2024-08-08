@@ -1,11 +1,12 @@
 package com.parkingapp.parkingservice.application.getparkingzones;
 
-import com.parkingapp.parkingservice.domain.common.Currency;
 import com.parkingapp.parkingservice.domain.common.Location;
 import com.parkingapp.parkingservice.domain.parkingzone.ParkingZone;
 import com.parkingapp.parkingservice.domain.parkingzone.ParkingZonesRepository;
 import org.junit.jupiter.api.Test;
 
+import javax.money.Monetary;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
@@ -25,8 +26,8 @@ class GetParkingZonesByIdUseCaseTest {
                 UUID.randomUUID(),
                 "Test zone",
                 UUID.randomUUID(),
-                new Location(40.7128, -74.0060),
-                Currency.EUR,
+                new Location(new BigDecimal("40.7128"), new BigDecimal("-74.0060")),
+                Monetary.getCurrency("EUR"),
                 100
         );
         List<ParkingZone> expectedParkingZones = List.of(parkingZone);

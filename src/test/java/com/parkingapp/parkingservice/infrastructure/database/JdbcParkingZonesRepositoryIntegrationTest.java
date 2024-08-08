@@ -1,6 +1,5 @@
 package com.parkingapp.parkingservice.infrastructure.database;
 
-import com.parkingapp.parkingservice.domain.common.Currency;
 import com.parkingapp.parkingservice.domain.common.Location;
 import com.parkingapp.parkingservice.domain.parkingzone.ParkingZone;
 import com.parkingapp.parkingservice.infrastructure.fixtures.initializers.testannotation.IntegrationTest;
@@ -10,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
+import javax.money.Monetary;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
@@ -33,8 +34,8 @@ class JdbcParkingZonesRepositoryIntegrationTest {
                 UUID.randomUUID(),
                 "Test zone",
                 cityId,
-                new Location(40.71288, -74.00601),
-                Currency.EUR,
+                new Location(new BigDecimal("40.71280"), new BigDecimal("-74.00600")),
+                Monetary.getCurrency("EUR"),
                 100
         );
         List<ParkingZone> expectedParkingZones = List.of(parkingZone);
@@ -67,8 +68,8 @@ class JdbcParkingZonesRepositoryIntegrationTest {
                 UUID.randomUUID(),
                 "Test zone",
                 cityId,
-                new Location(40.71289, -74.00601),
-                Currency.EUR,
+                new Location(new BigDecimal("40.71280"), new BigDecimal("-74.00600")),
+                Monetary.getCurrency("EUR"),
                 100
         );
         givenExistingParkingZone(parkingZone);
@@ -105,8 +106,8 @@ class JdbcParkingZonesRepositoryIntegrationTest {
                 cityParams
         );
 
-        double latitude = parkingZone.getLocation().getLatitude();
-        double longitude = parkingZone.getLocation().getLongitude();
+        BigDecimal latitude = parkingZone.getLocation().getLatitude();
+        BigDecimal longitude = parkingZone.getLocation().getLongitude();
 
         MapSqlParameterSource parkingZoneParams = new MapSqlParameterSource()
                 .addValue("id", parkingZone.getId())
@@ -114,7 +115,7 @@ class JdbcParkingZonesRepositoryIntegrationTest {
                 .addValue("cityId", parkingZone.getCityId())
                 .addValue("latitude", latitude)
                 .addValue("longitude", longitude)
-                .addValue("currency", parkingZone.getCurrency().name())
+                .addValue("currency", parkingZone.getCurrency().getCurrencyCode())
                 .addValue("feePerMinute", parkingZone.getFeePerMinute());
 
         namedParameterJdbcTemplate.update(
