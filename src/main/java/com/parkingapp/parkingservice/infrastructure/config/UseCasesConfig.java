@@ -6,6 +6,7 @@ import com.parkingapp.parkingservice.application.findallcities.FindAllCitiesUseC
 import com.parkingapp.parkingservice.application.getparkingbyid.GetParkingByIdUseCase;
 import com.parkingapp.parkingservice.application.checkparkingstatus.CheckParkingStatusUseCase;
 import com.parkingapp.parkingservice.application.getparkingzones.GetParkingZonesByIdUseCase;
+import com.parkingapp.parkingservice.application.getuservehicles.GetUserVehiclesUseCase;
 import com.parkingapp.parkingservice.domain.city.CitiesRepository;
 import com.parkingapp.parkingservice.domain.parkingzone.ParkingZonesRepository;
 import com.parkingapp.parkingservice.domain.parking.ParkingRepository;
@@ -58,5 +59,12 @@ public class UseCasesConfig {
             VehicleRepository vehicleRepository
     ) {
         return new CreateVehicleUseCase(vehicleRepository);
+    }
+
+    @Bean
+    public GetUserVehiclesUseCase getUserVehiclesUseCase(
+            VehicleRepository vehicleRepository
+    ) {
+        return new GetUserVehiclesUseCase(vehicleRepository);
     }
 }
