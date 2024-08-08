@@ -1,5 +1,7 @@
 package com.parkingapp.parkingservice.application.getparkingzones;
 
+import com.parkingapp.parkingservice.domain.common.Currency;
+import com.parkingapp.parkingservice.domain.common.Location;
 import com.parkingapp.parkingservice.domain.parkingzone.ParkingZone;
 import com.parkingapp.parkingservice.domain.parkingzone.ParkingZonesRepository;
 import org.junit.jupiter.api.Test;
@@ -12,8 +14,8 @@ import static org.mockito.Mockito.*;
 
 class GetParkingZonesByIdUseCaseTest {
 
-    private ParkingZonesRepository parkingZonesRepository = mock(ParkingZonesRepository.class);
-    private GetParkingZonesByIdUseCase useCase = new GetParkingZonesByIdUseCase(parkingZonesRepository);
+    private final ParkingZonesRepository parkingZonesRepository = mock(ParkingZonesRepository.class);
+    private final GetParkingZonesByIdUseCase useCase = new GetParkingZonesByIdUseCase(parkingZonesRepository);
 
     @Test
     void shouldGetParkingZonesById() {
@@ -21,8 +23,11 @@ class GetParkingZonesByIdUseCaseTest {
         UUID cityId = UUID.randomUUID();
         ParkingZone parkingZone = new ParkingZone(
                 UUID.randomUUID(),
-                "dummy zone",
-                cityId
+                "Test zone",
+                UUID.randomUUID(),
+                new Location(40.7128, -74.0060),
+                Currency.EUR,
+                100
         );
         List<ParkingZone> expectedParkingZones = List.of(parkingZone);
         when(parkingZonesRepository.getParkingZonesByCityId(cityId)).thenReturn(expectedParkingZones);

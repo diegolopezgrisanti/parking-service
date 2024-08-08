@@ -1,5 +1,7 @@
 package com.parkingapp.parkingservice.infrastructure.database;
 
+import com.parkingapp.parkingservice.domain.common.Currency;
+import com.parkingapp.parkingservice.domain.common.Location;
 import com.parkingapp.parkingservice.domain.parkingzone.ParkingZone;
 import com.parkingapp.parkingservice.domain.parkingzone.ParkingZonesRepository;
 import org.springframework.jdbc.core.RowMapper;
@@ -44,10 +46,18 @@ public class JdbcParkingZonesRepository implements ParkingZonesRepository {
     private class ParkingZonesRowMapper implements RowMapper<ParkingZone> {
         @Override
         public ParkingZone mapRow(ResultSet rs, int rowNum) throws SQLException {
+
+            double latitude = rs.getDouble("latitude");
+            double longitude = rs.getDouble("longitude");
+            Location location = new Location(latitude, longitude);
+
             return new ParkingZone(
                     UUID.fromString(rs.getString("id")),
                     rs.getString("name"),
-                    UUID.fromString(rs.getString("city_id"))
+                    UUID.fromString(rs.getString("city_id")),
+                    location,
+                    Currency.valueOf(rs.getString("currency")),
+                    rs.getInt("fee_per_minute")
             );
         }
     }

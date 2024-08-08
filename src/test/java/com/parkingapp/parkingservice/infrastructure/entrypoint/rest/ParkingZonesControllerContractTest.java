@@ -3,6 +3,8 @@ package com.parkingapp.parkingservice.infrastructure.entrypoint.rest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.parkingapp.parkingservice.application.getparkingzones.GetParkingZonesByIdUseCase;
 import com.parkingapp.parkingservice.domain.common.IdGenerator;
+import com.parkingapp.parkingservice.domain.common.Location;
+import com.parkingapp.parkingservice.domain.common.Currency;
 import com.parkingapp.parkingservice.domain.parkingzone.ParkingZone;
 import com.parkingapp.parkingservice.infrastructure.entrypoint.rest.response.ParkingZoneDTO;
 import com.parkingapp.parkingservice.infrastructure.entrypoint.rest.response.ParkingZonesResponse;
@@ -43,10 +45,23 @@ class ParkingZonesControllerContractTest {
     private GetParkingZonesByIdUseCase getParkingZonesByIdUseCase;
 
     private final UUID cityId = UUID.randomUUID();
-    private final List<ParkingZone> parkingZoneList = List.of(new ParkingZone(UUID.randomUUID(), "Test zone", UUID.randomUUID()));
+    private final List<ParkingZone> parkingZoneList = List.of(new ParkingZone(
+            UUID.randomUUID(),
+            "Test zone",
+            UUID.randomUUID(),
+            new Location(40.7128, -74.0060),
+            Currency.EUR,
+            100
+            ));
 
     List<ParkingZoneDTO> parkingZoneDTOList = parkingZoneList.stream()
-            .map(parkingZone -> new ParkingZoneDTO(parkingZone.getId(), parkingZone.getName()))
+            .map(parkingZone -> new ParkingZoneDTO(
+                    parkingZone.getId(),
+                    parkingZone.getName(),
+                    parkingZone.getLocation(),
+                    parkingZone.getCurrency(),
+                    parkingZone.getFeePerMinute()
+            ))
             .collect(Collectors.toList());
 
     @Test
