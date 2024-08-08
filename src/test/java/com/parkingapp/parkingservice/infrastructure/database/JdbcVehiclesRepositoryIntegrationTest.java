@@ -142,4 +142,29 @@ public class JdbcVehiclesRepositoryIntegrationTest {
         assertThat(savedVehicle.getId()).isEqualTo(newVehicle.getId());
     }
 
+    @Test
+    void shouldGetUserVehicles() {
+        // GIVEN
+        Vehicle vehicle = new Vehicle(
+                UUID.randomUUID(),
+                brand,
+                model,
+                color,
+                plate,
+                country,
+                userId
+        );
+
+        // WHEN
+        boolean saveResult = vehicleRepository.saveVehicle(vehicle);
+        List<Vehicle> userVehiclesSaved = vehicleRepository.getUserVehicles(userId);
+
+        // THEN
+        assertThat(saveResult).isTrue();
+        assertThat(userVehiclesSaved).hasSize(1);
+        Vehicle savedVehicle = userVehiclesSaved.get(0);
+        assertThat(savedVehicle.getId()).isEqualTo(vehicle.getId());
+
+    }
+
 }
