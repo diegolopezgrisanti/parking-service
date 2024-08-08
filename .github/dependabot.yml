@@ -10,3 +10,10 @@ updates:
       - "diegolopezgrisanti"
       - "solblack"
       - "fabriciodigennaro"
+    groups:
+      all-minor-and-patch:
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
