@@ -1,0 +1,19 @@
+version: 2
+updates:
+  - package-ecosystem: "gradle"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    allow:
+      - dependency-type: "all"
+    reviewers:
+      - "diegolopezgrisanti"
+      - "solblack"
+      - "fabriciodigennaro"
+    groups:
+      all-minor-and-patch:
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
