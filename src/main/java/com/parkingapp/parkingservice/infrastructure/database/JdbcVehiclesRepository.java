@@ -11,6 +11,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 public class JdbcVehiclesRepository implements VehicleRepository {
@@ -54,6 +55,20 @@ public class JdbcVehiclesRepository implements VehicleRepository {
         RowMapper<Vehicle> rowMapper = getVehicleRowMapper();
 
         return namedParameterJdbcTemplate.query(sql, params, rowMapper);
+    }
+
+    @Override
+    public boolean isVehicleIdValid(UUID vehicleId, UUID userId) {
+        Integer count = namedParameterJdbcTemplate.queryForObject(
+                """
+                        SELECT count(*) FROM vehicles
+                        WHERE id = :vehicleId
+                        AND user_id = :userId
+                    """,
+                    Map.of("vehicleId", vehicleId, "userId", userId),
+                    Integer.class);
+
+        return count != null && count == 1;
     }
 
     private static @NotNull RowMapper<Vehicle> getVehicleRowMapper() {

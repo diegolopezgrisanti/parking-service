@@ -68,7 +68,13 @@ public class ParkingZonesController {
     public ParkingZonesResponse getParkingZonesByCityId(@RequestParam("city-id") UUID cityId) {
         List<ParkingZone> parkingZones = getParkingZonesByIdUseCase.execute(cityId);
         List<ParkingZoneDTO> mappedParkingZones = parkingZones.stream()
-                .map(parkingZone -> new ParkingZoneDTO(parkingZone.getId(), parkingZone.getName()))
+                .map(parkingZone -> new ParkingZoneDTO(
+                        parkingZone.getId(),
+                        parkingZone.getName(),
+                        parkingZone.getLocation(),
+                        parkingZone.getCurrency(),
+                        parkingZone.getFeePerMinute()
+                ))
                 .collect(Collectors.toList());
 
         return new ParkingZonesResponse(mappedParkingZones);
