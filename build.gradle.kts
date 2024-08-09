@@ -48,7 +48,7 @@ dependencies {
 	testImplementation("org.junit.jupiter:junit-jupiter")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 	testImplementation("org.assertj:assertj-core:3.26.3")
-	testImplementation("org.mockito:mockito-core:3.+")
+	testImplementation("org.mockito:mockito-core:5.+")
 
 	testImplementation(platform("org.testcontainers:testcontainers-bom:1.20.1"))
 	testImplementation("org.testcontainers:junit-jupiter")
