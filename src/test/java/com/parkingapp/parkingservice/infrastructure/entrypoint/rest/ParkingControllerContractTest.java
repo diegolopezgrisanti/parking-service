@@ -222,7 +222,10 @@ class ParkingControllerContractTest {
 
         @Test
         void shouldReturn404WhenParkingDoesNotExist() {
-            // WHEN
+             // GIVEN
+             when(getParkingByIdUseCase.execute(parkingId)).thenReturn(Optional.empty())
+             
+             // WHEN
             MockMvcResponse response = whenARequestToGetParkingByIdIsReceived();
 
             // THEN
