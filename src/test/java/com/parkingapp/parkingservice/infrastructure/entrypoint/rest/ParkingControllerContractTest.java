@@ -7,13 +7,12 @@ import com.parkingapp.parkingservice.application.getparkingbyid.GetParkingByIdUs
 import com.parkingapp.parkingservice.domain.common.IdGenerator;
 import com.parkingapp.parkingservice.domain.exceptions.VehicleNotFoundException;
 import com.parkingapp.parkingservice.domain.parking.Parking;
+import com.parkingapp.parkingservice.domain.parking.ParkingStatus;
 import com.parkingapp.parkingservice.domain.parking.ParkingStatusCheck;
 import com.parkingapp.parkingservice.domain.parking.PaymentStatus;
 import com.parkingapp.parkingservice.infrastructure.entrypoint.rest.response.ParkingCheckResponse;
 import com.parkingapp.parkingservice.infrastructure.entrypoint.rest.response.ParkingDetailsDTO;
 import com.parkingapp.parkingservice.infrastructure.entrypoint.rest.response.ParkingResponse;
-import com.parkingapp.parkingservice.infrastructure.entrypoint.rest.response.ParkingZonesResponse;
-import com.parkingapp.parkingservice.infrastructure.entrypoint.rest.response.error.ErrorResponse;
 import com.parkingapp.parkingservice.infrastructure.fixtures.initializers.testannotation.ContractTest;
 import io.restassured.http.ContentType;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
@@ -25,10 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.WebApplicationContext;
@@ -69,6 +65,8 @@ class ParkingControllerContractTest {
     UUID userId = UUID.randomUUID();
     UUID vehicleId = UUID.randomUUID();
     UUID paymentMethodId = UUID.randomUUID();
+    String plate = "1234ABC";
+    ParkingStatus parkingStatus = ParkingStatus.ACTIVE;
 
     Parking parking = new Parking(
             parkingId,
@@ -80,6 +78,8 @@ class ParkingControllerContractTest {
             Instant.now().plus(1, ChronoUnit.HOURS),
             PaymentStatus.PENDING
     );
+
+    ParkingStatusCheck parkingStatusCheck = new ParkingStatusCheck(parkingStatus, parking);
 
     String requestBody = String.format(
             """
@@ -262,6 +262,31 @@ class ParkingControllerContractTest {
     @Nested
     class CheckParking {
 
-    }
+        @Test
+        void shouldReturnParkingAndStatus() {
+            // GIVEN
+            when(checkParkingStatusUseCase.execute(plate, parkingZoneId)).thenReturn(parkingStatusCheck);
 
+            // WHEN
+            MockMvcResponse response = whenARequestToGetParkingStatusIsReceived();
+
+            // THEN
+            response.then()
+                    .statusCode(HttpStatus.OK.value());
+
+            verify(checkParkingStatusUseCase).execute(plate, parkingZoneId);
+        }
+
+        private MockMvcResponse whenARequestToGetParkingStatusIsReceived() {
+            return RestAssuredMockMvc
+                    .given()
+                    .webAppContextSetup(context)
+                    .contentType(ContentType.JSON)
+                    .param("plate", plate)
+                    .param("parking_zone_id", parkingZoneId)
+                    .when()
+                    .get("/parkings/check");
+        }
+    }
 }
+
