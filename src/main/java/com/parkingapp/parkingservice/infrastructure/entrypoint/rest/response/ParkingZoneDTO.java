@@ -1,9 +1,13 @@
 package com.parkingapp.parkingservice.infrastructure.entrypoint.rest.response;
 
+import com.parkingapp.parkingservice.domain.common.Location;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
 
+import javax.money.CurrencyUnit;
 import java.util.UUID;
 
+@Data
 public class ParkingZoneDTO {
     @Schema(
             description = "Parking zone ID",
@@ -17,24 +21,29 @@ public class ParkingZoneDTO {
     )
     private String name;
 
-    public ParkingZoneDTO(UUID id, String name) {
+    @Schema(
+            description = "Parking zone location (Lat & Long)",
+            example = "(40.71288, -74.00601)"
+    )
+    private Location location;
+
+    @Schema(
+            description = "Parking zone currency",
+            example = "EUR"
+    )
+    private String currency;
+
+    @Schema(
+            description = "Fee per minute in cents",
+            example = "100"
+    )
+    private int feePerMinute;
+
+    public ParkingZoneDTO(UUID id, String name, Location location, CurrencyUnit currency, int feePerMinute) {
         this.id = id;
         this.name = name;
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+        this.location = location;
+        this.currency = currency.getCurrencyCode();
+        this.feePerMinute = feePerMinute;
     }
 }

@@ -222,16 +222,19 @@ public class JdbcParkingRepositoryIntegrationTest {
                 """,
                 cityParams
         );
+
         MapSqlParameterSource parkingZoneParams = new MapSqlParameterSource()
                 .addValue("id", parkingZoneId)
                 .addValue("name", "dummy")
-                .addValue("cityId", cityId);
+                .addValue("cityId", cityId)
+                .addValue("latitude", 41.79788)
+                .addValue("longitude", 3.05944)
+                .addValue("currency", "EUR")
+                .addValue("feePerMinute", 150);
 
         namedParameterJdbcTemplate.update(
-                """
-                INSERT INTO parking_zones (id, name, city_id)
-                VALUES (:id, :name, :cityId)
-                """,
+                "INSERT INTO parking_zones(id, name, city_id, latitude, longitude, currency, fee_per_minute) " +
+                        "VALUES (:id, :name, :cityId, :latitude, :longitude, :currency, :feePerMinute);",
                 parkingZoneParams
         );
     }

@@ -2,6 +2,7 @@ package com.parkingapp.parkingservice.infrastructure.entrypoint.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.parkingapp.parkingservice.application.createVehicle.CreateVehicleUseCase;
+import com.parkingapp.parkingservice.application.getuservehicles.GetUserVehiclesUseCase;
 import com.parkingapp.parkingservice.domain.common.Country;
 import com.parkingapp.parkingservice.domain.common.IdGenerator;
 import com.parkingapp.parkingservice.domain.exceptions.VehicleAlreadyExistsException;
@@ -21,6 +22,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.util.List;
 import java.util.UUID;
 
 import static org.mockito.Mockito.never;
@@ -42,6 +44,9 @@ class VehiclesControllerContractTest {
 
     @MockBean
     private CreateVehicleUseCase createVehicleUseCase;
+
+    @MockBean
+    private GetUserVehiclesUseCase getUserVehiclesUseCase;
 
     private final UUID vehicleId = UUID.randomUUID();
     private final UUID userId = UUID.randomUUID();
@@ -91,8 +96,6 @@ class VehiclesControllerContractTest {
                     new VehicleResponse(newVehicle)
             );
 
-
-
             // WHEN
             MockMvcResponse response = whenARequestToCreateAVehicleIsReceived(requestBody);
 
@@ -102,19 +105,18 @@ class VehiclesControllerContractTest {
                     .body(CoreMatchers.equalTo(expectedResponse));
 
             verify(createVehicleUseCase).execute(newVehicle);
-
         }
 
         @Test
         public void shouldReturn500WhenErrorOccurs() {
-            // Given
+            // GIVEN
             when(idGenerator.generate()).thenReturn(vehicleId);
             when(createVehicleUseCase.execute(newVehicle)).thenThrow(new RuntimeException("ops"));
 
-            // When
+            // WHEN
             MockMvcResponse response = whenARequestToCreateAVehicleIsReceived(requestBody);
 
-            // Then
+            // THEN
             response.then()
                     .statusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
 
@@ -123,7 +125,7 @@ class VehiclesControllerContractTest {
 
         @Test
         public void shouldReturn400WhenBodyIsIncorrect() {
-            // Given
+            // GIVEN
             String incorrectRequestBody = String.format(
                     """
                         {
@@ -143,10 +145,10 @@ class VehiclesControllerContractTest {
                     userId
             );
 
-            // When
+            // WHEN
             MockMvcResponse response = whenARequestToCreateAVehicleIsReceived(incorrectRequestBody);
 
-            // Then
+            // THEN
             response.then()
                     .statusCode(HttpStatus.BAD_REQUEST.value());
 
@@ -155,15 +157,15 @@ class VehiclesControllerContractTest {
 
         @Test
         public void shouldReturn409WhenVehicleAlreadyExists() {
-            // Given
+            // GIVEN
             when(idGenerator.generate()).thenReturn(vehicleId);
             when(createVehicleUseCase.execute(newVehicle))
                     .thenThrow(new VehicleAlreadyExistsException());
 
-            // When
+            // WHEN
             MockMvcResponse response = whenARequestToCreateAVehicleIsReceived(requestBody);
 
-            // Then
+            // THEN
             response.then()
                     .statusCode(HttpStatus.CONFLICT.value())
                     .body("message", CoreMatchers.equalTo("The combination of vehicle_id and user_id already exists."));
@@ -179,6 +181,37 @@ class VehiclesControllerContractTest {
                     .body(requestBody)
                     .when()
                     .post("/vehicles");
+        }
+    }
+
+    @Nested
+    class GetUserVehicles {
+        @Test
+        void shouldGetUserVehicles() throws Exception {
+            // GIVEN
+            List<Vehicle> vehicleList =  List.of(newVehicle);
+            when(getUserVehiclesUseCase.execute(userId)).thenReturn(vehicleList);
+            String expectedResponse = objectMapper.writeValueAsString(vehicleList);
+
+            // WHEN
+            MockMvcResponse response = whenARequestToGetUserVehicleIsReceived(userId);
+
+            // THEN
+            response.then()
+                    .statusCode(HttpStatus.OK.value())
+                    .body(CoreMatchers.equalTo(expectedResponse));
+
+            verify(getUserVehiclesUseCase).execute(userId);
+        }
+
+        private MockMvcResponse whenARequestToGetUserVehicleIsReceived(UUID userId) {
+            return RestAssuredMockMvc
+                    .given()
+                    .webAppContextSetup(context)
+                    .contentType(ContentType.JSON)
+                    .pathParam("userId", userId.toString())
+                    .when()
+                    .get("/vehicles/{userId}");
         }
     }
 }

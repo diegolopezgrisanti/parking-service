@@ -26,7 +26,6 @@ class CheckParkingStatusUseCaseTest {
     private final Instant nowMinusOneHour = Instant.now().minus(1, ChronoUnit.HOURS);
     private final PaymentStatus paymentStatusPending = PaymentStatus.PENDING;
 
-
     @Test
     void shouldResolveActiveStatusWhenParkingIsActive() {
         // GIVEN

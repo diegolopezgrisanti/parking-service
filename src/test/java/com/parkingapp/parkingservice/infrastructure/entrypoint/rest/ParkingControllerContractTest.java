@@ -5,6 +5,7 @@ import com.parkingapp.parkingservice.application.checkparkingstatus.CheckParking
 import com.parkingapp.parkingservice.application.createparking.CreateParkingUseCase;
 import com.parkingapp.parkingservice.application.getparkingbyid.GetParkingByIdUseCase;
 import com.parkingapp.parkingservice.domain.common.IdGenerator;
+import com.parkingapp.parkingservice.domain.exceptions.VehicleNotFoundException;
 import com.parkingapp.parkingservice.domain.parking.Parking;
 import com.parkingapp.parkingservice.domain.parking.ParkingStatusCheck;
 import com.parkingapp.parkingservice.domain.parking.PaymentStatus;
@@ -168,6 +169,23 @@ class ParkingControllerContractTest {
                     .statusCode(HttpStatus.BAD_REQUEST.value());
 
             verify(createParkingUseCase, never()).execute(parking);
+        }
+
+        @Test
+        void shouldReturnVehicleNotFoundExceptionWhenVehicleDoesNotExist() {
+            // GIVEN
+            when(idGenerator.generate()).thenReturn(parkingId);
+            when(createParkingUseCase.execute(parking)).thenThrow(new VehicleNotFoundException(vehicleId));
+
+            // WHEN
+            MockMvcResponse response = whenARequestToCreateAParkingIsReceived(requestBody);
+
+            // THEN
+            response.then()
+                    .statusCode(HttpStatus.BAD_REQUEST.value())
+                    .body("message", CoreMatchers.equalTo(String.format("Vehicle with id %s not found", vehicleId)));
+
+            verify(createParkingUseCase).execute(parking);
         }
 
         private MockMvcResponse whenARequestToCreateAParkingIsReceived(String requestBody) {
