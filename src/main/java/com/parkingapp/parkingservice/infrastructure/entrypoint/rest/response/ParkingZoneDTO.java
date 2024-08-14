@@ -1,10 +1,10 @@
 package com.parkingapp.parkingservice.infrastructure.entrypoint.rest.response;
 
+import com.parkingapp.parkingservice.domain.common.Amount;
 import com.parkingapp.parkingservice.domain.common.Location;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
-import javax.money.CurrencyUnit;
 import java.util.UUID;
 
 @Data
@@ -39,11 +39,11 @@ public class ParkingZoneDTO {
     )
     private int feePerMinute;
 
-    public ParkingZoneDTO(UUID id, String name, Location location, CurrencyUnit currency, int feePerMinute) {
+    public ParkingZoneDTO(UUID id, String name, Location location, Amount amount) {
         this.id = id;
         this.name = name;
         this.location = location;
-        this.currency = currency.getCurrencyCode();
-        this.feePerMinute = feePerMinute;
+        this.currency = amount.getCurrency().getCurrencyCode();
+        this.feePerMinute = amount.getCents();
     }
 }

@@ -72,8 +72,7 @@ public class ParkingZonesController {
                         parkingZone.getId(),
                         parkingZone.getName(),
                         parkingZone.getLocation(),
-                        parkingZone.getCurrency(),
-                        parkingZone.getFeePerMinute()
+                        parkingZone.getAmount()
                 ))
                 .collect(Collectors.toList());
 

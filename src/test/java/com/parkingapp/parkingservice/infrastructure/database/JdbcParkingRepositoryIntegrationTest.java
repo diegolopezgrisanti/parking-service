@@ -197,7 +197,6 @@ public class JdbcParkingRepositoryIntegrationTest {
                 now,
                 now.plus(3, ChronoUnit.HOURS),
                 paymentStatusPending
-
         );
         parkingRepository.saveParking(parking);
         parkingRepository.saveParking(parking2);

@@ -1,5 +1,6 @@
 package com.parkingapp.parkingservice.infrastructure.database;
 
+import com.parkingapp.parkingservice.domain.common.Amount;
 import com.parkingapp.parkingservice.domain.common.Location;
 import com.parkingapp.parkingservice.domain.parkingzone.ParkingZone;
 import com.parkingapp.parkingservice.infrastructure.fixtures.initializers.testannotation.IntegrationTest;
@@ -35,8 +36,7 @@ class JdbcParkingZonesRepositoryIntegrationTest {
                 "Test zone",
                 cityId,
                 new Location(new BigDecimal("40.71280"), new BigDecimal("-74.00600")),
-                Monetary.getCurrency("EUR"),
-                100
+                new Amount(Monetary.getCurrency("EUR"), 100)
         );
         List<ParkingZone> expectedParkingZones = List.of(parkingZone);
         givenExistingParkingZone(parkingZone);
@@ -69,8 +69,7 @@ class JdbcParkingZonesRepositoryIntegrationTest {
                 "Test zone",
                 cityId,
                 new Location(new BigDecimal("40.71280"), new BigDecimal("-74.00600")),
-                Monetary.getCurrency("EUR"),
-                100
+                new Amount(Monetary.getCurrency("EUR"), 100)
         );
         givenExistingParkingZone(parkingZone);
         // WHEN
@@ -115,8 +114,8 @@ class JdbcParkingZonesRepositoryIntegrationTest {
                 .addValue("cityId", parkingZone.getCityId())
                 .addValue("latitude", latitude)
                 .addValue("longitude", longitude)
-                .addValue("currency", parkingZone.getCurrency().getCurrencyCode())
-                .addValue("feePerMinute", parkingZone.getFeePerMinute());
+                .addValue("currency", parkingZone.getAmount().getCurrency().getCurrencyCode())
+                .addValue("feePerMinute", parkingZone.getAmount().getCents());
 
         namedParameterJdbcTemplate.update(
                 "INSERT INTO parking_zones(id, name, city_id, latitude, longitude, currency, fee_per_minute) " +

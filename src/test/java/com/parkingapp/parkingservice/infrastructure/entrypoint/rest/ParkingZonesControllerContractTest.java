@@ -2,6 +2,7 @@ package com.parkingapp.parkingservice.infrastructure.entrypoint.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.parkingapp.parkingservice.application.getparkingzones.GetParkingZonesByIdUseCase;
+import com.parkingapp.parkingservice.domain.common.Amount;
 import com.parkingapp.parkingservice.domain.common.IdGenerator;
 import com.parkingapp.parkingservice.domain.common.Location;
 import com.parkingapp.parkingservice.domain.parkingzone.ParkingZone;
@@ -51,17 +52,15 @@ class ParkingZonesControllerContractTest {
             "Test zone",
             UUID.randomUUID(),
             new Location(new BigDecimal("40.7128"), new BigDecimal("-74.0060")),
-            Monetary.getCurrency("EUR"),
-            100
-            ));
+            new Amount(Monetary.getCurrency("EUR"), 100))
+    );
 
     List<ParkingZoneDTO> parkingZoneDTOList = parkingZoneList.stream()
             .map(parkingZone -> new ParkingZoneDTO(
                     parkingZone.getId(),
                     parkingZone.getName(),
                     parkingZone.getLocation(),
-                    parkingZone.getCurrency(),
-                    parkingZone.getFeePerMinute()
+                    parkingZone.getAmount()
             ))
             .collect(Collectors.toList());
 
