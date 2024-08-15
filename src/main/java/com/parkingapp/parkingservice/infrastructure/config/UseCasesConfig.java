@@ -5,7 +5,7 @@ import com.parkingapp.parkingservice.application.createparking.CreateParkingUseC
 import com.parkingapp.parkingservice.application.findallcities.FindAllCitiesUseCase;
 import com.parkingapp.parkingservice.application.getparkingbyid.GetParkingByIdUseCase;
 import com.parkingapp.parkingservice.application.checkparkingstatus.CheckParkingStatusUseCase;
-import com.parkingapp.parkingservice.application.getparkingzones.GetParkingZonesByIdUseCase;
+import com.parkingapp.parkingservice.application.getparkingzones.GetParkingZonesUseCase;
 import com.parkingapp.parkingservice.application.getuservehicles.GetUserVehiclesUseCase;
 import com.parkingapp.parkingservice.domain.city.CitiesRepository;
 import com.parkingapp.parkingservice.domain.parkingzone.ParkingZonesRepository;
@@ -25,10 +25,10 @@ public class UseCasesConfig {
     }
 
     @Bean
-    public GetParkingZonesByIdUseCase getParkingZonesByIdUseCase(
+    public GetParkingZonesUseCase getParkingZonesUseCase(
             ParkingZonesRepository parkingZonesRepository
     ) {
-        return new GetParkingZonesByIdUseCase(parkingZonesRepository);
+        return new GetParkingZonesUseCase(parkingZonesRepository);
     }
 
     @Bean

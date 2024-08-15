@@ -13,7 +13,7 @@ group = "com.parkingapp"
 version = "0.0.1-SNAPSHOT"
 
 java {
-	sourceCompatibility = JavaVersion.VERSION_17
+	sourceCompatibility = JavaVersion.VERSION_21
 }
 
 repositories {
@@ -34,6 +34,13 @@ dependencies {
 	implementation("org.flywaydb:flyway-core:9.11.0")
 	implementation("org.springframework.boot:spring-boot-starter-jdbc")
 	implementation("org.javamoney:moneta:1.4.4")
+
+	implementation("org.springframework.boot:spring-boot-starter-log4j2")
+	modules {
+		module("org.springframework.boot:spring-boot-starter-logging") {
+			replacedBy("org.springframework.boot:spring-boot-starter-log4j2", "Use Log4j2 instead of Logback")
+		}
+	}
 
 	// Lombok
 	compileOnly("org.projectlombok:lombok:1.18.34")

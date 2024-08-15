@@ -1,5 +1,6 @@
 package com.parkingapp.parkingservice.application.getparkingzones;
 
+import com.parkingapp.parkingservice.domain.common.Amount;
 import com.parkingapp.parkingservice.domain.common.Location;
 import com.parkingapp.parkingservice.domain.parkingzone.ParkingZone;
 import com.parkingapp.parkingservice.domain.parkingzone.ParkingZonesRepository;
@@ -16,7 +17,7 @@ import static org.mockito.Mockito.*;
 class GetParkingZonesByIdUseCaseTest {
 
     private final ParkingZonesRepository parkingZonesRepository = mock(ParkingZonesRepository.class);
-    private final GetParkingZonesByIdUseCase useCase = new GetParkingZonesByIdUseCase(parkingZonesRepository);
+    private final GetParkingZonesUseCase useCase = new GetParkingZonesUseCase(parkingZonesRepository);
 
     @Test
     void shouldGetParkingZonesById() {
@@ -27,8 +28,7 @@ class GetParkingZonesByIdUseCaseTest {
                 "Test zone",
                 UUID.randomUUID(),
                 new Location(new BigDecimal("40.7128"), new BigDecimal("-74.0060")),
-                Monetary.getCurrency("EUR"),
-                100
+                new Amount(Monetary.getCurrency("EUR"), 100)
         );
         List<ParkingZone> expectedParkingZones = List.of(parkingZone);
         when(parkingZonesRepository.getParkingZonesByCityId(cityId)).thenReturn(expectedParkingZones);
@@ -40,5 +40,4 @@ class GetParkingZonesByIdUseCaseTest {
         assertThat(result).isEqualTo(expectedParkingZones);
         verify(parkingZonesRepository).getParkingZonesByCityId(cityId);
     }
-
 }

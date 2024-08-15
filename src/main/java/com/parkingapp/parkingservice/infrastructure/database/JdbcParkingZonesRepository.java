@@ -1,11 +1,13 @@
 package com.parkingapp.parkingservice.infrastructure.database;
 
+import com.parkingapp.parkingservice.domain.common.Amount;
 import com.parkingapp.parkingservice.domain.common.Location;
 import com.parkingapp.parkingservice.domain.parkingzone.ParkingZone;
 import com.parkingapp.parkingservice.domain.parkingzone.ParkingZonesRepository;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
+import javax.money.CurrencyUnit;
 import javax.money.Monetary;
 import java.math.BigDecimal;
 import java.sql.ResultSet;
@@ -51,14 +53,16 @@ public class JdbcParkingZonesRepository implements ParkingZonesRepository {
             BigDecimal latitude = rs.getBigDecimal("latitude");
             BigDecimal longitude = rs.getBigDecimal("longitude");
             Location location = new Location(latitude, longitude);
+            CurrencyUnit currency = Monetary.getCurrency(rs.getString("currency"));
+            int feePerMinute = rs.getInt("fee_per_minute");
+            Amount amount = new Amount(currency, feePerMinute);
 
             return new ParkingZone(
                     UUID.fromString(rs.getString("id")),
                     rs.getString("name"),
                     UUID.fromString(rs.getString("city_id")),
                     location,
-                    Monetary.getCurrency(rs.getString("currency")),
-                    rs.getInt("fee_per_minute")
+                    amount
             );
         }
     }
