@@ -25,7 +25,7 @@ public class UseCasesConfig {
     }
 
     @Bean
-    public GetParkingZonesUseCase getParkingZonesByIdUseCase(
+    public GetParkingZonesUseCase getParkingZonesUseCase(
             ParkingZonesRepository parkingZonesRepository
     ) {
         return new GetParkingZonesUseCase(parkingZonesRepository);

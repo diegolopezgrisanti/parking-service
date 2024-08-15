@@ -14,5 +14,4 @@ public class ParkingClosure {
     Instant startDate;
     Instant endDate;
     UUID parkingId;
-
 }

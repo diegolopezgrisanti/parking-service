@@ -56,7 +56,7 @@ public class JdbcParkingClosureRepository implements ParkingClosureRepository {
     public void markAsProcessed(UUID parkingId, Instant processedAt) {
         String sql = """
             UPDATE parking
-            SET processed_date = :processedAt,
+            SET processed_at = :processedAt,
                 payment_status = :paymentStatus::payment_status
             WHERE id = :parkingId
         """;
@@ -74,7 +74,7 @@ public class JdbcParkingClosureRepository implements ParkingClosureRepository {
     public void markAsFailed(UUID parkingId, Instant processedAt) {
         String sql = """
             UPDATE parking
-            SET processed_date = :processedAt
+            SET processed_at = :processedAt
             WHERE id = :parkingId
         """;
 
