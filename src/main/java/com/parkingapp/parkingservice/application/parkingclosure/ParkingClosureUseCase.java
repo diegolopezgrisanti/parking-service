@@ -6,16 +6,20 @@ import com.parkingapp.parkingservice.domain.payment.ParkingPaymentResponse;
 import com.parkingapp.parkingservice.domain.payment.ParkingPaymentService;
 import com.parkingapp.parkingservice.domain.payment.Failure;
 import com.parkingapp.parkingservice.domain.payment.Successful;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.time.Clock;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
+import java.util.UUID;
 
 public class ParkingClosureUseCase {
     private final ParkingClosureRepository parkingClosureRepository;
     private final ParkingPaymentService parkingPaymentService;
     private final Clock clock;
+    private final Logger log = LogManager.getLogger(getClass());
 
     public ParkingClosureUseCase(
             ParkingClosureRepository parkingClosureRepository,
@@ -36,10 +40,20 @@ public class ParkingClosureUseCase {
             ParkingPaymentResponse response = parkingPaymentService.chargeFee(parkingClosure, feeAmount);
 
             switch (response) {
-                case Successful s -> parkingClosureRepository.markAsProcessed(parkingClosure.getParkingId(), now);
-                case Failure f -> parkingClosureRepository.markAsFailed(parkingClosure.getParkingId(), now);
+                case Successful s -> markAsProcessed(parkingClosure.getParkingId(), now);
+                case Failure f -> markAsFailed(parkingClosure.getParkingId(), now);
             }
         }
+    }
+
+    private void markAsFailed(UUID parkingId, Instant now) {
+        parkingClosureRepository.markAsFailed(parkingId, now);
+        log.error(String.format("Failed to process payment for parking with ID: %s", parkingId));
+    }
+
+    private void markAsProcessed(UUID parkingId, Instant now) {
+        parkingClosureRepository.markAsProcessed(parkingId, now);
+        log.info((String.format("Payment processed for parking with ID: %s", parkingId)));
     }
 
     private int calculateFeeAmount(ParkingClosure parkingClosure) {
@@ -47,5 +61,7 @@ public class ParkingClosureUseCase {
         long minutesParked = Duration.between(parkingClosure.getStartDate(), parkingClosure.getEndDate()).toMinutes();
         return (int) (minutesParked * feePerMinute);
     }
+
+
 
 }
