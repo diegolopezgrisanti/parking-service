@@ -42,8 +42,6 @@ class ParkingClosureUseCaseTest {
             UUID.randomUUID()
     );
 
-
-
     @Test
     void shouldProcessPendingParking() {
         // Given

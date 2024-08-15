@@ -1,6 +1,6 @@
 package com.parkingapp.parkingservice.infrastructure.entrypoint.rest;
 
-import com.parkingapp.parkingservice.application.getparkingzones.GetParkingZonesByIdUseCase;
+import com.parkingapp.parkingservice.application.getparkingzones.GetParkingZonesUseCase;
 import com.parkingapp.parkingservice.domain.parkingzone.ParkingZone;
 import com.parkingapp.parkingservice.infrastructure.entrypoint.rest.response.ParkingZoneDTO;
 import com.parkingapp.parkingservice.infrastructure.entrypoint.rest.response.ParkingZonesResponse;
@@ -29,10 +29,10 @@ import java.util.stream.Collectors;
 @Tag(name = "Parking zones", description = "All about parking zones")
 public class ParkingZonesController {
 
-    private final GetParkingZonesByIdUseCase getParkingZonesByIdUseCase;
+    private final GetParkingZonesUseCase getParkingZonesUseCase;
 
-    public ParkingZonesController(GetParkingZonesByIdUseCase getParkingZonesByIdUseCase) {
-        this.getParkingZonesByIdUseCase = getParkingZonesByIdUseCase;
+    public ParkingZonesController(GetParkingZonesUseCase getParkingZonesUseCase) {
+        this.getParkingZonesUseCase = getParkingZonesUseCase;
     }
 
     @Operation(summary = "Gets all parking zones by city ID")
@@ -66,7 +66,7 @@ public class ParkingZonesController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public ParkingZonesResponse getParkingZonesByCityId(@RequestParam("city-id") UUID cityId) {
-        List<ParkingZone> parkingZones = getParkingZonesByIdUseCase.execute(cityId);
+        List<ParkingZone> parkingZones = getParkingZonesUseCase.execute(cityId);
         List<ParkingZoneDTO> mappedParkingZones = parkingZones.stream()
                 .map(parkingZone -> new ParkingZoneDTO(
                         parkingZone.getId(),

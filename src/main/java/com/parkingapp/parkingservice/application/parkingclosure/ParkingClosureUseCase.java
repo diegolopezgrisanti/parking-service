@@ -61,7 +61,4 @@ public class ParkingClosureUseCase {
         long minutesParked = Duration.between(parkingClosure.getStartDate(), parkingClosure.getEndDate()).toMinutes();
         return (int) (minutesParked * feePerMinute);
     }
-
-
-
 }

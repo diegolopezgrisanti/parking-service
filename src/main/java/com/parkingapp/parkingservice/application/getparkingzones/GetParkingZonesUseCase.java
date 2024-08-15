@@ -6,11 +6,11 @@ import com.parkingapp.parkingservice.domain.parkingzone.ParkingZonesRepository;
 import java.util.List;
 import java.util.UUID;
 
-public class GetParkingZonesByIdUseCase {
+public class GetParkingZonesUseCase {
 
     private final ParkingZonesRepository parkingZonesRepository;
 
-    public GetParkingZonesByIdUseCase(ParkingZonesRepository parkingZonesRepository) {
+    public GetParkingZonesUseCase(ParkingZonesRepository parkingZonesRepository) {
         this.parkingZonesRepository = parkingZonesRepository;
     }
 
