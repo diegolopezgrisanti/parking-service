@@ -31,7 +31,7 @@ dependencies {
 	implementation("org.jetbrains:annotations:24.1.0")
 	implementation("org.postgresql:postgresql:42.7.3")
 	implementation("org.springframework.boot:spring-boot-starter-web:3.3.2")
-	implementation("org.flywaydb:flyway-core:9.11.0")
+	implementation("org.flywaydb:flyway-core:10.17.1")
 	implementation("org.springframework.boot:spring-boot-starter-jdbc")
 	implementation("org.javamoney:moneta:1.4.4")
 
