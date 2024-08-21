@@ -6,6 +6,8 @@ updates:
       interval: "weekly"
     allow:
       - dependency-type: "all"
+    ignore:
+      - dependency-name: "org.flywaydb:flyway-core"
     reviewers:
       - "diegolopezgrisanti"
       - "solblack"
