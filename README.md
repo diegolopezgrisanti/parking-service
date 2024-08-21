@@ -1,62 +1,110 @@
 
+# Parking Service
 
-# Read Me First
-The following information was discovered during the project build process:
+This project is a parking management service built with Spring Boot and PostgreSQL.
+It provides an API for managing parking reservations, calculating fees, and handling customer data.
 
-* The JVM level has been updated from '11' to '17'. For more details, review the [JDK Version Range](https://github.com/spring-projects/spring-framework/wiki/Spring-Framework-Versions#jdk-version-range) in the wiki.
-* The original package name 'com.parkingapp.parking-service' is invalid. This project now employs 'com.parkingapp.parkingservice'.
+## Prerequisites
 
-# Getting Started
+Ensure you have the following installed before starting:
 
-### Setting Up Locally
+- JDK 21 or higher
+- Docker and Docker Compose
+- Gradle 8.9 or higher (optional if you prefer using `./gradlew`)
 
-To run the project locally, follow these steps:
+## Local Environment Setup
 
-1. Start the Docker container housing the PostgreSQL database.
-2. Run the project.
+### 1. Database Setup with Docker Compose
 
-After completing these steps, the service will be accessible at the following URL: [http://localhost:8080/](http://localhost:8080/).
+This project uses PostgreSQL as the database. You can spin up a local instance using Docker Compose.
 
-Certainly! Here's an addition to your README regarding the naming conventions for Flyway migrations:
+To start the PostgreSQL database with Docker Compose:
 
----
+```bash
+docker-compose up -d
+```
 
-### Running Migrations with Flyway
+### 2. Running the Service
 
-#### Migration Naming Conventions
+To run the service locally:
 
-Flyway follows a specific naming convention for migration files. Ensure your migration files adhere to the following naming format:
+1. Ensure the database is running.
+2. Start the service with the following command:
 
-* **Prefix:** Start the filename with a prefix that describes the purpose or category of the migration. For example: `V` for versioned migrations, `R` for repeatable migrations, or any custom identifier.
+```bash
+./gradlew bootRun
+```
 
-* **Version Number:** Follow the prefix with a version number, separating elements with underscores. For versioned migrations, this number reflects the version the migration applies to, like `V001`.
-* **Separator:** Use double underscore as a separator between version and description, like `V001__`.
+The service will be available at [http://localhost:8080/](http://localhost:8080/).
 
-* **Description:** Add a brief description of the migration, using underscores to separate words. For example, `add_users_table` or `populate_initial_data`.
+### 3. Database Migrations with Flyway
 
-* **Suffix (For Versioned Migrations):** End versioned migration filenames with `.sql` for SQL migrations, `.kt` for Kotlin, `.java` for Java, etc.
+Database migrations are managed by Flyway. Make sure to follow the naming conventions below when creating new migration scripts:
 
-* **Example (Versioned Migration):** `V001__create_users_table.sql`
+- **Prefix:** Use `V` for versioned migrations and `R` for repeatable migrations.
+- **Version Number:** Follow the prefix with a version number (e.g., `V001`).
+- **Separator:** Use double underscores `__` to separate the version from the description.
+- **Description:** Provide a brief description of the migration in lowercase, using underscores to separate words.
+- **Suffix:** End with `.sql` for SQL migrations.
 
-* **Example (Repeatable Migration):** `R__populate_initial_data.sql`
+Example:
 
-Ensure your migration filenames follow these conventions to allow Flyway to execute them correctly.
+```text
+V001__create_users_table.sql
+R__populate_initial_data.sql
+```
 
----
+### 4. Running Tests
 
+The project includes various levels of testing: unit, integration, contract, and component tests. You can run all tests using Gradle.
 
+1. To run unit tests:
 
-### Reference Documentation
-For further reference, please consider the following sections:
+```bash
+./gradlew test
+```
 
-* [Official Gradle documentation](https://docs.gradle.org)
-* [Spring Boot Gradle Plugin Reference Guide](https://docs.spring.io/spring-boot/docs/3.1.1/gradle-plugin/reference/html/)
-* [Create an OCI image](https://docs.spring.io/spring-boot/docs/3.1.1/gradle-plugin/reference/html/#build-image)
+2. To run integration tests:
 
-### Additional Links
-These additional references might be helpful:
+```bash
+./gradlew integrationTest
+```
 
-* [Gradle Build Scans – insights for your project's build](https://scans.gradle.com#gradle)
+3. To run contract tests:
+
+```bash
+./gradlew contractTest
+```
+
+4. To run component tests:
+
+```bash
+./gradlew componentTest
+```
+
+5. To run all tests:
+
+```bash
+./gradlew check
+```
+
+## Key Dependencies
+
+The project uses the following key dependencies:
+
+- **Spring Boot:** The main framework for building the service.
+- **PostgreSQL:** Relational database.
+- **Flyway:** Tool for managing database migrations.
+- **Resilience4j:** Provides resilience patterns for external service calls.
+- **JUnit and Testcontainers:** Testing tools.
+
+## Additional Documentation
+
+For more information, refer to the following resources:
+
+- [Official Gradle documentation](https://docs.gradle.org)
+- [Spring Boot Gradle Plugin Reference Guide](https://docs.spring.io/spring-boot/docs/current/gradle-plugin/reference/html/)
+- [Create an OCI image](https://docs.spring.io/spring-boot/docs/current/gradle-plugin/reference/html/#build-image)
 
 ---
 
