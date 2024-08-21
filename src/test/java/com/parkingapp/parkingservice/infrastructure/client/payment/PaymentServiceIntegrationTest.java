@@ -1,8 +1,8 @@
 package com.parkingapp.parkingservice.infrastructure.client.payment;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
+import com.github.tomakehurst.wiremock.client.MappingBuilder;
 import com.github.tomakehurst.wiremock.client.WireMock;
-import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.parkingapp.parkingservice.domain.common.Amount;
 import com.parkingapp.parkingservice.domain.parkingclosure.ParkingClosure;
 import com.parkingapp.parkingservice.domain.payment.Failure;
@@ -10,15 +10,13 @@ import com.parkingapp.parkingservice.domain.payment.ParkingPaymentResponse;
 import com.parkingapp.parkingservice.domain.payment.Successful;
 import com.parkingapp.parkingservice.infrastructure.config.ObjectMapperConfig;
 import com.parkingapp.parkingservice.infrastructure.config.client.PaymentClientConfig;
+import com.parkingapp.parkingservice.infrastructure.fixtures.initializers.WiremockTestContainer;
 import com.parkingapp.parkingservice.infrastructure.fixtures.initializers.testannotation.IntegrationTest;
+import com.parkingapp.parkingservice.infrastructure.fixtures.initializers.testannotation.WithWireMock;
 import org.springframework.beans.factory.annotation.Autowired;
-import retrofit2.Retrofit;
-import retrofit2.converter.jackson.JacksonConverterFactory;
-
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ContextConfiguration;
 
 import javax.money.Monetary;
 import java.time.Instant;
@@ -26,15 +24,19 @@ import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
+import static com.github.tomakehurst.wiremock.client.WireMock.post;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
+import static com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-
-@IntegrationTest
+@WithWireMock
 @SpringBootTest(
         classes = {PaymentClientConfig.class, ObjectMapperConfig.class}
 )
+@IntegrationTest
+@ContextConfiguration(initializers = {WiremockTestContainer.class})
 public class PaymentServiceIntegrationTest {
+    @Autowired
     private WireMockServer wireMockServer;
 
     @Autowired
@@ -56,31 +58,13 @@ public class PaymentServiceIntegrationTest {
             paymentMethodId
     );
 
-    @BeforeEach
-    void setUp() {
-        wireMockServer = new WireMockServer(WireMockConfiguration.wireMockConfig().dynamicPort());
-        wireMockServer.start();
-
-        WireMock.configureFor("localhost", wireMockServer.port());
-
-        PaymentApi paymentApi = new Retrofit.Builder()
-                .baseUrl("http://localhost:" + wireMockServer.port())
-                .addConverterFactory(JacksonConverterFactory.create())
-                .build()
-                .create(PaymentApi.class);
-
-        paymentService = new PaymentService(paymentApi);
-    }
-
-    @AfterEach
-    void tearDown() {
-        wireMockServer.stop();
-    }
+    MappingBuilder baseResponse = post(urlPathEqualTo("/payment"));
 
     @Test
     public void shouldReturnASuccessfulResponse() {
-        wireMockServer.stubFor(WireMock.post(urlEqualTo("/payment"))
-                .willReturn(aResponse().withStatus(202)));
+        wireMockServer.givenThat(
+                    baseResponse.willReturn(aResponse().withStatus(202))
+                );
 
         ParkingPaymentResponse response = paymentService.chargeFee(parkingClosure, amountInCents);
 

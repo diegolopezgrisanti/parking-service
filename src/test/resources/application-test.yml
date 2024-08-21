@@ -3,3 +3,10 @@ spring:
     enabled: true
     baselineOnMigrate: true
     locations: classpath:db/migrations
+
+clients:
+  payment:
+    url: http://localhost:${wiremock.port:1080}
+    timeout:
+      connect: 100
+      read: 100
