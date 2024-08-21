@@ -8,5 +8,5 @@ clients:
   payment:
     url: http://localhost:${wiremock.port:1080}
     timeout:
-      connect: 100
-      read: 100
+      connect: 1000
+      read: 1000

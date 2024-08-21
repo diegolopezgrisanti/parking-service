@@ -14,9 +14,6 @@ public class WiremockTestContainer implements ApplicationContextInitializer<Conf
         WireMockServer wireMockServer = new WireMockServer(new WireMockConfiguration().dynamicPort());
         wireMockServer.start();
 
-        TestPropertyValues.of("wiremock.port=" + wireMockServer.port())
-                .applyTo(applicationContext);
-
         applicationContext.addApplicationListener(event -> {
             if (event instanceof ContextClosedEvent) {
                 wireMockServer.resetAll();
@@ -25,6 +22,9 @@ public class WiremockTestContainer implements ApplicationContextInitializer<Conf
         });
 
         applicationContext.getBeanFactory().registerSingleton("wireMockServer", wireMockServer);
+
+        TestPropertyValues.of("wiremock.port=" + wireMockServer.port())
+                .applyTo(applicationContext);
     }
 
 }
