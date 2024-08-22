@@ -2,6 +2,7 @@ package com.parkingapp.parkingservice.infrastructure.client.payment;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.client.MappingBuilder;
+import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.http.Fault;
 import com.parkingapp.parkingservice.domain.common.Amount;
 import com.parkingapp.parkingservice.domain.parkingclosure.ParkingClosure;
@@ -54,10 +55,31 @@ public class PaymentServiceIntegrationTest {
             paymentMethodId
     );
 
-    MappingBuilder baseResponse = post(urlPathEqualTo("/payment"));
+    String expectedRequestBody = String.format(
+            """
+                {
+                    "payment_type_id": "%s",
+                    "payment_id": "%s",
+                    "amount_in_cents": %d,
+                    "currency": "%s",
+                    "user_id": "%s",
+                    "payment_method_id": "%s"
+                }
+            """,
+            "PARKING",
+            parkingId,
+            amountInCents,
+            "EUR",
+            userId,
+            paymentMethodId
+    );
+
+    MappingBuilder baseResponse = post(urlPathEqualTo("/payment"))
+            .withRequestBody(WireMock.equalToJson(expectedRequestBody));
 
     @Test
     public void shouldReturnASuccessfulResponse() {
+        System.out.println(expectedRequestBody);
         wireMockServer.givenThat(
                     baseResponse.willReturn(aResponse().withStatus(202))
         );
