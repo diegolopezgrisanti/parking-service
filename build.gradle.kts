@@ -22,6 +22,7 @@ repositories {
 
 dependencies {
 	val REST_ASSURED = "5.5.0"
+	val RETROFIT = "2.10.0"
 
 	implementation("org.springframework.boot:spring-boot-starter")
 	implementation("org.springframework.boot:spring-boot-starter-web")
@@ -34,6 +35,9 @@ dependencies {
 	implementation("org.flywaydb:flyway-core:9.11.0")
 	implementation("org.springframework.boot:spring-boot-starter-jdbc")
 	implementation("org.javamoney:moneta:1.4.4")
+	implementation("com.squareup.retrofit2:retrofit:$RETROFIT")
+	implementation("com.squareup.retrofit2:converter-jackson:$RETROFIT")
+	implementation("io.github.resilience4j:resilience4j-retry:2.2.0")
 
 	implementation("org.springframework.boot:spring-boot-starter-log4j2")
 	modules {
@@ -66,6 +70,8 @@ dependencies {
 	testImplementation("io.rest-assured:xml-path:$REST_ASSURED")
 	testImplementation("io.rest-assured:spring-mock-mvc:$REST_ASSURED")
 	testImplementation("io.rest-assured:spring-commons:$REST_ASSURED")
+	testImplementation("org.wiremock:wiremock-standalone:3.9.1")
+
 }
 
 tasks.apply {
