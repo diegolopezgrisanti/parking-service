@@ -76,7 +76,9 @@ class JdbcParkingClosureRepositoryIntegrationTest {
             new Amount(Monetary.getCurrency("EUR"), parkingZoneFeePerMinute),
             parkingStartDate,
             parkingEndDate,
-            parkingId
+            parkingId,
+            userId,
+            paymentMethodId
     );
 
     private final Parking endedParking = new Parking(
