@@ -2,7 +2,6 @@
 # Parking Service
 
 This project is a parking management service built with Spring Boot and PostgreSQL.
-It provides an API for managing parking reservations, calculating fees, and handling customer data.
 
 ## Prerequisites
 
@@ -35,7 +34,7 @@ To run the service locally:
 ./gradlew bootRun
 ```
 
-The service will be available at [http://localhost:8080/](http://localhost:8080/).
+The service will be available at [http://localhost:8080/](http://localhost:8080/)
 
 ### 3. Database Migrations with Flyway
 
@@ -95,8 +94,7 @@ The project uses the following key dependencies:
 - **Spring Boot:** The main framework for building the service.
 - **PostgreSQL:** Relational database.
 - **Flyway:** Tool for managing database migrations.
-- **Resilience4j:** Provides resilience patterns for external service calls.
-- **JUnit and Testcontainers:** Testing tools.
+
 
 ## Additional Documentation
 
@@ -107,5 +105,3 @@ For more information, refer to the following resources:
 - [Create an OCI image](https://docs.spring.io/spring-boot/docs/current/gradle-plugin/reference/html/#build-image)
 
 ---
-
-Feel free to provide more details about the migration process or any other information you'd like to include!
