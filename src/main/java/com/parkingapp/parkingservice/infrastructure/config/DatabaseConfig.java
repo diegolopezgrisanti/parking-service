@@ -1,9 +1,11 @@
 package com.parkingapp.parkingservice.infrastructure.config;
 
 import com.parkingapp.parkingservice.domain.city.CitiesRepository;
+import com.parkingapp.parkingservice.domain.parkingclosure.ParkingClosureRepository;
 import com.parkingapp.parkingservice.domain.parkingzone.ParkingZonesRepository;
 import com.parkingapp.parkingservice.domain.vehicle.VehicleRepository;
 import com.parkingapp.parkingservice.infrastructure.database.JdbcCitiesRepository;
+import com.parkingapp.parkingservice.infrastructure.database.JdbcParkingClosureRepository;
 import com.parkingapp.parkingservice.infrastructure.database.JdbcParkingRepository;
 import com.parkingapp.parkingservice.infrastructure.database.JdbcParkingZonesRepository;
 import com.parkingapp.parkingservice.domain.parking.ParkingRepository;
@@ -43,4 +45,10 @@ public class DatabaseConfig {
         return new JdbcVehiclesRepository(namedParameterJdbcTemplate);
     }
 
+    @Bean
+    public ParkingClosureRepository parkingClosureRepository(
+            NamedParameterJdbcTemplate namedParameterJdbcTemplate
+    ) {
+        return new JdbcParkingClosureRepository(namedParameterJdbcTemplate);
+    }
 }

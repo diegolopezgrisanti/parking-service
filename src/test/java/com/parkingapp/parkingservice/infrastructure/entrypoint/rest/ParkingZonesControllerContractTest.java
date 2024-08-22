@@ -1,7 +1,8 @@
 package com.parkingapp.parkingservice.infrastructure.entrypoint.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.parkingapp.parkingservice.application.getparkingzones.GetParkingZonesByIdUseCase;
+import com.parkingapp.parkingservice.application.getparkingzones.GetParkingZonesUseCase;
+import com.parkingapp.parkingservice.domain.common.Amount;
 import com.parkingapp.parkingservice.domain.common.IdGenerator;
 import com.parkingapp.parkingservice.domain.common.Location;
 import com.parkingapp.parkingservice.domain.parkingzone.ParkingZone;
@@ -43,7 +44,7 @@ class ParkingZonesControllerContractTest {
     private IdGenerator idGenerator;
 
     @MockBean
-    private GetParkingZonesByIdUseCase getParkingZonesByIdUseCase;
+    private GetParkingZonesUseCase getParkingZonesUseCase;
 
     private final UUID cityId = UUID.randomUUID();
     private final List<ParkingZone> parkingZoneList = List.of(new ParkingZone(
@@ -51,24 +52,22 @@ class ParkingZonesControllerContractTest {
             "Test zone",
             UUID.randomUUID(),
             new Location(new BigDecimal("40.7128"), new BigDecimal("-74.0060")),
-            Monetary.getCurrency("EUR"),
-            100
-            ));
+            new Amount(Monetary.getCurrency("EUR"), 100))
+    );
 
     List<ParkingZoneDTO> parkingZoneDTOList = parkingZoneList.stream()
             .map(parkingZone -> new ParkingZoneDTO(
                     parkingZone.getId(),
                     parkingZone.getName(),
                     parkingZone.getLocation(),
-                    parkingZone.getCurrency(),
-                    parkingZone.getFeePerMinute()
+                    parkingZone.getAmount()
             ))
             .collect(Collectors.toList());
 
     @Test
     void getParkingZonesByCityId() throws Exception {
         // GIVEN
-        when(getParkingZonesByIdUseCase.execute(cityId)).thenReturn(parkingZoneList);
+        when(getParkingZonesUseCase.execute(cityId)).thenReturn(parkingZoneList);
         String expectedResponse = objectMapper.writeValueAsString(new ParkingZonesResponse(parkingZoneDTOList));
 
         // WHEN & THEN
@@ -78,13 +77,13 @@ class ParkingZonesControllerContractTest {
                 .statusCode(HttpStatus.OK.value())
                 .body(CoreMatchers.equalTo(expectedResponse));
 
-        verify(getParkingZonesByIdUseCase).execute(cityId);
+        verify(getParkingZonesUseCase).execute(cityId);
     }
 
     @Test
     void shouldReturn500WhenErrorOccurs() {
         // Given
-        when(getParkingZonesByIdUseCase.execute(cityId)).thenThrow(new RuntimeException("ops"));
+        when(getParkingZonesUseCase.execute(cityId)).thenThrow(new RuntimeException("ops"));
 
         // When
         MockMvcResponse response = whenARequestToGetParkingZonesByCityIdIsReceived();
@@ -93,7 +92,7 @@ class ParkingZonesControllerContractTest {
         response.then()
                 .statusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
 
-        verify(getParkingZonesByIdUseCase).execute(cityId);
+        verify(getParkingZonesUseCase).execute(cityId);
     }
 
     private MockMvcResponse whenARequestToGetParkingZonesByCityIdIsReceived() {

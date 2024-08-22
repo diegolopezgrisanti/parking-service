@@ -1,0 +1,2 @@
+ALTER TABLE parking
+ADD COLUMN processed_at TIMESTAMP WITH TIME ZONE;

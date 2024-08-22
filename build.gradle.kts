@@ -13,7 +13,7 @@ group = "com.parkingapp"
 version = "0.0.1-SNAPSHOT"
 
 java {
-	sourceCompatibility = JavaVersion.VERSION_17
+	sourceCompatibility = JavaVersion.VERSION_21
 }
 
 repositories {
@@ -22,6 +22,7 @@ repositories {
 
 dependencies {
 	val REST_ASSURED = "5.5.0"
+	val RETROFIT = "2.10.0"
 
 	implementation("org.springframework.boot:spring-boot-starter")
 	implementation("org.springframework.boot:spring-boot-starter-web")
@@ -34,6 +35,16 @@ dependencies {
 	implementation("org.flywaydb:flyway-core:9.11.0")
 	implementation("org.springframework.boot:spring-boot-starter-jdbc")
 	implementation("org.javamoney:moneta:1.4.4")
+	implementation("com.squareup.retrofit2:retrofit:$RETROFIT")
+	implementation("com.squareup.retrofit2:converter-jackson:$RETROFIT")
+	implementation("io.github.resilience4j:resilience4j-retry:2.2.0")
+
+	implementation("org.springframework.boot:spring-boot-starter-log4j2")
+	modules {
+		module("org.springframework.boot:spring-boot-starter-logging") {
+			replacedBy("org.springframework.boot:spring-boot-starter-log4j2", "Use Log4j2 instead of Logback")
+		}
+	}
 
 	// Lombok
 	compileOnly("org.projectlombok:lombok:1.18.34")
@@ -45,7 +56,7 @@ dependencies {
 
 	// Test dependencies
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
-	testImplementation(platform("org.junit:junit-bom:5.10.3"))
+	testImplementation(platform("org.junit:junit-bom:5.11.0"))
 	testImplementation("org.junit.jupiter:junit-jupiter")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 	testImplementation("org.assertj:assertj-core:3.26.3")
@@ -59,6 +70,8 @@ dependencies {
 	testImplementation("io.rest-assured:xml-path:$REST_ASSURED")
 	testImplementation("io.rest-assured:spring-mock-mvc:$REST_ASSURED")
 	testImplementation("io.rest-assured:spring-commons:$REST_ASSURED")
+	testImplementation("org.wiremock:wiremock-standalone:3.9.1")
+
 }
 
 tasks.apply {

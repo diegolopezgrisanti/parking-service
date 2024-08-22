@@ -22,3 +22,10 @@ spring:
 
 cors:
   allowed-origins: "http://localhost:4200"
+
+clients:
+  payment:
+    url: "https://payment-service"
+    timeout:
+      connect: 5000
+      read: 5000
