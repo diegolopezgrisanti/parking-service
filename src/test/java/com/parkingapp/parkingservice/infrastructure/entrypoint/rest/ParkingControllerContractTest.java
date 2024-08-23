@@ -7,13 +7,12 @@ import com.parkingapp.parkingservice.application.getparkingbyid.GetParkingByIdUs
 import com.parkingapp.parkingservice.domain.common.IdGenerator;
 import com.parkingapp.parkingservice.domain.exceptions.VehicleNotFoundException;
 import com.parkingapp.parkingservice.domain.parking.Parking;
+import com.parkingapp.parkingservice.domain.parking.ParkingStatus;
 import com.parkingapp.parkingservice.domain.parking.ParkingStatusCheck;
 import com.parkingapp.parkingservice.domain.parking.PaymentStatus;
 import com.parkingapp.parkingservice.infrastructure.entrypoint.rest.response.ParkingCheckResponse;
 import com.parkingapp.parkingservice.infrastructure.entrypoint.rest.response.ParkingDetailsDTO;
 import com.parkingapp.parkingservice.infrastructure.entrypoint.rest.response.ParkingResponse;
-import com.parkingapp.parkingservice.infrastructure.entrypoint.rest.response.ParkingZonesResponse;
-import com.parkingapp.parkingservice.infrastructure.entrypoint.rest.response.error.ErrorResponse;
 import com.parkingapp.parkingservice.infrastructure.fixtures.initializers.testannotation.ContractTest;
 import io.restassured.http.ContentType;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
@@ -25,12 +24,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.time.Instant;
@@ -38,6 +31,8 @@ import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 import java.util.UUID;
 
+import static com.parkingapp.parkingservice.domain.parking.ParkingStatus.ACTIVE;
+import static com.parkingapp.parkingservice.domain.parking.ParkingStatus.NOT_FOUND;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -69,6 +64,9 @@ class ParkingControllerContractTest {
     UUID userId = UUID.randomUUID();
     UUID vehicleId = UUID.randomUUID();
     UUID paymentMethodId = UUID.randomUUID();
+    String plate = "1234ABC";
+    ParkingStatus parkingStatus = ACTIVE;
+
 
     Parking parking = new Parking(
             parkingId,
@@ -80,6 +78,8 @@ class ParkingControllerContractTest {
             Instant.now().plus(1, ChronoUnit.HOURS),
             PaymentStatus.PENDING
     );
+
+    ParkingStatusCheck parkingStatusCheck = new ParkingStatusCheck(parkingStatus, parking);
 
     String requestBody = String.format(
             """
@@ -262,6 +262,70 @@ class ParkingControllerContractTest {
     @Nested
     class CheckParking {
 
-    }
 
+        @Test
+        void shouldReturnParkingAndStatusWithParkingDetail() throws Exception {
+            // GIVEN
+            ParkingDetailsDTO details = new ParkingDetailsDTO(plate, parking.getEndDate());
+            String expectedResponse = objectMapper.writeValueAsString(
+                    new ParkingCheckResponse(parkingStatus, details)
+            );
+            when(checkParkingStatusUseCase.execute(plate, parkingZoneId)).thenReturn(parkingStatusCheck);
+
+            // WHEN
+            MockMvcResponse response = whenARequestToGetParkingStatusIsReceived();
+
+            // THEN
+            response.then()
+                    .statusCode(HttpStatus.OK.value())
+                    .body(CoreMatchers.equalTo(expectedResponse));
+
+            verify(checkParkingStatusUseCase).execute(plate, parkingZoneId);
+        }
+
+        @Test
+        void shouldReturnParkingAndStatusWithNoParkingDetail() throws  Exception {
+             // GIVEN
+            ParkingStatusCheck parkingStatusCheckNoDetails = new ParkingStatusCheck(NOT_FOUND, null);
+            when(checkParkingStatusUseCase.execute(plate, parkingZoneId)).thenReturn(parkingStatusCheckNoDetails);
+
+            // WHEN
+            MockMvcResponse response = whenARequestToGetParkingStatusIsReceived();
+
+            // THEN
+            response.then()
+                    .statusCode(HttpStatus.OK.value())
+                    .body("check_result", CoreMatchers.equalTo("NOT_FOUND"))
+                    .body("parking_details", CoreMatchers.nullValue());
+
+            verify(checkParkingStatusUseCase).execute(plate, parkingZoneId);
+        }
+
+        @Test
+        void shouldReturn500WhenErrorOccurs() {
+            // GIVEN
+            when(checkParkingStatusUseCase.execute(plate, parkingZoneId)).thenThrow(new RuntimeException("ops"));
+
+            // WHEN
+            MockMvcResponse response = whenARequestToGetParkingStatusIsReceived();
+
+            // THEN
+            response.then()
+                    .statusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
+
+            verify(checkParkingStatusUseCase).execute(plate, parkingZoneId);
+        }
+
+        private MockMvcResponse whenARequestToGetParkingStatusIsReceived() {
+            return RestAssuredMockMvc
+                    .given()
+                    .webAppContextSetup(context)
+                    .contentType(ContentType.JSON)
+                    .param("plate", plate)
+                    .param("parking_zone_id", parkingZoneId)
+                    .when()
+                    .get("/parkings/check");
+        }
+    }
 }
+
