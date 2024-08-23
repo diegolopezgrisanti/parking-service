@@ -29,3 +29,8 @@ clients:
     timeout:
       connect: 5000
       read: 5000
+
+scheduler:
+  parking-closure:
+    fixedDelay: 60000
+    batchSize: 25
