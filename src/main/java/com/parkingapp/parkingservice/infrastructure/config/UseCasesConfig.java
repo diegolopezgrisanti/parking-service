@@ -7,12 +7,17 @@ import com.parkingapp.parkingservice.application.getparkingbyid.GetParkingByIdUs
 import com.parkingapp.parkingservice.application.checkparkingstatus.CheckParkingStatusUseCase;
 import com.parkingapp.parkingservice.application.getparkingzones.GetParkingZonesUseCase;
 import com.parkingapp.parkingservice.application.getuservehicles.GetUserVehiclesUseCase;
+import com.parkingapp.parkingservice.application.parkingclosure.ParkingClosureUseCase;
 import com.parkingapp.parkingservice.domain.city.CitiesRepository;
+import com.parkingapp.parkingservice.domain.parkingclosure.ParkingClosureRepository;
 import com.parkingapp.parkingservice.domain.parkingzone.ParkingZonesRepository;
 import com.parkingapp.parkingservice.domain.parking.ParkingRepository;
+import com.parkingapp.parkingservice.domain.payment.ParkingPaymentService;
 import com.parkingapp.parkingservice.domain.vehicle.VehicleRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import java.time.Clock;
 
 @Configuration
 public class UseCasesConfig {
@@ -66,5 +71,14 @@ public class UseCasesConfig {
             VehicleRepository vehicleRepository
     ) {
         return new GetUserVehiclesUseCase(vehicleRepository);
+    }
+
+    @Bean
+    public ParkingClosureUseCase parkingClosureUseCase(
+            ParkingClosureRepository parkingClosureRepository,
+            ParkingPaymentService parkingPaymentService,
+            Clock clock
+    ) {
+        return new ParkingClosureUseCase(parkingClosureRepository, parkingPaymentService, clock);
     }
 }
