@@ -5,9 +5,9 @@ import com.parkingapp.parkingservice.domain.payment.ParkingPaymentService;
 import com.parkingapp.parkingservice.infrastructure.client.payment.PaymentApi;
 import com.parkingapp.parkingservice.infrastructure.client.payment.PaymentService;
 import okhttp3.OkHttpClient;
-import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import retrofit2.Retrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 
@@ -15,7 +15,7 @@ import java.net.URI;
 import java.time.Duration;
 
 
-@Configurable
+@Configuration
 public class PaymentClientConfig {
 
     @Value("${clients.payment.url}")
