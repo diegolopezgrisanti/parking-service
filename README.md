@@ -89,7 +89,7 @@ The project includes various levels of testing: unit, integration, contract, and
 5. To run all tests:
 
 ```bash
-
+./gradlew build
 ```
 
 ## Key Dependencies
