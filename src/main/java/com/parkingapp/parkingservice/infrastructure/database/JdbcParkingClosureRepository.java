@@ -38,6 +38,8 @@ public class JdbcParkingClosureRepository implements ParkingClosureRepository {
                     p.id AS parking_id,
                     p.start_date,
                     p.end_date,
+                    p.user_id,
+                    p.payment_method_id,
                     pz.currency,
                     pz.fee_per_minute
                 FROM parking p
@@ -99,7 +101,9 @@ public class JdbcParkingClosureRepository implements ParkingClosureRepository {
                     amount,
                     rs.getTimestamp("start_date").toInstant(),
                     rs.getTimestamp("end_date").toInstant(),
-                    UUID.fromString(rs.getString("parking_id"))
+                    UUID.fromString(rs.getString("parking_id")),
+                    UUID.fromString(rs.getString("user_id")),
+                    UUID.fromString(rs.getString("payment_method_id"))
             );
         }
     }

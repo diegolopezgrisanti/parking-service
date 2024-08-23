@@ -35,11 +35,17 @@ class ParkingClosureUseCaseTest {
     private final Instant parkingEndDate = parkingStartDate.plus(45, ChronoUnit.MINUTES);
     private final int parkingZoneFeePerMinute = 10;
     private final int expectedFeeAmount = 450;
+    private final UUID parkingId = UUID.randomUUID();
+    private final UUID userId = UUID.randomUUID();
+    private final UUID paymentMethodId = UUID.randomUUID();
     private final ParkingClosure parkingClosure = new ParkingClosure(
             new Amount(Monetary.getCurrency("EUR"), parkingZoneFeePerMinute),
             parkingStartDate,
             parkingEndDate,
-            UUID.randomUUID()
+            parkingId,
+            userId,
+            paymentMethodId
+
     );
 
     @Test
