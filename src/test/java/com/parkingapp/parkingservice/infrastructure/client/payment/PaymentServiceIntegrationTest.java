@@ -14,6 +14,7 @@ import com.parkingapp.parkingservice.infrastructure.config.ObjectMapperConfig;
 import com.parkingapp.parkingservice.infrastructure.config.client.PaymentClientConfig;
 import com.parkingapp.parkingservice.infrastructure.fixtures.initializers.testannotation.IntegrationTest;
 import com.parkingapp.parkingservice.infrastructure.fixtures.initializers.testannotation.WithWireMock;
+import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -79,6 +80,11 @@ public class PaymentServiceIntegrationTest {
 
     MappingBuilder baseResponse = post(urlPathEqualTo("/payment"))
             .withRequestBody(WireMock.equalToJson(expectedRequestBody));
+
+    @BeforeEach
+    public void setUp() {
+        wireMockServer.resetAll();
+    }
 
     @Test
     public void shouldReturnASuccessfulResponse() {
