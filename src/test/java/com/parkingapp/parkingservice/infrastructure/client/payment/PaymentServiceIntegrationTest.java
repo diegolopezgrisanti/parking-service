@@ -4,6 +4,7 @@ import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.client.MappingBuilder;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.http.Fault;
+import com.github.tomakehurst.wiremock.stubbing.Scenario;
 import com.parkingapp.parkingservice.domain.common.Amount;
 import com.parkingapp.parkingservice.domain.parkingclosure.ParkingClosure;
 import com.parkingapp.parkingservice.domain.payment.Failure;
@@ -13,9 +14,11 @@ import com.parkingapp.parkingservice.infrastructure.config.ObjectMapperConfig;
 import com.parkingapp.parkingservice.infrastructure.config.client.PaymentClientConfig;
 import com.parkingapp.parkingservice.infrastructure.fixtures.initializers.testannotation.IntegrationTest;
 import com.parkingapp.parkingservice.infrastructure.fixtures.initializers.testannotation.WithWireMock;
+import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
 
 import javax.money.Monetary;
 import java.time.Instant;
@@ -25,6 +28,7 @@ import java.util.UUID;
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.post;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo;
+import static io.restassured.RestAssured.request;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @WithWireMock
@@ -77,6 +81,11 @@ public class PaymentServiceIntegrationTest {
     MappingBuilder baseResponse = post(urlPathEqualTo("/payment"))
             .withRequestBody(WireMock.equalToJson(expectedRequestBody));
 
+    @BeforeEach
+    public void setUp() {
+        wireMockServer.resetAll();
+    }
+
     @Test
     public void shouldReturnASuccessfulResponse() {
         System.out.println(expectedRequestBody);
@@ -109,6 +118,48 @@ public class PaymentServiceIntegrationTest {
         ParkingPaymentResponse response = paymentService.chargeFee(parkingClosure, amountInCents);
 
         assertThat(response).isInstanceOf(Failure.class);
+    }
+
+    @Test
+    public void shouldRetryWhenCommunicationWithPaymentServiceFails() {
+        wireMockServer.givenThat(
+                WireMock.post(WireMock.urlPathEqualTo("/payment"))
+                        .inScenario("Payment service")
+                        .whenScenarioStateIs(Scenario.STARTED)
+                        .willSetStateTo("SECOND")
+                        .willReturn(
+                                WireMock.aResponse()
+                                        .withStatus(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                        )
+        );
+
+        wireMockServer.givenThat(
+                WireMock.post(WireMock.urlPathEqualTo("/payment"))
+                        .inScenario("Payment service")
+                        .whenScenarioStateIs("SECOND")
+                        .willSetStateTo("SUCCESS")
+                        .willReturn(
+                                WireMock.aResponse()
+                                        .withStatus(HttpStatus.SERVICE_UNAVAILABLE.value())
+                        )
+        );
+
+        wireMockServer.givenThat(
+                WireMock.post(WireMock.urlPathEqualTo("/payment"))
+                        .inScenario("Payment service")
+                        .whenScenarioStateIs("SUCCESS")
+                        .willReturn(
+                                WireMock.aResponse()
+                                        .withStatus(HttpStatus.CREATED.value())
+                        )
+        );
+
+        ParkingPaymentResponse response = paymentService.chargeFee(parkingClosure, amountInCents);
+        assertThat(response).isInstanceOf(Successful.class);
+        wireMockServer.verify(
+                3,
+                WireMock.postRequestedFor(WireMock.urlPathEqualTo("/payment"))
+        );
     }
 
 }
