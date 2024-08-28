@@ -28,6 +28,7 @@ import java.util.UUID;
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.post;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo;
+import static io.restassured.RestAssured.request;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @WithWireMock
@@ -87,6 +88,7 @@ public class PaymentServiceIntegrationTest {
 
     @Test
     public void shouldReturnASuccessfulResponse() {
+        System.out.println(expectedRequestBody);
         wireMockServer.givenThat(
                     baseResponse.willReturn(aResponse().withStatus(202))
         );
