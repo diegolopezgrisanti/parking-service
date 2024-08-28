@@ -8,6 +8,7 @@ import com.parkingapp.parkingservice.application.checkparkingstatus.CheckParking
 import com.parkingapp.parkingservice.application.getparkingzones.GetParkingZonesUseCase;
 import com.parkingapp.parkingservice.application.getuservehicles.GetUserVehiclesUseCase;
 import com.parkingapp.parkingservice.application.parkingclosure.ParkingClosureUseCase;
+import com.parkingapp.parkingservice.domain.atomicity.AtomicOperation;
 import com.parkingapp.parkingservice.domain.city.CitiesRepository;
 import com.parkingapp.parkingservice.domain.parkingclosure.ParkingClosureRepository;
 import com.parkingapp.parkingservice.domain.parkingzone.ParkingZonesRepository;
@@ -77,8 +78,9 @@ public class UseCasesConfig {
     public ParkingClosureUseCase parkingClosureUseCase(
             ParkingClosureRepository parkingClosureRepository,
             ParkingPaymentService parkingPaymentService,
+            AtomicOperation atomicOperation,
             Clock clock
     ) {
-        return new ParkingClosureUseCase(parkingClosureRepository, parkingPaymentService, clock);
+        return new ParkingClosureUseCase(parkingClosureRepository, parkingPaymentService, atomicOperation, clock);
     }
 }

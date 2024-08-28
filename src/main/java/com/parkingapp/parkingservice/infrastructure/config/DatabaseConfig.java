@@ -1,9 +1,11 @@
 package com.parkingapp.parkingservice.infrastructure.config;
 
+import com.parkingapp.parkingservice.domain.atomicity.AtomicOperation;
 import com.parkingapp.parkingservice.domain.city.CitiesRepository;
 import com.parkingapp.parkingservice.domain.parkingclosure.ParkingClosureRepository;
 import com.parkingapp.parkingservice.domain.parkingzone.ParkingZonesRepository;
 import com.parkingapp.parkingservice.domain.vehicle.VehicleRepository;
+import com.parkingapp.parkingservice.infrastructure.atomicity.SpringTransactionalAtomicOperation;
 import com.parkingapp.parkingservice.infrastructure.database.JdbcCitiesRepository;
 import com.parkingapp.parkingservice.infrastructure.database.JdbcParkingClosureRepository;
 import com.parkingapp.parkingservice.infrastructure.database.JdbcParkingRepository;
@@ -50,5 +52,10 @@ public class DatabaseConfig {
             NamedParameterJdbcTemplate namedParameterJdbcTemplate
     ) {
         return new JdbcParkingClosureRepository(namedParameterJdbcTemplate);
+    }
+
+    @Bean
+    public AtomicOperation atomicOperation() {
+        return new SpringTransactionalAtomicOperation();
     }
 }
