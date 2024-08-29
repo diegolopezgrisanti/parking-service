@@ -98,6 +98,7 @@ tasks.apply {
 		showSkipped = true
 		showFailed = true
 		showOnlySlow = false
+
 		showStandardStreams = false
 		showPassedStandardStreams = false
 		showSkippedStandardStreams = true
