@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -59,7 +58,6 @@ class ParkingClosureUseCaseTest {
     @BeforeEach
     void setUp() {
         when(loggerFactory.getLogger(any())).thenReturn(logger);
-        doNothing().when(logger).logInfo(any());
         parkingClosureUseCase = new ParkingClosureUseCase(
                 parkingClosureRepository,
                 parkingPaymentService,
