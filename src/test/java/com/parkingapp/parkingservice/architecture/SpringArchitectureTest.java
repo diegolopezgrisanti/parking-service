@@ -16,7 +16,7 @@ public class SpringArchitectureTest {
             .importPackages("com.parkingapp.parkingservice");
 
     @Test
-    public void shouldNotUseStereotypesAnnotationsForBeans() {
+    public void shouldNotUseStereotypeAnnotationsForBeans() {
         classes()
                 .should().notBeAnnotatedWith(Component.class)
                 .andShould().notBeAnnotatedWith(Repository.class)
