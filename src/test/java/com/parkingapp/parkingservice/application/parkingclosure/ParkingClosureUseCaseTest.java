@@ -2,6 +2,8 @@ package com.parkingapp.parkingservice.application.parkingclosure;
 
 import com.parkingapp.parkingservice.domain.atomicity.AtomicOperation;
 import com.parkingapp.parkingservice.domain.common.Amount;
+import com.parkingapp.parkingservice.domain.logging.Logger;
+import com.parkingapp.parkingservice.domain.logging.LoggerFactory;
 import com.parkingapp.parkingservice.domain.parkingclosure.ParkingClosure;
 import com.parkingapp.parkingservice.domain.parkingclosure.ParkingClosureRepository;
 import com.parkingapp.parkingservice.domain.payment.Failure;
@@ -30,12 +32,9 @@ class ParkingClosureUseCaseTest {
     private final ParkingPaymentService parkingPaymentService = mock(ParkingPaymentService.class);
     private final AtomicOperation atomicOperation = mock(AtomicOperation.class);
     private final Clock clock = mock(Clock.class);
-    private final ParkingClosureUseCase parkingClosureUseCase = new ParkingClosureUseCase(
-            parkingClosureRepository,
-            parkingPaymentService,
-            atomicOperation,
-            clock
-    );
+    private final LoggerFactory loggerFactory = mock(LoggerFactory.class);
+    private final Logger logger = mock(Logger.class);
+    private ParkingClosureUseCase parkingClosureUseCase;
 
     private final Instant now = Instant.now();
     private final int batchSize = 1;
@@ -58,8 +57,16 @@ class ParkingClosureUseCaseTest {
 
     @BeforeEach
     void setUp() {
-        ArgumentCaptor<AtomicOperation.TransactionCallback> captor = ArgumentCaptor.forClass(AtomicOperation.TransactionCallback.class);
+        when(loggerFactory.getLogger(any())).thenReturn(logger);
+        parkingClosureUseCase = new ParkingClosureUseCase(
+                parkingClosureRepository,
+                parkingPaymentService,
+                atomicOperation,
+                clock,
+                loggerFactory
+        );
 
+        ArgumentCaptor<AtomicOperation.TransactionCallback> captor = ArgumentCaptor.forClass(AtomicOperation.TransactionCallback.class);
         doAnswer(invocation -> {
             invocation.<AtomicOperation.TransactionCallback>getArgument(0).doInTransaction();
             return  null;
@@ -83,6 +90,7 @@ class ParkingClosureUseCaseTest {
         verify(parkingClosureRepository).getParkingsWithPendingPayment(batchSize, now);
         verify(parkingPaymentService).chargeFee(parkingClosure, expectedFeeAmount);
         verify(parkingClosureRepository).markAsProcessed(parkingClosure.getParkingId(), now);
+        verify(logger).logInfo(String.format("Payment processed for parking with ID: %s", parkingId));
     }
 
     @Test
@@ -102,6 +110,7 @@ class ParkingClosureUseCaseTest {
         verify(parkingClosureRepository).getParkingsWithPendingPayment(batchSize, now);
         verify(parkingPaymentService).chargeFee(parkingClosure, expectedFeeAmount);
         verify(parkingClosureRepository).markAsFailed(parkingClosure.getParkingId(), now);
+        verify(logger).logError(String.format("Failed to process payment for parking with ID: %s", parkingId));
     }
 
 }

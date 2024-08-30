@@ -72,7 +72,7 @@ dependencies {
 	testImplementation("io.rest-assured:spring-commons:$REST_ASSURED")
 	testImplementation("org.wiremock:wiremock-standalone:3.9.1")
 	testImplementation("org.awaitility:awaitility:4.2.2")
-
+	testImplementation("com.tngtech.archunit:archunit:1.3.0")
 }
 
 tasks.apply {

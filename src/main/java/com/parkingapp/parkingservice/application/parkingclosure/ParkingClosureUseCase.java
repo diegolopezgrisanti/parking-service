@@ -1,14 +1,14 @@
 package com.parkingapp.parkingservice.application.parkingclosure;
 
 import com.parkingapp.parkingservice.domain.atomicity.AtomicOperation;
+import com.parkingapp.parkingservice.domain.logging.Logger;
+import com.parkingapp.parkingservice.domain.logging.LoggerFactory;
 import com.parkingapp.parkingservice.domain.parkingclosure.ParkingClosure;
 import com.parkingapp.parkingservice.domain.parkingclosure.ParkingClosureRepository;
 import com.parkingapp.parkingservice.domain.payment.ParkingPaymentResponse;
 import com.parkingapp.parkingservice.domain.payment.ParkingPaymentService;
 import com.parkingapp.parkingservice.domain.payment.Failure;
 import com.parkingapp.parkingservice.domain.payment.Successful;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.time.Clock;
 import java.time.Duration;
@@ -21,18 +21,20 @@ public class ParkingClosureUseCase {
     private final ParkingPaymentService parkingPaymentService;
     private final AtomicOperation atomicOperation;
     private final Clock clock;
-    private final Logger log = LogManager.getLogger(getClass());
+    private final Logger logger;
 
     public ParkingClosureUseCase(
             ParkingClosureRepository parkingClosureRepository,
             ParkingPaymentService parkingPaymentService,
             AtomicOperation atomicOperation,
-            Clock clock
+            Clock clock,
+            LoggerFactory loggerFactory
     ) {
         this.parkingClosureRepository = parkingClosureRepository;
         this.parkingPaymentService = parkingPaymentService;
         this.atomicOperation = atomicOperation;
         this.clock = clock;
+        this.logger = loggerFactory.getLogger(getClass());
     }
 
     public void execute(int batchSize) {
@@ -54,12 +56,12 @@ public class ParkingClosureUseCase {
 
     private void markAsFailed(UUID parkingId, Instant now) {
         parkingClosureRepository.markAsFailed(parkingId, now);
-        log.error("Failed to process payment for parking with ID: {}", parkingId);
+        logger.logError(String.format("Failed to process payment for parking with ID: %s", parkingId));
     }
 
     private void markAsProcessed(UUID parkingId, Instant now) {
         parkingClosureRepository.markAsProcessed(parkingId, now);
-        log.info((String.format("Payment processed for parking with ID: %s", parkingId)));
+        logger.logInfo(String.format("Payment processed for parking with ID: %s", parkingId));
     }
 
     private int calculateFeeAmount(ParkingClosure parkingClosure) {
