@@ -7,6 +7,7 @@ plugins {
 	id("com.adarshr.test-logger") version "4.0.0"
 	kotlin("jvm") version "2.0.20"
 	kotlin("plugin.spring") version "2.0.20"
+	jacoco
 }
 
 group = "com.parkingapp"
@@ -75,6 +76,10 @@ dependencies {
 	testImplementation("com.tngtech.archunit:archunit:1.3.0")
 }
 
+jacoco {
+	toolVersion = "0.8.12"
+}
+
 tasks.apply {
 	test {
 		enableAssertions = true
@@ -83,6 +88,7 @@ tasks.apply {
 			excludeTags("component")
 			excludeTags("contract")
 		}
+		finalizedBy(jacocoTestReport)
 	}
 
 	testlogger {
@@ -137,4 +143,16 @@ tasks.apply {
 		dependsOn("integrationTest", "contractTest", "componentTest")
 	}
 
+	jacocoTestReport {
+		val jacocoDir = layout.buildDirectory.dir("jacoco")
+		executionData(files("$jacocoDir/test.exec", "$jacocoDir/contractTest.exec", "$jacocoDir/integrationTest.exec"))
+		reports {
+			csv.required.set(false)
+			html.required.set(true)
+			xml.required.set(true)
+			html.outputLocation.set(layout.buildDirectory.dir("jacoco/html"))
+			xml.outputLocation.set(layout.buildDirectory.file("jacoco/report.xml"))
+		}
+		dependsOn(test, "integrationTest", "contractTest")
+	}
 }
