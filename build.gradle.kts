@@ -148,11 +148,13 @@ tasks.apply {
 
 	jacocoTestReport {
 		val jacocoDir = layout.buildDirectory.dir("jacoco")
-		executionData(files(
-			"$jacocoDir/test.exec",
-			"$jacocoDir/contractTest.exec",
-			"$jacocoDir/integrationTest.exec"
-		))
+		executionData(
+			fileTree(jacocoDir).include(
+			"/test.exec",
+			"/contractTest.exec",
+			"/integrationTest.exec"
+			)
+		)
 		reports {
 			csv.required.set(false)
 			html.required.set(true)
@@ -164,6 +166,14 @@ tasks.apply {
 	}
 
 	jacocoTestCoverageVerification {
+		val jacocoDir = layout.buildDirectory.dir("jacoco")
+		executionData(
+			fileTree(jacocoDir).include(
+				"test.exec",
+				"contractTest.exec",
+				"integrationTest.exec"
+			)
+		)
 		violationRules {
 			rule {
 				limit {
@@ -171,5 +181,6 @@ tasks.apply {
 				}
 			}
 		}
+		dependsOn(test, "integrationTest", "contractTest")
 	}
 }
