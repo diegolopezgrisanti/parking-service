@@ -162,13 +162,6 @@ tasks.apply {
 			html.outputLocation.set(layout.buildDirectory.dir("jacoco/html"))
 			xml.outputLocation.set(layout.buildDirectory.file("jacoco/report.xml"))
 		}
-		classDirectories.setFrom(
-			files(classDirectories.files.map {
-				fileTree(it) {
-					exclude("**/infrastructure/config/**")
-				}
-			})
-		)
 		dependsOn(test, "integrationTest", "contractTest")
 	}
 
