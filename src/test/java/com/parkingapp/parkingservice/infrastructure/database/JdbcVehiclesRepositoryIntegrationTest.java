@@ -167,4 +167,41 @@ public class JdbcVehiclesRepositoryIntegrationTest {
 
     }
 
+    @Test
+    void shouldReturnTrueWhenVehicleIdIsValidForGivenUserId() {
+        // GIVEN
+        vehicleRepository.saveVehicle(newVehicle);
+
+        // WHEN
+        boolean isValid = vehicleRepository.isVehicleIdValid(vehicleId, userId);
+
+        // THEN
+        assertThat(isValid).isTrue();
+    }
+
+    @Test
+    void shouldReturnFalseWhenVehicleIdIsNotValidForGivenUserId() {
+        // GIVEN
+        UUID invalidVehicleId = UUID.randomUUID();
+
+        // WHEN
+        boolean isValid = vehicleRepository.isVehicleIdValid(invalidVehicleId, userId);
+
+        // THEN
+        assertThat(isValid).isFalse();
+    }
+
+    @Test
+    void shouldReturnFalseWhenVehicleIdExistsButDoesNotBelongToUserId() {
+        // GIVEN
+        UUID differentUserId = UUID.randomUUID();
+        vehicleRepository.saveVehicle(newVehicle);
+
+        // WHEN
+        boolean isValid = vehicleRepository.isVehicleIdValid(vehicleId, differentUserId);
+
+        // THEN
+        assertThat(isValid).isFalse();
+    }
+
 }

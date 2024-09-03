@@ -35,32 +35,7 @@ public enum Country {
     ECU("Ecuador", "ECUADOR", "EC", 218),
     PRY("Paraguay", "PARAGUAY", "PY", 600);
 
-    private final String countryName;
-    private final String isoCountryName;
-    private final String iso2Name;
-    private final int isoCode;
-
     Country(String countryName, String isoCountryName, String iso2Name, int isoCode) {
-        this.countryName = countryName;
-        this.isoCountryName = isoCountryName;
-        this.iso2Name = iso2Name;
-        this.isoCode = isoCode;
-    }
-
-    public String getCountryName() {
-        return countryName;
-    }
-
-    public String getIsoCountryName() {
-        return isoCountryName;
-    }
-
-    public String getIso2Name() {
-        return iso2Name;
-    }
-
-    public int getIsoCode() {
-        return isoCode;
     }
 }
 

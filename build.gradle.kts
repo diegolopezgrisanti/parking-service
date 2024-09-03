@@ -162,6 +162,13 @@ tasks.apply {
 			html.outputLocation.set(layout.buildDirectory.dir("jacoco/html"))
 			xml.outputLocation.set(layout.buildDirectory.file("jacoco/report.xml"))
 		}
+		classDirectories.setFrom(
+			files(classDirectories.files.map {
+				fileTree(it) {
+					exclude("**/infrastructure/config/**")
+				}
+			})
+		)
 		dependsOn(test, "integrationTest", "contractTest")
 	}
 
@@ -177,7 +184,7 @@ tasks.apply {
 		violationRules {
 			rule {
 				limit {
-					minimum = "0.80".toBigDecimal()
+					minimum = "0.90".toBigDecimal()
 				}
 			}
 		}

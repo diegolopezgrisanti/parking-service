@@ -1,10 +1,13 @@
 package com.parkingapp.parkingservice.infrastructure.entrypoint.rest.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 
 import java.util.UUID;
 
-
+@Data
+@AllArgsConstructor
 public class CityDTO {
 
     @Schema(
@@ -18,28 +21,4 @@ public class CityDTO {
             example = "Barcelona"
     )
     private String name;
-
-    public CityDTO() {
-    }
-
-    public CityDTO(UUID id, String name) {
-        this.id = id;
-        this.name = name;
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 }
