@@ -37,3 +37,6 @@ jobs:
 
       - name: Build with Gradle
         run: ./gradlew build --no-daemon
+
+      - name: Run Tests and Jacoco Coverage
+        run: ./gradlew test jacocoTestReport jacocoTestCoverageVerification

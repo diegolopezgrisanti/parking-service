@@ -43,7 +43,10 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-log4j2")
 	modules {
 		module("org.springframework.boot:spring-boot-starter-logging") {
-			replacedBy("org.springframework.boot:spring-boot-starter-log4j2", "Use Log4j2 instead of Logback")
+			replacedBy(
+				"org.springframework.boot:spring-boot-starter-log4j2",
+				"Use Log4j2 instead of Logback"
+			)
 		}
 	}
 
@@ -145,7 +148,11 @@ tasks.apply {
 
 	jacocoTestReport {
 		val jacocoDir = layout.buildDirectory.dir("jacoco")
-		executionData(files("$jacocoDir/test.exec", "$jacocoDir/contractTest.exec", "$jacocoDir/integrationTest.exec"))
+		executionData(files(
+			"$jacocoDir/test.exec",
+			"$jacocoDir/contractTest.exec",
+			"$jacocoDir/integrationTest.exec"
+		))
 		reports {
 			csv.required.set(false)
 			html.required.set(true)
@@ -154,5 +161,15 @@ tasks.apply {
 			xml.outputLocation.set(layout.buildDirectory.file("jacoco/report.xml"))
 		}
 		dependsOn(test, "integrationTest", "contractTest")
+	}
+
+	jacocoTestCoverageVerification {
+		violationRules {
+			rule {
+				limit {
+					minimum = "0.80".toBigDecimal()
+				}
+			}
+		}
 	}
 }
