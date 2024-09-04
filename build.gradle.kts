@@ -189,8 +189,9 @@ tasks.apply {
 spotless {
 	java {
 		target("src/*/java/**/*.java")
+		importOrder("org", "com", "other", "java", "javax")
 		removeUnusedImports()
-		googleJavaFormat()
+		eclipse().configFile("config/linter/eclipse-formatter.xml")
 		formatAnnotations()
 		trimTrailingWhitespace()
 		endWithNewline()
