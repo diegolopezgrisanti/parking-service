@@ -8,6 +8,7 @@ plugins {
 	kotlin("jvm") version "2.0.20"
 	kotlin("plugin.spring") version "2.0.20"
 	jacoco
+	id("com.diffplug.spotless") version "6.25.0"
 }
 
 group = "com.parkingapp"
@@ -182,5 +183,16 @@ tasks.apply {
 			}
 		}
 		dependsOn(test, "integrationTest", "contractTest")
+	}
+}
+
+spotless {
+	java {
+		target("src/*/java/**/*.java")
+		removeUnusedImports()
+		googleJavaFormat()
+		formatAnnotations()
+		trimTrailingWhitespace()
+		endWithNewline()
 	}
 }

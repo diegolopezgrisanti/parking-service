@@ -35,6 +35,9 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
+      - name: Run linter to check style
+        run: ./gradlew spotlessCheck --info
+
       - name: Build with Gradle
         run: ./gradlew build --no-daemon
 
