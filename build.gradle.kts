@@ -189,7 +189,7 @@ tasks.apply {
 spotless {
 	java {
 		target("src/*/java/**/*.java")
-		importOrder("org", "com", "other", "java", "javax")
+		importOrder("", "jakarta", "javax", "java", "\\#")
 		removeUnusedImports()
 		eclipse().configFile("config/linter/eclipse-formatter.xml")
 		formatAnnotations()
