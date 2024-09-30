@@ -30,7 +30,7 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-validation")
 	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0")
 	implementation("org.springdoc:springdoc-openapi-ui:1.8.0")
-	implementation("org.jetbrains:annotations:24.1.0")
+	implementation("org.jetbrains:annotations:25.0.0")
 	implementation("org.postgresql:postgresql:42.7.4")
 	implementation("org.springframework.boot:spring-boot-starter-web:3.3.4")
 	implementation("org.flywaydb:flyway-core:9.11.0")
